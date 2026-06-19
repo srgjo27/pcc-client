@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
@@ -15,7 +15,7 @@ describe('RegisterForm Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useRegister as any).mockReturnValue({
+    (useRegister as Mock).mockReturnValue({
       mutateAsync: mockMutateAsync,
       isPending: false,
     });
