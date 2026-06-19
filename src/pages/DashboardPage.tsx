@@ -7,7 +7,7 @@ const DashboardPage: React.FC = () => {
     <>
       <Helmet>
         <title>Dashboard | PCC Client</title>
-        <meta name="description" content="Dashboard monitoring performa sistem, koneksi jaringan, dan aktivitas log untuk PCC Client." />
+        <meta name="description" content="Dashboard ringkasan produktivitas harian dan evaluasi mingguan berbasis AI untuk PCC Client." />
       </Helmet>
       <DashboardOverview />
     </>
