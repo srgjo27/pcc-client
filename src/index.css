@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --text: #000000;
   --bg: #fff;
@@ -9,10 +11,10 @@
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
-  border: var(--border);
+  border: 1px solid var(--border);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
