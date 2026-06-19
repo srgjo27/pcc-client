@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
 import { Button } from '../../../shared/components/ui/Button';
@@ -13,6 +13,7 @@ import { ASSETS } from '../../../constants/assets';
 import type { LoginPayload } from '../types';
 
 export const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const { mutateAsync: login, isPending } = useLogin();
@@ -37,6 +38,9 @@ export const LoginForm: React.FC = () => {
         type: 'success',
         message: strings.auth.successMessage,
       });
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
     } catch (err) {
       setAuthFeedback({
         type: 'error',
