@@ -1,7 +1,7 @@
-import pccIcon from '../assets/image/pcc.png';
+import pccImg from '../assets/image/pcc.png';
 
 export const ASSETS = {
-  icons: {
-    pcc: pccIcon,
+  images: {
+    pcc: pccImg,
   },
 };
