@@ -1,4 +1,5 @@
 export const strings = {
+  systemVersion: 'v1.1.0',
   auth: {
     loginTitle: 'Masuk ke Akun Anda',
     loginDescription: 'Silakan masukkan email dan kata sandi Anda untuk masuk.',
@@ -17,7 +18,6 @@ export const strings = {
     registerLinkText: 'Daftar sekarang',
     alreadyHaveAccountText: 'Sudah memiliki akun?',
     loginLinkText: 'Masuk di sini',
-    systemVersion: 'v1.0.0',
     submitButton: 'Masuk',
     submittingButton: 'Sedang Masuk...',
     registerButton: 'Daftar',
@@ -38,5 +38,15 @@ export const strings = {
     errorMessage: 'Login gagal. Silakan periksa kembali email atau kata sandi Anda.',
     successRegisterMessage: 'Pendaftaran berhasil! Akun Anda telah dibuat.',
     errorRegisterMessage: 'Pendaftaran gagal. Silakan coba lagi.',
+  },
+  menu: {
+    dashboard: 'Dashboard',
+    todo: 'Lacak Tugas',
+    schedule: 'Jadwal',
+    finance: 'Keuangan',
+    notes: 'Catatan',
+    habits: 'Rutinitas',
+    focus: 'Fokus',
+    comingSoon: 'Segera Hadir',
   },
 };

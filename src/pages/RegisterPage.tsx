@@ -13,7 +13,7 @@ const RegisterPage: React.FC = () => {
       <div className="min-h-screen flex flex-col items-center justify-center p-4 gap-4">
         <RegisterForm />
         <span className="text-xs text-slate-400">
-          Versi {strings.auth.systemVersion}
+          Versi {strings.systemVersion}
         </span>
       </div>
     </>

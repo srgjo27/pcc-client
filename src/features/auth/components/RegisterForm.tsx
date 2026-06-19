@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
 import { Button } from '../../../shared/components/ui/Button';
@@ -13,6 +13,7 @@ import { ASSETS } from '../../../constants/assets';
 import type { RegisterPayload } from '../types';
 
 export const RegisterForm: React.FC = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -43,6 +44,9 @@ export const RegisterForm: React.FC = () => {
         message: strings.auth.successRegisterMessage,
       });
       reset();
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
     } catch (err) {
       setAuthFeedback({
         type: 'error',
