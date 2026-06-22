@@ -4,14 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ASSETS } from '@/constants/assets';
-import { loginSchema, useLogin, type LoginPayload } from '@/features/auth'
-import { strings } from '@/constants/strings';
+import { getLoginSchema, useLogin, type LoginPayload } from '@/features/auth';
+import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/Card';
 import { Input } from '@/shared/components/ui/Input';
 import { Button } from '@/shared/components/ui/Button';
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const { mutateAsync: login, isPending } = useLogin();
@@ -21,7 +22,7 @@ export const LoginForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginPayload>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(getLoginSchema(t)),
     defaultValues: {
       email: '',
       password: '',
@@ -38,7 +39,7 @@ export const LoginForm: React.FC = () => {
     } catch (err) {
       setAuthFeedback({
         type: 'error',
-        message: err instanceof Error ? err.message : strings.auth.errorMessage,
+        message: err instanceof Error ? err.message : t.auth.errorMessage,
       });
     }
   };
@@ -51,10 +52,10 @@ export const LoginForm: React.FC = () => {
             <img src={ASSETS.images.pcc} alt="PCC Logo" loading="lazy" className="h-24 w-auto object-contain" />
           </div>
           <CardTitle className="text-center">
-            {strings.auth.loginTitle}
+            {t.auth.loginTitle}
           </CardTitle>
           <CardDescription className="text-center">
-            {strings.auth.loginDescription}
+            {t.auth.loginDescription}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,10 +64,11 @@ export const LoginForm: React.FC = () => {
             {authFeedback && (
               <div
                 role="alert"
-                className={`p-3 rounded-lg text-sm font-medium border ${authFeedback.type === 'success'
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                  : 'bg-red-50 text-red-800 border-red-200'
-                  }`}
+                className={`p-3 rounded-lg text-sm font-medium border ${
+                  authFeedback.type === 'success'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    : 'bg-red-50 text-red-800 border-red-200'
+                }`}
               >
                 {authFeedback.message}
               </div>
@@ -74,8 +76,8 @@ export const LoginForm: React.FC = () => {
 
             <Input
               type="email"
-              label={strings.auth.emailLabel}
-              placeholder={strings.auth.emailPlaceholder}
+              label={t.auth.emailLabel}
+              placeholder={t.auth.emailPlaceholder}
               error={errors.email?.message}
               disabled={isPending}
               {...register('email')}
@@ -84,8 +86,8 @@ export const LoginForm: React.FC = () => {
             <div className="space-y-1">
               <Input
                 type={showPassword ? 'text' : 'password'}
-                label={strings.auth.passwordLabel}
-                placeholder={strings.auth.passwordPlaceholder}
+                label={t.auth.passwordLabel}
+                placeholder={t.auth.passwordPlaceholder}
                 error={errors.password?.message}
                 disabled={isPending}
                 rightElement={
@@ -109,7 +111,7 @@ export const LoginForm: React.FC = () => {
                   to="/forgot-password"
                   className="text-xs font-medium text-blue-600 hover:text-blue-500 hover:underline focus:outline-none focus:underline"
                 >
-                  {strings.auth.forgotPasswordLink}
+                  {t.auth.forgotPasswordLink}
                 </Link>
               </div>
             </div>
@@ -120,16 +122,16 @@ export const LoginForm: React.FC = () => {
                 isLoading={isPending}
                 className="w-full mt-2"
               >
-                {!isPending && strings.auth.submitButton}
+                {!isPending && t.auth.submitButton}
               </Button>
 
               <div className="text-center text-sm text-slate-600">
-                <span>{strings.auth.dontHaveAccountText} </span>
+                <span>{t.auth.dontHaveAccountText} </span>
                 <Link
                   to="/register"
                   className="font-medium text-blue-600 hover:text-blue-500 hover:underline focus:outline-none focus:underline"
                 >
-                  {strings.auth.registerLinkText}
+                  {t.auth.registerLinkText}
                 </Link>
               </div>
             </div>

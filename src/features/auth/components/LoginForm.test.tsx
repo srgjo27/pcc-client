@@ -2,6 +2,8 @@ import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 import { LoginForm } from './LoginForm';
 import { useLogin } from '../hooks';
 
@@ -23,9 +25,11 @@ describe('LoginForm Component', () => {
 
   const renderComponent = () => {
     return render(
-      <MemoryRouter>
-        <LoginForm />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <LoginForm />
+        </MemoryRouter>
+      </Provider>
     );
   };
 
