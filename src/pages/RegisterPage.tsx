@@ -1,7 +1,7 @@
+import { strings } from '@/constants/strings';
+import { RegisterForm } from '@/features/auth';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { RegisterForm } from '../features/auth';
-import { strings } from '../constants/strings';
 
 const RegisterPage: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const RegisterPage: React.FC = () => {
       <div className="min-h-screen flex flex-col items-center justify-center p-4 gap-4">
         <RegisterForm />
         <span className="text-xs text-slate-400">
-          Versi {strings.systemVersion}
+          {`${strings.version} ${strings.systemVersion}`}
         </span>
       </div>
     </>

@@ -8,6 +8,7 @@ import Layout from './shared/components/layout/Layout';
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const TodoPage = lazy(() => import('./pages/TodoPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
@@ -23,7 +24,7 @@ const PageLoader: React.FC = () => (
   <div className="flex min-h-screen items-center justify-center bg-slate-50/50">
     <div className="flex flex-col items-center gap-3">
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-[#26A69A]" />
-      <span className="text-sm font-semibold text-slate-500">Memuat halaman...</span>
+      <span className="text-sm text-slate-500">Memuat halaman...</span>
     </div>
   </div>
 );
@@ -40,6 +41,7 @@ const App: React.FC = () => {
               <Route path="/register" element={<RegisterPage />} />
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/to-do" element={<TodoPage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

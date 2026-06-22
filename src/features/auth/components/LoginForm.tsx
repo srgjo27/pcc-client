@@ -3,14 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../shared/components/ui/Card';
-import { Input } from '../../../shared/components/ui/Input';
-import { Button } from '../../../shared/components/ui/Button';
-import { loginSchema } from '../schemas';
-import { useLogin } from '../hooks';
-import { strings } from '../../../constants/strings';
-import { ASSETS } from '../../../constants/assets';
-import type { LoginPayload } from '../types';
+import { ASSETS } from '@/constants/assets';
+import { loginSchema, useLogin, type LoginPayload } from '@/features/auth'
+import { strings } from '@/constants/strings';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/Card';
+import { Input } from '@/shared/components/ui/Input';
+import { Button } from '@/shared/components/ui/Button';
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -34,10 +32,6 @@ export const LoginForm: React.FC = () => {
     setAuthFeedback(null);
     try {
       await login(data);
-      setAuthFeedback({
-        type: 'success',
-        message: strings.auth.successMessage,
-      });
       setTimeout(() => {
         navigate('/dashboard');
       }, 1000);
@@ -65,6 +59,19 @@ export const LoginForm: React.FC = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+
+            {authFeedback && (
+              <div
+                role="alert"
+                className={`p-3 rounded-lg text-sm font-medium border ${authFeedback.type === 'success'
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  : 'bg-red-50 text-red-800 border-red-200'
+                  }`}
+              >
+                {authFeedback.message}
+              </div>
+            )}
+
             <Input
               type="email"
               label={strings.auth.emailLabel}
@@ -107,25 +114,13 @@ export const LoginForm: React.FC = () => {
               </div>
             </div>
 
-            {authFeedback && (
-              <div
-                role="alert"
-                className={`p-3 rounded-lg text-sm font-medium border ${authFeedback.type === 'success'
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                  : 'bg-red-50 text-red-800 border-red-200'
-                  }`}
-              >
-                {authFeedback.message}
-              </div>
-            )}
-
             <div className="space-y-4">
               <Button
                 type="submit"
                 isLoading={isPending}
                 className="w-full mt-2"
               >
-                {isPending ? strings.auth.submittingButton : strings.auth.submitButton}
+                {!isPending && strings.auth.submitButton}
               </Button>
 
               <div className="text-center text-sm text-slate-600">
