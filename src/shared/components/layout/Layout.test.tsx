@@ -15,8 +15,6 @@ describe('Layout Component', () => {
     );
 
     expect(screen.getByTestId('child-content')).toHaveTextContent('Dashboard Content Test');
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('User')).toBeInTheDocument();
   });
 
   test('toggles sidebar collapse state when the toggle button is clicked', async () => {

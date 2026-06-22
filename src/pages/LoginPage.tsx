@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { LoginForm } from '../features/auth';
-import { strings } from '../constants/strings';
+import { strings } from '@/constants/strings';
+import { LoginForm } from '@/features/auth';
 
 const LoginPage: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
       <div className="min-h-screen flex flex-col items-center justify-center p-4 gap-4">
         <LoginForm />
         <span className="text-xs text-slate-400">
-          Versi {strings.systemVersion}
+          {`${strings.version} ${strings.systemVersion}`}
         </span>
       </div>
     </>

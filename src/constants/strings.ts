@@ -1,5 +1,8 @@
 export const strings = {
-  systemVersion: 'v1.1.0',
+  appName: 'PCC Client',
+  systemVersion: '1.1.0',
+  version: 'Versi',
+  rightsReserved: 'Seluruh hak dilindungi.',
   auth: {
     loginTitle: 'Masuk ke Akun Anda',
     loginDescription: 'Silakan masukkan email dan kata sandi Anda untuk masuk.',
@@ -19,9 +22,7 @@ export const strings = {
     alreadyHaveAccountText: 'Sudah memiliki akun?',
     loginLinkText: 'Masuk di sini',
     submitButton: 'Masuk',
-    submittingButton: 'Sedang Masuk...',
     registerButton: 'Daftar',
-    registeringButton: 'Sedang Mendaftar...',
     validation: {
       emailInvalid: 'Alamat email tidak valid.',
       emailRequired: 'Email wajib diisi.',
@@ -34,9 +35,7 @@ export const strings = {
       termsRequired: 'Anda harus menyetujui Syarat dan Ketentuan.',
     },
     termsLabel: 'Saya menyetujui Syarat dan Ketentuan',
-    successMessage: 'Login berhasil! Selamat datang kembali.',
     errorMessage: 'Login gagal. Silakan periksa kembali email atau kata sandi Anda.',
-    successRegisterMessage: 'Pendaftaran berhasil! Akun Anda telah dibuat.',
     errorRegisterMessage: 'Pendaftaran gagal. Silakan coba lagi.',
   },
   menu: {
@@ -49,4 +48,45 @@ export const strings = {
     focus: 'Fokus',
     comingSoon: 'Segera Hadir',
   },
+  dashboard: {
+    title: 'Daily Overview',
+    subtitle: 'Pantau ringkasan produktivitas harian Anda dan analisis perkembangan aktivitas mingguan.',
+  },
+  todo: {
+    title: 'Smart To-Do',
+    subtitle: 'Kelola dan lacak tugas harian Anda dengan mudah.',
+    addButton: 'Tambah Tugas',
+    addAriaLabel: 'Tambah Tugas Baru',
+    activeTasksTitle: 'Daftar Tugas Aktif',
+    activeTasksSubtitle: 'Daftar semua rencana tindakan yang perlu diselesaikan.',
+    emptyStateTitle: 'Belum ada tugas terpilih',
+    emptyStateSubtitle: 'Pilih filter kategori di samping atau buat tugas baru untuk memulai.',
+    modalDescription: 'Formulir untuk menambahkan tugas baru.',
+    modalPlaceholder: 'Konten form tambah tugas akan segera hadir di sini.',
+    cancelButton: 'Batal',
+    saveButton: 'Simpan',
+    aside: {
+      contextTitle: 'Konteks',
+      priorityTitle: 'Prioritas',
+      reviewTitle: 'Tinjauan Hari Ini',
+      contexts: {
+        college: 'Kuliah',
+        work: 'Kerja',
+        business: 'Usaha',
+        personal: 'Personal',
+      },
+      priorities: {
+        high: 'Tinggi',
+        medium: 'Sedang',
+        low: 'Rendah',
+      },
+      stats: {
+        completed: 'Selesai',
+        pending: 'Tertunda',
+        completionRate: 'Tingkat Penyelesaian',
+        tasksCount: '{completed} dari {total} tugas selesai',
+      }
+    }
+  }
 };
+
