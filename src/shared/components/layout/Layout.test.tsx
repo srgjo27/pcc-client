@@ -2,16 +2,20 @@ import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 import Layout from './Layout';
 
 describe('Layout Component', () => {
   test('renders children content correctly inside layout page wrapper', () => {
     render(
-      <MemoryRouter>
-        <Layout>
-          <div data-testid="child-content">Dashboard Content Test</div>
-        </Layout>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Layout>
+            <div data-testid="child-content">Dashboard Content Test</div>
+          </Layout>
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByTestId('child-content')).toHaveTextContent('Dashboard Content Test');
@@ -19,11 +23,13 @@ describe('Layout Component', () => {
 
   test('toggles sidebar collapse state when the toggle button is clicked', async () => {
     render(
-      <MemoryRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Layout>
+            <div>Content</div>
+          </Layout>
+        </MemoryRouter>
+      </Provider>
     );
 
     // Initial state: Sidebar has expand/collapse button
@@ -44,11 +50,13 @@ describe('Layout Component', () => {
 
   test('renders navigation link with correct attributes', () => {
     render(
-      <MemoryRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Layout>
+            <div>Content</div>
+          </Layout>
+        </MemoryRouter>
+      </Provider>
     );
 
     const dashboardLinks = screen.getAllByRole('link', { name: /dashboard/i });
