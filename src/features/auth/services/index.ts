@@ -10,7 +10,7 @@ export async function loginUser(payload: LoginPayload): Promise<AuthResponse> {
       // For slicing, we will accept any login but fail on a specific test password/email if desired.
       // Let's mock a successful login.
       if (payload.email === 'error@example.com') {
-        reject(new Error(strings.auth.errorMessage));
+        reject(new Error(strings.id.auth.errorMessage));
       } else {
         resolve({
           user: {
@@ -32,8 +32,9 @@ export async function registerUser(payload: RegisterPayload): Promise<AuthRespon
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (payload.email === 'error@example.com') {
-        reject(new Error(strings.auth.errorRegisterMessage));
+        reject(new Error(strings.id.auth.errorRegisterMessage));
       } else {
+
         resolve({
           user: {
             id: 'usr_reg_' + Math.random().toString(36).substring(2, 9),
