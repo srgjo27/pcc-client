@@ -15,7 +15,7 @@ const getInitialLanguage = (): Language => {
         return saved;
       }
     }
-  } catch (e) {
+  } catch {
     // safe fallback
   }
 
@@ -37,7 +37,7 @@ export const settingsSlice = createSlice({
         if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.setItem === 'function') {
           window.localStorage.setItem('pcc_lang', action.payload);
         }
-      } catch (e) {
+      } catch {
         // safe fallback
       }
     },
