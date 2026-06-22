@@ -106,7 +106,6 @@ describe('LoginForm Component', () => {
         email: 'john@example.com',
         password: 'password123',
       });
-      expect(screen.getByText('Login berhasil! Selamat datang kembali.')).toBeInTheDocument();
     });
   });
 

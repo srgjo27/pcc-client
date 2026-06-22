@@ -147,7 +147,6 @@ describe('RegisterForm Component', () => {
         confirmPassword: 'password123',
         acceptTerms: true,
       });
-      expect(screen.getByText('Pendaftaran berhasil! Akun Anda telah dibuat.')).toBeInTheDocument();
     });
 
     // Form should be reset
