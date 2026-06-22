@@ -3,14 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../shared/components/ui/Card';
-import { Input } from '../../../shared/components/ui/Input';
-import { Button } from '../../../shared/components/ui/Button';
-import { registerSchema } from '../schemas';
-import { useRegister } from '../hooks';
-import { strings } from '../../../constants/strings';
-import { ASSETS } from '../../../constants/assets';
-import type { RegisterPayload } from '../types';
+import { registerSchema, useRegister, type RegisterPayload } from '@/features/auth'
+import { strings } from '@/constants/strings';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/Card';
+import { ASSETS } from '@/constants/assets';
+import { Input } from '@/shared/components/ui/Input';
+import { Button } from '@/shared/components/ui/Button';
 
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
@@ -39,10 +37,6 @@ export const RegisterForm: React.FC = () => {
     setAuthFeedback(null);
     try {
       await registerUser(data);
-      setAuthFeedback({
-        type: 'success',
-        message: strings.auth.successRegisterMessage,
-      });
       reset();
       setTimeout(() => {
         navigate('/login');
@@ -172,7 +166,7 @@ export const RegisterForm: React.FC = () => {
                 isLoading={isPending}
                 className="w-full mt-2"
               >
-                {isPending ? strings.auth.registeringButton : strings.auth.registerButton}
+                {!isPending && strings.auth.registerButton}
               </Button>
 
               <div className="text-center text-sm text-slate-600">

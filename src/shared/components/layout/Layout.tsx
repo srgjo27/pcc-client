@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   Menu,
   LayoutDashboard,
-  LogOut,
-  User,
   ClipboardList,
   Calendar,
   Wallet,
@@ -14,9 +12,9 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
 } from 'lucide-react';
-import { cn } from '../../utils/cn';
-import { ASSETS } from '../../../constants/assets';
-import { strings } from '../../../constants/strings';
+import { cn } from '@/shared/utils/cn';
+import { strings } from '@/constants/strings';
+import { ASSETS } from '@/constants/assets';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -25,12 +23,7 @@ export interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const handleLogout = () => {
-    navigate('/login');
-  };
 
   const menuItems = [
     {
@@ -79,7 +72,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const getPageTitle = () => {
     if (location.pathname === '/dashboard') return strings.menu.dashboard;
     if (location.pathname === '/to-do') return strings.menu.todo;
-    return 'PCC Client';
+    return strings.appName;
   };
 
   return (
@@ -100,26 +93,26 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <img src={ASSETS.images.pcc} alt="PCC Logo" loading="lazy" className="w-auto object-contain" />
                 </div>
                 <span className="text-base font-bold bg-linear-to-r from-[#26A69A] via-[#29B6F6] to-[#FFB300] bg-clip-text text-transparent truncate">
-                  PCC Client
+                  {strings.appName}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsCollapsed(true)}
-                className="rounded-lg p-1.5 hover:bg-[#F0F9FF] hover:text-[#26A69A] transition-colors"
+                className="rounded-lg p-1.5 text-slate-500 hover:bg-[#F0F9FF] hover:text-[#26A69A] transition-colors"
                 aria-label="Collapse Sidebar"
               >
-                <PanelLeftClose className="h-5 w-5" />
+                <PanelLeftClose className="h-4 w-4" />
               </button>
             </>
           ) : (
             <button
               type="button"
               onClick={() => setIsCollapsed(false)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-[#F0F9FF] hover:text-[#26A69A] transition-colors"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-[#F0F9FF] hover:text-[#26A69A] transition-colors"
               aria-label="Expand Sidebar"
             >
-              <PanelLeftOpen className="h-5 w-5" />
+              <PanelLeftOpen className="h-4 w-4" />
             </button>
           )}
         </div>
@@ -133,12 +126,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div
                   key={item.name}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 cursor-not-allowed select-none',
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-300 cursor-not-allowed select-none',
                     isCollapsed && 'justify-center'
                   )}
                   title={`${item.name} (${strings.menu.comingSoon})`}
                 >
-                  <Icon className="h-5 w-5 shrink-0" />
+                  <Icon className="h-4 w-4 shrink-0" />
                   {!isCollapsed && <span>{item.name}</span>}
                 </div>
               );
@@ -150,7 +143,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 to={item.path}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#F0F9FF] text-[#26A69A] font-semibold'
                       : 'hover:bg-slate-100 hover:text-slate-600',
@@ -158,7 +151,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   )
                 }
               >
-                <Icon className="h-5 w-5 shrink-0" />
+                <Icon className="h-4 w-4 shrink-0" />
                 {!isCollapsed && <span>{item.name}</span>}
               </NavLink>
             );
@@ -192,7 +185,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <img src={ASSETS.images.pcc} alt="PCC Logo" loading="lazy" className="w-auto object-contain" />
             </div>
             <span className="text-base font-bold bg-linear-to-r from-[#26A69A] via-[#29B6F6] to-[#FFB300] bg-clip-text text-transparent truncate">
-              PCC Client
+              {strings.appName}
             </span>
           </div>
           <button
@@ -246,7 +239,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Navbar */}
-        <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-neutral-300 px-4 backdrop-blur-md sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-neutral-300 px-4 backdrop-blur-md sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             {/* Mobile menu toggle */}
             <button
@@ -259,33 +252,15 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </button>
 
             {/* View/Page Title */}
-            <h2 className="text-base font-bold md:text-lg">
+            <h2 className="font-semibold">
               {getPageTitle()}
             </h2>
           </div>
 
           {/* Right Actions */}
           <div className="flex items-center gap-4">
-            {/* Profile Info */}
             <div className="flex items-center gap-3">
-              <div className="hidden xs:flex flex-col items-end">
-                <span className="text-xs font-bold">John Doe</span>
-                <span className="text-[10px] font-medium text-slate-400">User</span>
-              </div>
-
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F0F9FF] text-[#26A69A]">
-                <User className="h-4 w-4" />
-              </div>
-
-              {/* Logout */}
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-100 text-red-500 transition-colors"
-                aria-label="Keluar Aplikasi"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
+              {/* TODO */}
             </div>
           </div>
         </header>
@@ -299,10 +274,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <footer className="border-t border-neutral-300 py-4 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] sm:text-xs text-slate-400">
             <div>
-              &copy; {`2026`} PCC Client. All rights reserved.
+              &copy; {`2026`} {`${strings.appName}. ${strings.rightsReserved}`}
             </div>
             <div>
-              <span>Versi {strings.systemVersion}</span>
+              <span>{`${strings.version} ${strings.systemVersion}`}</span>
             </div>
           </div>
         </footer>
