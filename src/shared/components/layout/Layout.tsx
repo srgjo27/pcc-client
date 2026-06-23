@@ -40,9 +40,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     },
     {
       name: t.menu.schedule,
-      path: '#',
+      path: '/schedule',
       icon: Calendar,
-      disabled: true,
     },
     {
       name: t.menu.finance,
@@ -74,6 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const getPageTitle = () => {
     if (location.pathname === '/dashboard') return t.menu.dashboard;
     if (location.pathname === '/to-do') return t.menu.todo;
+    if (location.pathname === '/schedule') return t.menu.schedule;
     return t.appName;
   };
 

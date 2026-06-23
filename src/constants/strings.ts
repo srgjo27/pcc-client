@@ -88,6 +88,59 @@ export interface TranslationType {
       };
     };
   };
+  schedule: {
+    title: string;
+    subtitle: string;
+    addEvent: string;
+    editEvent: string;
+    eventDetails: string;
+    deleteEvent: string;
+    deleteConfirm: string;
+    filter: string;
+    today: string;
+    form: {
+      titleLabel: string;
+      titlePlaceholder: string;
+      descriptionLabel: string;
+      descriptionPlaceholder: string;
+      contextLabel: string;
+      startDateLabel: string;
+      endDateLabel: string;
+      isRecurringLabel: string;
+      recurringDaysLabel: string;
+      recurringEndDateLabel: string;
+    };
+    validation: {
+      titleRequired: string;
+      startDateRequired: string;
+      endDateRequired: string;
+      contextRequired: string;
+      dateOrderInvalid: string;
+    };
+    conflictWarningTitle: string;
+    conflictWarningDesc: string;
+    views: {
+      month: string;
+      week: string;
+      day: string;
+    };
+    dayView: {
+      eventsCountLabel: string;
+      noEvents: string;
+      emptyStateActionDesc: string;
+      recurring: string;
+      conflictMessage: string;
+    };
+    monthView: {
+      weekDays: string[];
+    };
+    weekView: {
+      noEvents: string;
+      conflictBadge: string;
+    };
+    prevAriaLabel: string;
+    nextAriaLabel: string;
+  };
 }
 
 export const strings: Record<'id' | 'en', TranslationType> = {
@@ -180,6 +233,59 @@ export const strings: Record<'id' | 'en', TranslationType> = {
           tasksCount: '{completed} dari {total} tugas selesai',
         }
       }
+    },
+    schedule: {
+      title: 'Jadwal Terpadu',
+      subtitle: 'Pantau dan kelola jadwal aktivitas Anda dari semua kategori secara terintegrasi.',
+      addEvent: 'Tambah Jadwal Baru',
+      editEvent: 'Ubah Jadwal',
+      eventDetails: 'Detail Jadwal',
+      deleteEvent: 'Hapus Jadwal',
+      deleteConfirm: 'Apakah Anda yakin ingin menghapus jadwal ini?',
+      filter: 'Filter',
+      today: 'Hari Ini',
+      form: {
+        titleLabel: 'Nama Kegiatan',
+        titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
+        descriptionLabel: 'Keterangan',
+        descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
+        contextLabel: 'Kategori / Konteks',
+        startDateLabel: 'Waktu Mulai',
+        endDateLabel: 'Waktu Selesai',
+        isRecurringLabel: 'Ulangi Kegiatan Ini',
+        recurringDaysLabel: 'Ulangi Pada Hari',
+        recurringEndDateLabel: 'Selesai Pengulangan Pada',
+      },
+      validation: {
+        titleRequired: 'Nama kegiatan wajib diisi.',
+        startDateRequired: 'Waktu mulai wajib diisi.',
+        endDateRequired: 'Waktu selesai wajib diisi.',
+        contextRequired: 'Kategori wajib dipilih.',
+        dateOrderInvalid: 'Waktu selesai harus setelah waktu mulai.',
+      },
+      conflictWarningTitle: 'Bentrokan Jadwal Terdeteksi!',
+      conflictWarningDesc: 'Beberapa kegiatan Anda bertabrakan di tampilan ini.',
+      views: {
+        month: 'Bulanan',
+        week: 'Mingguan',
+        day: 'Harian',
+      },
+      dayView: {
+        eventsCountLabel: '{count} Kegiatan',
+        noEvents: 'Tidak ada kegiatan untuk hari ini',
+        emptyStateActionDesc: 'Klik sel kosong atau tombol Tambah Jadwal untuk membuat kegiatan baru',
+        recurring: 'Berulang',
+        conflictMessage: 'Bentrokan jadwal: Kegiatan ini bertabrakan dengan kegiatan lain!',
+      },
+      monthView: {
+        weekDays: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+      },
+      weekView: {
+        noEvents: 'Tidak ada kegiatan',
+        conflictBadge: 'Bentrokan',
+      },
+      prevAriaLabel: 'Sebelumnya',
+      nextAriaLabel: 'Berikutnya',
     }
   },
   en: {
@@ -224,12 +330,12 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     },
     menu: {
       dashboard: 'Dashboard',
-      todo: 'Track Tasks',
-      schedule: 'Schedule',
-      finance: 'Finance',
-      notes: 'Notes',
-      habits: 'Habits',
-      focus: 'Focus',
+      todo: 'Smart To-Do',
+      schedule: 'Unified Schedule',
+      finance: 'Finance Tracker',
+      notes: 'Quick Notes',
+      habits: 'Habit & Gym Log',
+      focus: 'Focus Mode',
       comingSoon: 'Coming Soon',
     },
     dashboard: {
@@ -271,6 +377,59 @@ export const strings: Record<'id' | 'en', TranslationType> = {
           tasksCount: '{completed} of {total} tasks completed',
         }
       }
+    },
+    schedule: {
+      title: 'Unified Schedule',
+      subtitle: 'Monitor and manage your schedules across all categories in an integrated view.',
+      addEvent: 'Add New Event',
+      editEvent: 'Edit Event',
+      eventDetails: 'Event Details',
+      deleteEvent: 'Delete Event',
+      deleteConfirm: 'Are you sure you want to delete this event?',
+      filter: 'Filters',
+      today: 'Today',
+      form: {
+        titleLabel: 'Event Title',
+        titlePlaceholder: 'e.g., Linear Algebra Class',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Add a description or meeting link',
+        contextLabel: 'Category / Context',
+        startDateLabel: 'Start Time',
+        endDateLabel: 'End Time',
+        isRecurringLabel: 'Repeat This Event',
+        recurringDaysLabel: 'Repeat On',
+        recurringEndDateLabel: 'End Recurrence On',
+      },
+      validation: {
+        titleRequired: 'Event title is required.',
+        startDateRequired: 'Start time is required.',
+        endDateRequired: 'End time is required.',
+        contextRequired: 'Category is required.',
+        dateOrderInvalid: 'End time must be after start time.',
+      },
+      conflictWarningTitle: 'Schedule Conflict Detected!',
+      conflictWarningDesc: 'Some of your schedules conflict in this view.',
+      views: {
+        month: 'Month',
+        week: 'Week',
+        day: 'Day',
+      },
+      dayView: {
+        eventsCountLabel: '{count} Event(s)',
+        noEvents: 'No events scheduled for this day',
+        emptyStateActionDesc: 'Click a blank cell or the Add Event button to schedule one',
+        recurring: 'Recurring',
+        conflictMessage: 'Schedule conflict: This event overlaps with another event!',
+      },
+      monthView: {
+        weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      },
+      weekView: {
+        noEvents: 'No events scheduled',
+        conflictBadge: 'Conflict',
+      },
+      prevAriaLabel: 'Previous',
+      nextAriaLabel: 'Next',
     }
   }
 };
