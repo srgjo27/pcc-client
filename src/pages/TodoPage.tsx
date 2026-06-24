@@ -1,13 +1,16 @@
 import { ToDo } from '@/features/to-do';
+import { useLanguage } from '@/shared/hooks/useLanguage';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const TodoPage: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <>
       <Helmet>
-        <title>Lacak Tugas | PCC Client</title>
-        <meta name="description" content="Manajemen tugas harian berdasarkan konteks Kuliah, Kerja, Usaha, dan Personal dengan prioritasi dan visualisasi deadline." />
+        <title>{`${t.menu.todo} | ${t.appName}`}</title>
+        <meta name="description" content={t.todo.subtitle} />
       </Helmet>
       <ToDo />
     </>
