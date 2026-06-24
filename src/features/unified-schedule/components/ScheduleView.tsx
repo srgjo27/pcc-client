@@ -147,8 +147,9 @@ export const ScheduleView: React.FC = () => {
       {/* Sidebar Controls */}
       <aside className="w-full lg:w-64 shrink-0 flex flex-col gap-4 border border-neutral-300 rounded-xl p-4 bg-white">
         <Button
+          variant="custom"
           size="sm"
-          className="gap-2 !bg-[#26A69A] hover:!bg-[#23968b] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="gap-2 bg-[#26A69A] hover:bg-[#23968b] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
           onClick={() => {
             setSelectedEvent(null);
             setIsModalOpen(true);
