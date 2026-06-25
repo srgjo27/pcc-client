@@ -183,7 +183,7 @@ export const EventModal: React.FC<EventModalProps> = ({
             id="event-isRecurring"
             type="checkbox"
             disabled={isLoading}
-            className="h-4.5 w-4.5 rounded border-neutral-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            className="h-4.5 w-4.5 rounded border-neutral-300 accent-[#FFB300] cursor-pointer"
             {...register('isRecurring')}
           />
           <label
@@ -224,8 +224,8 @@ export const EventModal: React.FC<EventModalProps> = ({
                             type="button"
                             disabled={isLoading}
                             onClick={() => toggleDay(day.value)}
-                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none ${isSelected
-                              ? 'bg-blue-600 text-white border-blue-600'
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 ${isSelected
+                              ? 'bg-[#29B6F6] text-white'
                               : 'bg-white text-slate-600 border-neutral-300 hover:bg-slate-50'
                               }`}
                           >
@@ -279,10 +279,10 @@ export const EventModal: React.FC<EventModalProps> = ({
             </Button>
             <Button
               type="submit"
-              variant="primary"
+              variant="custom"
               size="sm"
               isLoading={isLoading}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto bg-[#26A69A] hover:bg-[#23968b] text-white"
             >
               {t.todo.saveButton}
             </Button>

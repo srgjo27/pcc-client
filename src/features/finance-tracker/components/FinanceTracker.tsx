@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Plus, Wallet, TrendingUp, TrendingDown, AlertTriangle, Trash2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Wallet, TrendingUp, TrendingDown, AlertTriangle, Calendar, Search } from 'lucide-react';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Button } from '@/shared/components/ui/Button';
 import { Card } from '@/shared/components/ui/Card';
+import { Input } from '@/shared/components/ui/Input';
 import { formatCurrency } from '@/shared/utils/currency';
 import {
   PieChart,
@@ -26,6 +27,7 @@ import {
 } from '../hooks';
 import { TransactionForm } from './TransactionForm';
 import { BudgetForm } from './BudgetForm';
+import { TransactionHistoryList } from './TransactionHistoryList';
 import type { ExpenseCategory } from '../types';
 
 export const FinanceTracker: React.FC = () => {
@@ -33,6 +35,7 @@ export const FinanceTracker: React.FC = () => {
   const [isTxModalOpen, setIsTxModalOpen] = useState(false);
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Queries & Mutations
   const { data: transactions = [], isLoading: isTxLoading } = useGetTransactions();
@@ -164,18 +167,31 @@ export const FinanceTracker: React.FC = () => {
     return [...transactions].sort((a, b) => b.date.localeCompare(a.date));
   }, [transactions]);
 
-  // Reset page to 1 on dataset length changes
+  // Filter transactions by search query
+  const filteredTransactions = useMemo(() => {
+    if (!searchQuery.trim()) return sortedTransactions;
+    const query = searchQuery.toLowerCase().trim();
+    return sortedTransactions.filter((tx) => {
+      const titleMatch = tx.title.toLowerCase().includes(query);
+      const descMatch = tx.description ? tx.description.toLowerCase().includes(query) : false;
+      const categoryLabel = t.finance.categories[tx.category] || tx.category;
+      const categoryMatch = categoryLabel.toLowerCase().includes(query);
+      return titleMatch || descMatch || categoryMatch;
+    });
+  }, [sortedTransactions, searchQuery, t.finance.categories]);
+
+  // Reset page to 1 on dataset length changes or search query changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [transactions.length]);
+  }, [transactions.length, searchQuery]);
 
   const ITEMS_PER_PAGE = 10;
-  const totalPages = Math.ceil(sortedTransactions.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
 
   const paginatedTransactions = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return sortedTransactions.slice(start, start + ITEMS_PER_PAGE);
-  }, [sortedTransactions, currentPage]);
+    return filteredTransactions.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredTransactions, currentPage]);
 
   const handleDelete = (id: string) => {
     if (confirm(t.finance.deleteConfirm)) {
@@ -195,6 +211,7 @@ export const FinanceTracker: React.FC = () => {
           <Button
             variant="outline"
             onClick={() => setIsBudgetModalOpen(true)}
+            size="sm"
             className="gap-2">
             <Calendar className="h-4 w-4 text-[#26A69A]" />
             <span>{t.finance.setBudget}</span>
@@ -202,6 +219,7 @@ export const FinanceTracker: React.FC = () => {
           <Button
             onClick={() => setIsTxModalOpen(true)}
             variant="custom"
+            size="sm"
             className="gap-2 bg-[#26A69A] hover:bg-[#208b81] text-white">
             <Plus className="h-4 w-4" />
             <span>{t.finance.addTransaction}</span>
@@ -351,115 +369,38 @@ export const FinanceTracker: React.FC = () => {
 
       {/* Transaction History list */}
       <Card className="p-6">
-        <div className="mb-4 flex justify-between items-center">
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h3 className="font-bold text-sm tracking-tight">
             {lang === 'id' ? 'Riwayat Transaksi' : 'Transaction History'}
           </h3>
+          <div className="w-full sm:w-64">
+            <Input
+              type="text"
+              placeholder={lang === 'id' ? 'Cari transaksi...' : 'Search transactions...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label={lang === 'id' ? 'Cari transaksi' : 'Search transactions'}
+              className="!h-9 !text-xs"
+              leftElement={<Search className="h-3 w-3 text-slate-400" />}
+            />
+          </div>
         </div>
-        {isTxLoading ? (
-          <div className="py-12 flex justify-center items-center text-slate-400 text-xs">
-            <span className="animate-pulse">{lang === 'id' ? 'Memuat data...' : 'Loading data...'}</span>
-          </div>
-        ) : sortedTransactions.length === 0 ? (
-          <div className="py-12 flex justify-center items-center text-slate-400 text-xs">
-            <span>{lang === 'id' ? 'Belum ada transaksi' : 'No transactions recorded yet'}</span>
-          </div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-neutral-200 text-slate-400 uppercase tracking-wider text-[10px]">
-                    <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Tanggal' : 'Date'}</th>
-                    <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Transaksi' : 'Title'}</th>
-                    <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Kategori' : 'Category'}</th>
-                    <th className="py-3 px-2 font-semibold text-right">{lang === 'id' ? 'Jumlah' : 'Amount'}</th>
-                    <th className="py-3 px-2 font-semibold text-center">{lang === 'id' ? 'Aksi' : 'Action'}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {paginatedTransactions.map((tx) => (
-                    <tr key={tx.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="py-3.5 px-2 text-slate-500 font-medium whitespace-nowrap">{tx.date}</td>
-                      <td className="py-3.5 px-2">
-                        <div className="font-bold">{tx.title}</div>
-                        {tx.description && <div className="text-[10px] text-slate-400 mt-0.5">{tx.description}</div>}
-                      </td>
-                      <td className="py-3.5 px-2">
-                        <span className="px-2 py-0.5 bg-slate-100 rounded-full font-medium text-slate-600 text-[10px]">
-                          {t.finance.categories[tx.category] || tx.category}
-                        </span>
-                      </td>
-                      <td className={`py-3.5 px-2 text-right font-extrabold whitespace-nowrap ${tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                        {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
-                      </td>
-                      <td className="py-3.5 px-2 text-center">
-                        <Button
-                          variant="custom"
-                          size="icon"
-                          onClick={() => handleDelete(tx.id)}
-                          className="h-8 w-8 text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                          aria-label={`${lang === 'id' ? 'Hapus' : 'Delete'} ${tx.title}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-neutral-200 mt-4">
-                <div className="text-xs text-slate-500">
-                  {lang === 'id'
-                    ? `Menampilkan ${Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, sortedTransactions.length)} - ${Math.min(currentPage * ITEMS_PER_PAGE, sortedTransactions.length)} dari ${sortedTransactions.length} transaksi`
-                    : `Showing ${Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, sortedTransactions.length)} - ${Math.min(currentPage * ITEMS_PER_PAGE, sortedTransactions.length)} of ${sortedTransactions.length} transactions`}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="p-1.5 h-8 w-8 rounded-lg flex items-center justify-center"
-                    aria-label={lang === 'id' ? 'Halaman sebelumnya' : 'Previous page'}
-                  >
-                    <ChevronLeft className="h-4 w-4 shrink-0" />
-                  </Button>
-
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? 'custom' : 'outline'}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                      className={`h-8 w-8 ${currentPage === page ? 'bg-[#26A69A] border-none text-white' : ''}`}
-                    >
-                      {page}
-                    </Button>
-                  ))}
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="p-1.5 h-8 w-8 rounded-lg flex items-center justify-center"
-                    aria-label={lang === 'id' ? 'Halaman berikutnya' : 'Next page'}
-                  >
-                    <ChevronRight className="h-4 w-4 shrink-0" />
-                  </Button>
-                </div>
-              </div>
-            )}
-          </>
-        )}
+        <TransactionHistoryList
+          isTxLoading={isTxLoading}
+          transactionsCount={transactions.length}
+          filteredTransactions={filteredTransactions}
+          paginatedTransactions={paginatedTransactions}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={ITEMS_PER_PAGE}
+          onPageChange={setCurrentPage}
+          onDelete={handleDelete}
+          lang={lang}
+          t={t}
+        />
       </Card>
 
-      {/* Forms Modals */}
+      {/* Modals */}
       <TransactionForm
         isOpen={isTxModalOpen}
         onClose={() => setIsTxModalOpen(false)}
