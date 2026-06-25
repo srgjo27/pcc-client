@@ -1,4 +1,4 @@
-import type { Transaction, Budget, TransactionFormPayload, BudgetFormPayload } from '../types';
+import type { Transaction, Budget, TransactionFormPayload, BudgetFormPayload, TransactionCategory, ExpenseCategory } from '../types';
 
 const TRANSACTIONS_KEY = 'pcc_finance_transactions';
 const BUDGETS_KEY = 'pcc_finance_budgets';
@@ -109,7 +109,7 @@ export async function createTransaction(payload: TransactionFormPayload): Promis
       const transactions = getStoredTransactions();
       const newTransaction: Transaction = {
         ...payload,
-        category: payload.category as any,
+        category: payload.category as TransactionCategory,
         id: `t_${Math.random().toString(36).substring(2, 9)}`,
       };
       transactions.push(newEventToTransactions(newTransaction));
@@ -119,13 +119,13 @@ export async function createTransaction(payload: TransactionFormPayload): Promis
   });
 }
 
-function newEventToTransactions(item: any): Transaction {
+function newEventToTransactions(item: Transaction): Transaction {
   return {
     id: item.id,
     title: item.title,
     type: item.type,
     amount: Number(item.amount),
-    category: item.category as any,
+    category: item.category,
     date: item.date,
     description: item.description || '',
   };
@@ -156,7 +156,7 @@ export async function updateBudget(payload: BudgetFormPayload): Promise<Budget> 
       const budgets = getStoredBudgets();
       const index = budgets.findIndex((b) => b.category === payload.category);
       const updatedBudget: Budget = {
-        category: payload.category as any,
+        category: payload.category as ExpenseCategory,
         amount: Number(payload.amount),
       };
       if (index > -1) {

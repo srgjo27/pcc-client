@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Plus, Wallet, TrendingUp, TrendingDown, AlertTriangle, Calendar, Search } from 'lucide-react';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Button } from '@/shared/components/ui/Button';
@@ -180,18 +180,19 @@ export const FinanceTracker: React.FC = () => {
     });
   }, [sortedTransactions, searchQuery, t.finance.categories]);
 
-  // Reset page to 1 on dataset length changes or search query changes
-  useEffect(() => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
     setCurrentPage(1);
-  }, [transactions.length, searchQuery]);
+  };
 
   const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
+  const activePage = Math.max(1, Math.min(currentPage, totalPages || 1));
 
   const paginatedTransactions = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const start = (activePage - 1) * ITEMS_PER_PAGE;
     return filteredTransactions.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredTransactions, currentPage]);
+  }, [filteredTransactions, activePage]);
 
   const handleDelete = (id: string) => {
     if (confirm(t.finance.deleteConfirm)) {
@@ -378,7 +379,7 @@ export const FinanceTracker: React.FC = () => {
               type="text"
               placeholder={lang === 'id' ? 'Cari transaksi...' : 'Search transactions...'}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               aria-label={lang === 'id' ? 'Cari transaksi' : 'Search transactions'}
               className="!h-9 !text-xs"
               leftElement={<Search className="h-3 w-3 text-slate-400" />}
@@ -390,7 +391,7 @@ export const FinanceTracker: React.FC = () => {
           transactionsCount={transactions.length}
           filteredTransactions={filteredTransactions}
           paginatedTransactions={paginatedTransactions}
-          currentPage={currentPage}
+          currentPage={activePage}
           totalPages={totalPages}
           itemsPerPage={ITEMS_PER_PAGE}
           onPageChange={setCurrentPage}

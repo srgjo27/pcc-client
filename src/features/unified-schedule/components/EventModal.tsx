@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Modal } from '@/shared/components/ui/Modal';
 import { Input } from '@/shared/components/ui/Input';
@@ -44,7 +44,6 @@ export const EventModal: React.FC<EventModalProps> = ({
     register,
     handleSubmit,
     control,
-    watch,
     setValue,
     reset,
     formState: { errors },
@@ -62,7 +61,10 @@ export const EventModal: React.FC<EventModalProps> = ({
     },
   });
 
-  const isRecurring = watch('isRecurring');
+  const isRecurring = useWatch({
+    control,
+    name: 'isRecurring',
+  });
 
   // Reset form when event changes or modal opens
   useEffect(() => {
