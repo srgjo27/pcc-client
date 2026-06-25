@@ -61,9 +61,10 @@ export const ToDo: React.FC = () => {
           </p>
         </div>
         <Button
+          variant="custom"
           type="button"
           size="sm"
-          className="gap-2 !bg-[#26A69A] hover:!bg-[#23968b] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="gap-2 bg-[#26A69A] hover:bg-[#23968b] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
           aria-label={t.todo.addAriaLabel}
           onClick={() => setIsAddModalOpen(true)}
         >
@@ -173,9 +174,8 @@ export const ToDo: React.FC = () => {
                       key={ctx.id}
                       type="button"
                       onClick={() => setSelectedContext(isSelected ? null : ctx.id)}
-                      className={`w-full flex items-center justify-between p-3.5 text-left text-xs font-medium transition-all hover:bg-slate-50 focus:bg-slate-50 outline-hidden ${
-                        isSelected ? 'bg-slate-50/80 font-bold border-l-4 border-[#26A69A] pl-2.5' : ''
-                      }`}
+                      className={`w-full flex items-center justify-between p-3.5 text-left text-xs font-medium transition-all hover:bg-slate-50 focus:bg-slate-50 outline-hidden ${isSelected ? 'bg-slate-50/80 font-bold border-l-4 border-[#26A69A] pl-2.5' : ''
+                        }`}
                       aria-label={`Filter berdasarkan konteks ${ctx.name}`}
                     >
                       <div className="flex items-center gap-3">
@@ -213,9 +213,8 @@ export const ToDo: React.FC = () => {
                       key={prio.id}
                       type="button"
                       onClick={() => setSelectedPriority(isSelected ? null : prio.id)}
-                      className={`w-full flex items-center justify-between p-3.5 text-left text-xs font-medium transition-all hover:bg-slate-50 focus:bg-slate-50 outline-hidden ${
-                        isSelected ? 'bg-slate-50/80 font-bold border-l-4 border-[#26A69A] pl-2.5' : ''
-                      }`}
+                      className={`w-full flex items-center justify-between p-3.5 text-left text-xs font-medium transition-all hover:bg-slate-50 focus:bg-slate-50 outline-hidden ${isSelected ? 'bg-slate-50/80 font-bold border-l-4 border-[#26A69A] pl-2.5' : ''
+                        }`}
                       aria-label={`Filter berdasarkan prioritas ${prio.name}`}
                     >
                       <div className="flex items-center gap-3">
@@ -255,8 +254,9 @@ export const ToDo: React.FC = () => {
               {t.todo.cancelButton}
             </Button>
             <Button
+              variant="custom"
               size="sm"
-              className="!bg-[#26A69A] hover:!bg-[#23968b] text-white"
+              className="bg-[#26A69A] hover:bg-[#23968b] text-white"
               onClick={() => setIsAddModalOpen(false)}
             >
               {t.todo.saveButton}

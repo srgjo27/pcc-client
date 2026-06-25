@@ -5,6 +5,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string;
   error?: string;
   helperText?: string;
+  leftElement?: React.ReactNode;
   rightElement?: React.ReactNode;
 }
 
@@ -16,6 +17,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     helperText,
     disabled,
     id,
+    leftElement,
     rightElement,
     ...props
   }, ref) => {
@@ -44,6 +46,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <div className="relative">
+          {leftElement && (
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+              {leftElement}
+            </div>
+          )}
           <input
             id={inputId}
             type={type}
@@ -60,6 +67,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 : error
                   ? 'border-red-500 text-red-900 focus-visible:ring-red-500 focus-visible:border-transparent'
                   : 'border-neutral-300 focus-visible:ring-blue-500 focus-visible:border-transparent',
+              leftElement ? 'pl-10' : '',
               rightElement ? 'pr-10' : '',
               className
             )}
