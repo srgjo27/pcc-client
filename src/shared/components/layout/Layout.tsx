@@ -45,9 +45,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     },
     {
       name: t.menu.finance,
-      path: '#',
+      path: '/finance',
       icon: Wallet,
-      disabled: true,
     },
     {
       name: t.menu.notes,
@@ -74,6 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (location.pathname === '/dashboard') return t.menu.dashboard;
     if (location.pathname === '/to-do') return t.menu.todo;
     if (location.pathname === '/schedule') return t.menu.schedule;
+    if (location.pathname === '/finance') return t.menu.finance;
     return t.appName;
   };
 

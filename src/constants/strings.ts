@@ -141,7 +141,53 @@ export interface TranslationType {
     prevAriaLabel: string;
     nextAriaLabel: string;
   };
+  finance: {
+    title: string;
+    subtitle: string;
+    totalIncome: string;
+    totalExpense: string;
+    netBalance: string;
+    addTransaction: string;
+    editTransaction: string;
+    deleteTransaction: string;
+    deleteConfirm: string;
+    setBudget: string;
+    budgetAlert: string;
+    budgetLimit: string;
+    budgetStatus: string;
+    incomeTrend: string;
+    expenseBreakdown: string;
+    categories: {
+      salary: string;
+      business: string;
+      freelance: string;
+      food: string;
+      transportation: string;
+      subscription: string;
+      education: string;
+      entertainment: string;
+      others: string;
+    };
+    form: {
+      titleLabel: string;
+      titlePlaceholder: string;
+      typeLabel: string;
+      amountLabel: string;
+      amountPlaceholder: string;
+      categoryLabel: string;
+      dateLabel: string;
+      descriptionLabel: string;
+      descriptionPlaceholder: string;
+    };
+    validation: {
+      titleRequired: string;
+      amountRequired: string;
+      categoryRequired: string;
+      dateRequired: string;
+    };
+  };
 }
+
 
 export const strings: Record<'id' | 'en', TranslationType> = {
   id: {
@@ -286,6 +332,51 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       },
       prevAriaLabel: 'Sebelumnya',
       nextAriaLabel: 'Berikutnya',
+    },
+    finance: {
+      title: 'Pelacak Keuangan',
+      subtitle: 'Kelola pemasukan, pengeluaran, anggaran, dan pantau kesehatan finansial Anda.',
+      totalIncome: 'Total Pemasukan',
+      totalExpense: 'Total Pengeluaran',
+      netBalance: 'Saldo Bersih',
+      addTransaction: 'Tambah Transaksi',
+      editTransaction: 'Ubah Transaksi',
+      deleteTransaction: 'Hapus Transaksi',
+      deleteConfirm: 'Apakah Anda yakin ingin menghapus transaksi ini?',
+      setBudget: 'Atur Anggaran',
+      budgetAlert: 'Peringatan Anggaran!',
+      budgetLimit: 'Batas Anggaran',
+      budgetStatus: 'Status Anggaran',
+      incomeTrend: 'Tren Pemasukan vs Pengeluaran (6 Bulan Terakhir)',
+      expenseBreakdown: 'Rincian Pengeluaran per Kategori',
+      categories: {
+        salary: 'Gaji',
+        business: 'Usaha',
+        freelance: 'Lepas (Freelance)',
+        food: 'Makanan & Minuman',
+        transportation: 'Transportasi',
+        subscription: 'Langganan',
+        education: 'Pendidikan',
+        entertainment: 'Hiburan',
+        others: 'Lainnya',
+      },
+      form: {
+        titleLabel: 'Nama Transaksi',
+        titlePlaceholder: 'misal: Gaji Bulanan, Makan Siang',
+        typeLabel: 'Tipe Transaksi',
+        amountLabel: 'Jumlah (Rp)',
+        amountPlaceholder: '0',
+        categoryLabel: 'Kategori',
+        dateLabel: 'Tanggal',
+        descriptionLabel: 'Keterangan',
+        descriptionPlaceholder: 'Catatan opsional',
+      },
+      validation: {
+        titleRequired: 'Nama transaksi wajib diisi.',
+        amountRequired: 'Jumlah transaksi harus lebih dari 0.',
+        categoryRequired: 'Kategori wajib dipilih.',
+        dateRequired: 'Tanggal wajib diisi.',
+      },
     }
   },
   en: {
@@ -430,6 +521,51 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       },
       prevAriaLabel: 'Previous',
       nextAriaLabel: 'Next',
+    },
+    finance: {
+      title: 'Finance Tracker',
+      subtitle: 'Manage income, expenses, budgets, and monitor your financial health.',
+      totalIncome: 'Total Income',
+      totalExpense: 'Total Expense',
+      netBalance: 'Net Balance',
+      addTransaction: 'Add Transaction',
+      editTransaction: 'Edit Transaction',
+      deleteTransaction: 'Delete Transaction',
+      deleteConfirm: 'Are you sure you want to delete this transaction?',
+      setBudget: 'Set Budget',
+      budgetAlert: 'Budget Alert!',
+      budgetLimit: 'Budget Limit',
+      budgetStatus: 'Budget Status',
+      incomeTrend: 'Income vs Expense Trend (Last 6 Months)',
+      expenseBreakdown: 'Expense Breakdown by Category',
+      categories: {
+        salary: 'Salary',
+        business: 'Business',
+        freelance: 'Freelance',
+        food: 'Food',
+        transportation: 'Transportation',
+        subscription: 'Subscription',
+        education: 'Education',
+        entertainment: 'Entertainment',
+        others: 'Others',
+      },
+      form: {
+        titleLabel: 'Transaction Title',
+        titlePlaceholder: 'e.g., Monthly Salary, Lunch',
+        typeLabel: 'Transaction Type',
+        amountLabel: 'Amount',
+        amountPlaceholder: '0',
+        categoryLabel: 'Category',
+        dateLabel: 'Date',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Optional notes',
+      },
+      validation: {
+        titleRequired: 'Transaction title is required.',
+        amountRequired: 'Amount must be greater than 0.',
+        categoryRequired: 'Category is required.',
+        dateRequired: 'Date is required.',
+      },
     }
   }
 };
