@@ -25,6 +25,11 @@
   }
 }
 
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+} */
+
 #root {
   margin: 0 auto;
   min-height: 100svh;
