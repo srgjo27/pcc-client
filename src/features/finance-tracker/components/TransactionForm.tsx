@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Modal } from '@/shared/components/ui/Modal';
@@ -28,9 +28,9 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<TransactionFormPayload>({
     resolver: zodResolver(transactionSchema),
@@ -44,7 +44,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     },
   });
 
-  const transactionType = watch('type');
+  const transactionType = useWatch({
+    control,
+    name: 'type',
+  });
 
   // Set default category when transaction type changes
   useEffect(() => {
