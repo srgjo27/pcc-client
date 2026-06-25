@@ -2,6 +2,8 @@ import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 import { RegisterForm } from './RegisterForm';
 import { useRegister } from '../hooks';
 
@@ -23,9 +25,11 @@ describe('RegisterForm Component', () => {
 
   const renderComponent = () => {
     return render(
-      <MemoryRouter>
-        <RegisterForm />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <RegisterForm />
+        </MemoryRouter>
+      </Provider>
     );
   };
 
@@ -40,8 +44,6 @@ describe('RegisterForm Component', () => {
     expect(screen.getByLabelText('Nama Lengkap')).toBeInTheDocument();
     expect(screen.getByLabelText('Alamat Email')).toBeInTheDocument();
     
-    // There are two "Kata Sandi" labels technically or label text matches:
-    // "Kata Sandi" and "Konfirmasi Kata Sandi"
     expect(screen.getByLabelText('Kata Sandi')).toBeInTheDocument();
     expect(screen.getByLabelText('Konfirmasi Kata Sandi')).toBeInTheDocument();
 
@@ -147,7 +149,6 @@ describe('RegisterForm Component', () => {
         confirmPassword: 'password123',
         acceptTerms: true,
       });
-      expect(screen.getByText('Pendaftaran berhasil! Akun Anda telah dibuat.')).toBeInTheDocument();
     });
 
     // Form should be reset

@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../../shared/components/ui/Card';
-import { Input } from '../../../shared/components/ui/Input';
-import { Button } from '../../../shared/components/ui/Button';
-import { registerSchema } from '../schemas';
-import { useRegister } from '../hooks';
-import { strings } from '../../../constants/strings';
-import { ASSETS } from '../../../constants/assets';
-import type { RegisterPayload } from '../types';
+import { Link, useNavigate } from 'react-router-dom';
+import { getRegisterSchema, useRegister, type RegisterPayload } from '@/features/auth';
+import { useLanguage } from '@/shared/hooks/useLanguage';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/Card';
+import { ASSETS } from '@/constants/assets';
+import { Input } from '@/shared/components/ui/Input';
+import { Button } from '@/shared/components/ui/Button';
 
 export const RegisterForm: React.FC = () => {
+  const navigate = useNavigate();
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -24,7 +24,7 @@ export const RegisterForm: React.FC = () => {
     reset,
     formState: { errors },
   } = useForm<RegisterPayload>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(getRegisterSchema(t)),
     defaultValues: {
       name: '',
       email: '',
@@ -38,15 +38,14 @@ export const RegisterForm: React.FC = () => {
     setAuthFeedback(null);
     try {
       await registerUser(data);
-      setAuthFeedback({
-        type: 'success',
-        message: strings.auth.successRegisterMessage,
-      });
       reset();
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
     } catch (err) {
       setAuthFeedback({
         type: 'error',
-        message: err instanceof Error ? err.message : strings.auth.errorRegisterMessage,
+        message: err instanceof Error ? err.message : t.auth.errorRegisterMessage,
       });
     }
   };
@@ -59,18 +58,18 @@ export const RegisterForm: React.FC = () => {
             <img src={ASSETS.images.pcc} alt="PCC Logo" loading="lazy" className="h-24 w-auto object-contain" />
           </div>
           <CardTitle className="text-center">
-            {strings.auth.registerTitle}
+            {t.auth.registerTitle}
           </CardTitle>
           <CardDescription className="text-center">
-            {strings.auth.registerDescription}
+            {t.auth.registerDescription}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
             <Input
               type="text"
-              label={strings.auth.nameLabel}
-              placeholder={strings.auth.namePlaceholder}
+              label={t.auth.nameLabel}
+              placeholder={t.auth.namePlaceholder}
               error={errors.name?.message}
               disabled={isPending}
               {...register('name')}
@@ -78,8 +77,8 @@ export const RegisterForm: React.FC = () => {
 
             <Input
               type="email"
-              label={strings.auth.emailLabel}
-              placeholder={strings.auth.emailPlaceholder}
+              label={t.auth.emailLabel}
+              placeholder={t.auth.emailPlaceholder}
               error={errors.email?.message}
               disabled={isPending}
               {...register('email')}
@@ -87,8 +86,8 @@ export const RegisterForm: React.FC = () => {
 
             <Input
               type={showPassword ? 'text' : 'password'}
-              label={strings.auth.passwordLabel}
-              placeholder={strings.auth.passwordPlaceholder}
+              label={t.auth.passwordLabel}
+              placeholder={t.auth.passwordPlaceholder}
               error={errors.password?.message}
               disabled={isPending}
               rightElement={
@@ -110,8 +109,8 @@ export const RegisterForm: React.FC = () => {
 
             <Input
               type={showConfirmPassword ? 'text' : 'password'}
-              label={strings.auth.confirmPasswordLabel}
-              placeholder={strings.auth.confirmPasswordPlaceholder}
+              label={t.auth.confirmPasswordLabel}
+              placeholder={t.auth.confirmPasswordPlaceholder}
               error={errors.confirmPassword?.message}
               disabled={isPending}
               rightElement={
@@ -140,7 +139,7 @@ export const RegisterForm: React.FC = () => {
                   {...register('acceptTerms')}
                 />
                 <span className={errors.acceptTerms ? 'text-red-600 font-medium' : ''}>
-                  {strings.auth.termsLabel}
+                  {t.auth.termsLabel}
                 </span>
               </label>
               {errors.acceptTerms && (
@@ -153,10 +152,11 @@ export const RegisterForm: React.FC = () => {
             {authFeedback && (
               <div
                 role="alert"
-                className={`p-3 rounded-lg text-sm font-medium border ${authFeedback.type === 'success'
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                  : 'bg-red-50 text-red-800 border-red-200'
-                  }`}
+                className={`p-3 rounded-lg text-sm font-medium border ${
+                  authFeedback.type === 'success'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    : 'bg-red-50 text-red-800 border-red-200'
+                }`}
               >
                 {authFeedback.message}
               </div>
@@ -168,16 +168,16 @@ export const RegisterForm: React.FC = () => {
                 isLoading={isPending}
                 className="w-full mt-2"
               >
-                {isPending ? strings.auth.registeringButton : strings.auth.registerButton}
+                {!isPending && t.auth.registerButton}
               </Button>
 
               <div className="text-center text-sm text-slate-600">
-                <span>{strings.auth.alreadyHaveAccountText} </span>
+                <span>{t.auth.alreadyHaveAccountText} </span>
                 <Link
                   to="/login"
                   className="font-medium text-blue-600 hover:text-blue-500 hover:underline focus:outline-none focus:underline"
                 >
-                  {strings.auth.loginLinkText}
+                  {t.auth.loginLinkText}
                 </Link>
               </div>
             </div>
