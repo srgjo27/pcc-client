@@ -55,9 +55,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     },
     {
       name: t.menu.habits,
-      path: '#',
+      path: '/habits',
       icon: FishingRod,
-      disabled: true,
     },
     {
       name: t.menu.focus,
@@ -74,6 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (location.pathname === '/schedule') return t.menu.schedule;
     if (location.pathname === '/finance') return t.menu.finance;
     if (location.pathname === '/notes') return t.menu.notes;
+    if (location.pathname === '/habits') return t.menu.habits;
     return t.appName;
   };
 

@@ -4,7 +4,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { formatCurrency } from '@/shared/utils/currency';
 import { cn } from '@/shared/utils/cn';
 import type { Transaction } from '../types';
-import type { TranslationType } from '@/constants/strings';
+import type { TranslationType } from '@/shared/types/translation';
 
 interface TransactionHistoryListProps {
   isTxLoading: boolean;
