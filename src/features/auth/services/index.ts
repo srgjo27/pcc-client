@@ -1,4 +1,3 @@
-import { strings } from '../../../constants/strings';
 import type { AuthResponse, LoginPayload, RegisterPayload } from '../types';
 
 /**
@@ -10,7 +9,7 @@ export async function loginUser(payload: LoginPayload): Promise<AuthResponse> {
       // For slicing, we will accept any login but fail on a specific test password/email if desired.
       // Let's mock a successful login.
       if (payload.email === 'error@example.com') {
-        reject(new Error(strings.id.auth.errorMessage));
+        reject(new Error());
       } else {
         resolve({
           user: {
@@ -32,7 +31,7 @@ export async function registerUser(payload: RegisterPayload): Promise<AuthRespon
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (payload.email === 'error@example.com') {
-        reject(new Error(strings.id.auth.errorRegisterMessage));
+        reject(new Error());
       } else {
 
         resolve({

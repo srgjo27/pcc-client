@@ -4,6 +4,7 @@ import { AlertCircle, CalendarRange } from 'lucide-react';
 import type { ScheduleEvent, ScheduleEventOccurrence } from '../types';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
+import { id } from 'date-fns/locale';
 
 interface WeekViewProps {
   currentDate: Date;
@@ -34,7 +35,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
   onEventClick,
   activeContexts,
 }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const weekStart = startOfWeek(currentDate);
 
@@ -67,22 +68,22 @@ export const WeekView: React.FC<WeekViewProps> = ({
                   'text-sm font-bold',
                   isToday && 'text-[#26A69A]'
                 )}>
-                  {format(date, 'EEEE')}
+                  {lang === 'id' ? format(date, 'EEEE', { locale: id }) : format(date, 'EEEE')}
                 </span>
                 <span className="text-xs text-slate-500">
-                  {format(date, 'dd MMM yyyy')}
+                  {lang === 'id' ? format(date, 'dd MMM yyyy', { locale: id }) : format(date, 'dd MMM yyyy')}
                 </span>
               </div>
               {isToday && (
                 <span className="text-[10px] font-bold bg-[#26A69A]/10 text-[#26A69A] border border-[#26A69A]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  {t.schedule.today}
+                  {t.today}
                 </span>
               )}
             </div>
 
             {/* Day Events */}
             {dayOccurrences.length === 0 ? (
-              <div className="py-4 text-center text-xs text-slate-400 font-medium">
+              <div className="py-4 text-center text-xs text-slate-400">
                 {t.schedule.weekView.noEvents}
               </div>
             ) : (
@@ -93,15 +94,16 @@ export const WeekView: React.FC<WeekViewProps> = ({
                   const endTime = format(new Date(occ.actualEndDate), 'HH:mm');
 
                   return (
-                    <div
+                    <button
                       key={occ.occurrenceId}
+                      type="button"
                       onClick={() => onEventClick(occ)}
                       className={cn(
-                        'p-3 rounded-lg border border-neutral-200 bg-slate-50/50 hover:bg-slate-100/50 transition-colors cursor-pointer select-none flex flex-col justify-between gap-2',
+                        'w-full text-left p-3 rounded-lg border border-neutral-200 bg-slate-50/50 hover:bg-slate-100/50 transition-colors cursor-pointer select-none flex flex-col justify-between gap-2',
                         borderStyles[occ.context]
                       )}
                     >
-                      <div className="space-y-1">
+                      <div className="space-y-1 w-full">
                         <div className="flex items-start justify-between gap-2">
                           <h4 className="text-xs font-bold line-clamp-1">
                             {occ.title}
@@ -120,7 +122,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between mt-1 pt-2 border-t border-slate-100/80">
+                      <div className="flex items-center justify-between w-full mt-1 pt-2 border-t border-slate-100/80">
                         <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
                           <CalendarRange className="h-3 w-3 shrink-0" />
                           {startTime} - {endTime}
@@ -133,7 +135,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
                           </div>
                         )}
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>

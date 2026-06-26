@@ -8,6 +8,7 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     rightsReserved: 'Seluruh hak dilindungi.',
     days: 'Hari',
     times: 'Kali',
+    today: 'Hari Ini',
     auth: {
       loginTitle: 'Masuk ke Akun Anda',
       loginDescription: 'Silakan masukkan email dan kata sandi Anda untuk masuk.',
@@ -40,8 +41,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         termsRequired: 'Anda harus menyetujui Syarat dan Ketentuan.',
       },
       termsLabel: 'Saya menyetujui Syarat dan Ketentuan',
-      errorMessage: 'Login gagal. Silakan periksa kembali email atau kata sandi Anda.',
-      errorRegisterMessage: 'Pendaftaran gagal. Silakan coba lagi.',
     },
     menu: {
       dashboard: 'Dashboard',
@@ -101,14 +100,12 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       eventDetails: 'Detail Jadwal',
       deleteEvent: 'Hapus Jadwal',
       deleteConfirm: 'Apakah Anda yakin ingin menghapus jadwal ini?',
-      filter: 'Filter',
-      today: 'Hari Ini',
       form: {
         titleLabel: 'Nama Kegiatan',
         titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
         descriptionLabel: 'Keterangan',
         descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
-        contextLabel: 'Kategori / Konteks',
+        contextLabel: 'Kategori/Konteks',
         startDateLabel: 'Waktu Mulai',
         endDateLabel: 'Waktu Selesai',
         isRecurringLabel: 'Ulangi Kegiatan Ini',
@@ -136,15 +133,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         recurring: 'Berulang',
         conflictMessage: 'Bentrokan jadwal: Kegiatan ini bertabrakan dengan kegiatan lain!',
       },
-      monthView: {
-        weekDays: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-      },
       weekView: {
         noEvents: 'Tidak ada kegiatan',
         conflictBadge: 'Bentrokan',
       },
-      prevAriaLabel: 'Sebelumnya',
-      nextAriaLabel: 'Berikutnya',
     },
     finance: {
       title: 'Pelacak Keuangan',
@@ -258,6 +250,7 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     rightsReserved: 'All rights reserved.',
     days: 'Days',
     times: 'Times',
+    today: 'Today',
     auth: {
       loginTitle: 'Sign In to Your Account',
       loginDescription: 'Please enter your email and password to sign in.',
@@ -290,8 +283,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         termsRequired: 'You must agree to the Terms and Conditions.',
       },
       termsLabel: 'I agree to the Terms and Conditions',
-      errorMessage: 'Login failed. Please double-check your email or password.',
-      errorRegisterMessage: 'Registration failed. Please try again.',
     },
     menu: {
       dashboard: 'Dashboard',
@@ -351,8 +342,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       eventDetails: 'Event Details',
       deleteEvent: 'Delete Event',
       deleteConfirm: 'Are you sure you want to delete this event?',
-      filter: 'Filters',
-      today: 'Today',
       form: {
         titleLabel: 'Event Title',
         titlePlaceholder: 'e.g., Linear Algebra Class',
@@ -386,15 +375,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         recurring: 'Recurring',
         conflictMessage: 'Schedule conflict: This event overlaps with another event!',
       },
-      monthView: {
-        weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      },
       weekView: {
         noEvents: 'No events scheduled',
         conflictBadge: 'Conflict',
       },
-      prevAriaLabel: 'Previous',
-      nextAriaLabel: 'Next',
     },
     finance: {
       title: 'Finance Tracker',

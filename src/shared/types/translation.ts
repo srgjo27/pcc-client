@@ -5,6 +5,7 @@ export interface TranslationType {
     rightsReserved: string;
     days: string;
     times: string;
+    today: string;
     auth: {
         loginTitle: string;
         loginDescription: string;
@@ -37,8 +38,6 @@ export interface TranslationType {
             termsRequired: string;
         };
         termsLabel: string;
-        errorMessage: string;
-        errorRegisterMessage: string;
     };
     menu: {
         dashboard: string;
@@ -98,8 +97,6 @@ export interface TranslationType {
         eventDetails: string;
         deleteEvent: string;
         deleteConfirm: string;
-        filter: string;
-        today: string;
         form: {
             titleLabel: string;
             titlePlaceholder: string;
@@ -133,15 +130,10 @@ export interface TranslationType {
             recurring: string;
             conflictMessage: string;
         };
-        monthView: {
-            weekDays: string[];
-        };
         weekView: {
             noEvents: string;
             conflictBadge: string;
         };
-        prevAriaLabel: string;
-        nextAriaLabel: string;
     };
     finance: {
         title: string;

@@ -12,7 +12,7 @@ import { Button } from '@/shared/components/ui/Button';
 
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -45,7 +45,11 @@ export const RegisterForm: React.FC = () => {
     } catch (err) {
       setAuthFeedback({
         type: 'error',
-        message: err instanceof Error ? err.message : t.auth.errorRegisterMessage,
+        message: err instanceof Error
+          ? err.message
+          : lang === 'id'
+            ? 'Pendaftaran gagal. Silakan coba lagi.'
+            : 'Registration failed. Please try again.',
       });
     }
   };
@@ -66,8 +70,16 @@ export const RegisterForm: React.FC = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+            {authFeedback && (
+              <div
+                role="alert"
+                className="p-3 rounded-lg text-sm font-medium border bg-red-50 text-red-800 border-red-200"
+              >
+                {authFeedback.message}
+              </div>
+            )}
+
             <Input
-              type="text"
               label={t.auth.nameLabel}
               placeholder={t.auth.namePlaceholder}
               error={errors.name?.message}
@@ -94,7 +106,7 @@ export const RegisterForm: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded p-1 transition-colors"
+                  className="text-slate-400 hover:text-slate-600"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
@@ -117,7 +129,7 @@ export const RegisterForm: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded p-1 transition-colors"
+                  className="text-slate-400 hover:text-slate-600"
                   aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
                 >
                   {showConfirmPassword ? (
@@ -135,7 +147,7 @@ export const RegisterForm: React.FC = () => {
                 <input
                   type="checkbox"
                   disabled={isPending}
-                  className="h-4 w-4 mt-0.5 rounded border-neutral-300 text-blue-600 focus:ring-blue-500 focus:outline-none focus-visible:ring-2"
+                  className="h-4 w-4 mt-0.5"
                   {...register('acceptTerms')}
                 />
                 <span className={errors.acceptTerms ? 'text-red-600 font-medium' : ''}>
@@ -148,19 +160,6 @@ export const RegisterForm: React.FC = () => {
                 </p>
               )}
             </div>
-
-            {authFeedback && (
-              <div
-                role="alert"
-                className={`p-3 rounded-lg text-sm font-medium border ${
-                  authFeedback.type === 'success'
-                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                    : 'bg-red-50 text-red-800 border-red-200'
-                }`}
-              >
-                {authFeedback.message}
-              </div>
-            )}
 
             <div className="space-y-4">
               <Button

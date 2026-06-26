@@ -62,9 +62,8 @@ export const ToDo: React.FC = () => {
         </div>
         <Button
           variant="custom"
-          type="button"
           size="sm"
-          className="gap-2 bg-[#26A69A] hover:bg-[#23968b] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="gap-2 bg-[#26A69A] hover:bg-[#23968b] text-white hover:scale-[1.02] active:scale-[0.98]"
           aria-label={t.todo.addAriaLabel}
           onClick={() => setIsAddModalOpen(true)}
         >
@@ -77,7 +76,7 @@ export const ToDo: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
         {/* Main Content Area (Left/Center) */}
-        <main className="lg:col-span-8 space-y-6" aria-label={t.todo.activeTasksTitle}>
+        <main className="lg:col-span-8 space-y-6" aria-label="Daftar Tugas Aktif">
           <Card className="hover:shadow-md transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <div className="space-y-1">

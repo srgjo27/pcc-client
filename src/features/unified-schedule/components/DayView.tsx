@@ -4,6 +4,7 @@ import { AlertCircle, Clock, FileText } from 'lucide-react';
 import type { ScheduleEvent, ScheduleEventOccurrence } from '../types';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
+import { id } from 'date-fns/locale';
 
 interface DayViewProps {
   currentDate: Date;
@@ -43,7 +44,7 @@ export const DayView: React.FC<DayViewProps> = ({
   onEventClick,
   activeContexts,
 }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const dayOccurrences = occurrences.filter((occ) => {
     const occDate = new Date(occ.actualStartDate);
@@ -53,8 +54,10 @@ export const DayView: React.FC<DayViewProps> = ({
   return (
     <div className="bg-white border border-neutral-300 rounded-xl p-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center pb-4 border-b border-slate-100 mb-6 gap-2">
-        <h3 className="text-sm font-bold text-slate-800">
-          {format(currentDate, 'EEEE, d MMMM yyyy')}
+        <h3 className="text-sm font-bold">
+          {lang === 'id'
+            ? format(currentDate, 'EEEE, d MMMM yyyy', { locale: id })
+            : format(currentDate, 'EEEE, MMMM d, yyyy')}
         </h3>
         <span className="text-xs font-semibold text-slate-500">
           {t.schedule.dayView.eventsCountLabel.replace('{count}', String(dayOccurrences.length))}
@@ -63,7 +66,7 @@ export const DayView: React.FC<DayViewProps> = ({
 
       {dayOccurrences.length === 0 ? (
         <div className="py-12 flex flex-col items-center justify-center text-center">
-          <Clock className="h-10 w-10 text-slate-300 mb-3 animate-pulse" />
+          <Clock className="h-10 w-10 text-[#26A69A] mb-3 animate-pulse" />
           <p className="text-sm font-medium text-slate-500">{t.schedule.dayView.noEvents}</p>
           <p className="text-xs text-slate-400 mt-1">{t.schedule.dayView.emptyStateActionDesc}</p>
         </div>
@@ -76,26 +79,27 @@ export const DayView: React.FC<DayViewProps> = ({
             const endTime = format(new Date(occ.actualEndDate), 'HH:mm');
 
             return (
-              <div
+              <button
                 key={occ.occurrenceId}
+                type="button"
                 onClick={() => onEventClick(occ)}
                 className={cn(
-                  'p-4 rounded-xl border flex flex-col gap-3 transition-colors cursor-pointer select-none',
+                  'w-full text-left p-4 rounded-xl border flex flex-col gap-3 transition-colors cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#26A69A]',
                   style.bg,
                   style.accent
                 )}
               >
                 {/* Event header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-2 w-full">
                   <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-slate-800">{occ.title}</h4>
+                    <h4 className="text-sm font-bold">{occ.title}</h4>
                     <div className="flex flex-wrap gap-2 items-center text-xs text-slate-500 font-medium">
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5" />
+                        <Clock className="h-3 w-3" />
                         {startTime} - {endTime}
                       </span>
                       {occ.isRecurring && (
-                        <span className="bg-slate-100 border border-slate-200 text-slate-700 px-1.5 py-0.5 rounded-sm text-[10px]">
+                        <span className="bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-sm text-[10px]">
                           {t.schedule.dayView.recurring}
                         </span>
                       )}
@@ -103,7 +107,7 @@ export const DayView: React.FC<DayViewProps> = ({
                   </div>
 
                   <span className={cn(
-                    'text-[10px] font-bold px-2.5 py-1 rounded-full border uppercase shrink-0',
+                    'text-[10px] font-bold px-3 py-0.5 rounded-full border uppercase shrink-0',
                     style.badge
                   )}>
                     {t.todo.aside.contexts[occ.context as keyof typeof t.todo.aside.contexts] || occ.context}
@@ -112,7 +116,7 @@ export const DayView: React.FC<DayViewProps> = ({
 
                 {/* Description */}
                 {occ.description && (
-                  <p className="text-xs text-slate-600 font-medium flex items-start gap-2 leading-relaxed bg-white/50 p-2.5 rounded-lg border border-neutral-100">
+                  <p className="text-xs text-slate-600 flex gap-2 leading-relaxed bg-white/50 p-2.5 rounded-lg border border-neutral-100 w-full text-left">
                     <FileText className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
                     <span>{occ.description}</span>
                   </p>
@@ -120,12 +124,12 @@ export const DayView: React.FC<DayViewProps> = ({
 
                 {/* Conflict badge */}
                 {hasConflict && (
-                  <div className="flex items-center gap-2 p-2 bg-red-100/60 border border-red-200 text-red-800 rounded-lg text-xs font-bold animate-pulse">
+                  <div className="flex items-center gap-2 p-2 bg-red-100/60 border border-red-200 text-red-800 rounded-lg text-xs font-bold animate-pulse w-full text-left">
                     <AlertCircle className="h-4 w-4 text-red-600 shrink-0" />
                     <span>{t.schedule.dayView.conflictMessage}</span>
                   </div>
                 )}
-              </div>
+              </button>
             );
           })}
         </div>
