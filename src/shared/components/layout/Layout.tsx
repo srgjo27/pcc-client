@@ -50,9 +50,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     },
     {
       name: t.menu.notes,
-      path: '#',
+      path: '/notes',
       icon: NotebookPen,
-      disabled: true,
     },
     {
       name: t.menu.habits,
@@ -74,6 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (location.pathname === '/to-do') return t.menu.todo;
     if (location.pathname === '/schedule') return t.menu.schedule;
     if (location.pathname === '/finance') return t.menu.finance;
+    if (location.pathname === '/notes') return t.menu.notes;
     return t.appName;
   };
 

@@ -27,3 +27,18 @@ export function getRelativeDate(daysOffset: number, hours: number, minutes = 0):
   date.setHours(hours, minutes, 0, 0);
   return date.toISOString();
 }
+
+/**
+ * Format ISO string to localized short date (e.g. 25 Jun 2026)
+ */
+export const formatDateShort = (isoString: string, lang: 'id' | 'en' = 'id'): string => {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  const locale = lang === 'id' ? 'id-ID' : 'en-US';
+  return date.toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+

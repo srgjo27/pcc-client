@@ -1,9 +1,9 @@
 import { cn } from '@/shared/utils/cn';
-import { Loader } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import React from 'react';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'custom';
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon' | 'custom';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -27,7 +27,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     // Standard visual variant classes
     const variantClasses: Record<ButtonVariant, string> = {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+      primary: 'bg-[#26A69A] text-white hover:bg-[#22948B] active:bg-[#1E847C] focus-visible:ring-2 focus-visible:ring-[#26A69A] focus-visible:ring-offset-2',
       secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300 focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2',
       outline: 'border border-slate-300 text-slate-700 bg-transparent hover:bg-slate-50 active:bg-slate-100 focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2',
       ghost: 'text-slate-700 hover:bg-slate-100 active:bg-slate-200 focus-visible:ring-2 focus-visible:ring-slate-500',
@@ -41,6 +41,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       md: 'px-4 py-2 text-base rounded-lg',
       lg: 'px-6 py-3 text-lg rounded-xl',
       icon: 'p-2 rounded-lg aspect-square flex items-center justify-center',
+      custom: '',
     };
 
     const isBtnDisabled = disabled || isLoading;
@@ -53,7 +54,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-busy={isLoading ? 'true' : undefined}
         aria-live={isLoading ? 'polite' : undefined}
         className={cn(
-          'inline-flex items-center justify-center font-medium transition-all duration-200 ease-in-out',
+          'inline-flex items-center justify-center transition-all duration-200 ease-in-out',
           'focus:outline-none focus-visible:outline-none',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           variantClasses[variant],
@@ -63,7 +64,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && (
-          <Loader
+          <LoaderCircle
             className={cn("animate-spin")}
             data-testid="spinner"
           />
