@@ -186,7 +186,35 @@ export interface TranslationType {
       dateRequired: string;
     };
   };
+  notes: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    addNote: string;
+    pinned: string;
+    otherNotes: string;
+    emptyNotes: string;
+    emptyNotesDesc: string;
+    untitledNote: string;
+    saving: string;
+    saved: string;
+    editor: {
+      titlePlaceholder: string;
+      contentPlaceholder: string;
+      attachToTask: string;
+      noTaskAttached: string;
+      tagsLabel: string;
+      tagsPlaceholder: string;
+      bold: string;
+      italic: string;
+      heading: string;
+      list: string;
+      codeBlock: string;
+    };
+    confirmDelete: string;
+  };
 }
+
 
 
 export const strings: Record<'id' | 'en', TranslationType> = {
@@ -372,11 +400,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         descriptionPlaceholder: 'Catatan opsional',
       },
       validation: {
-        titleRequired: 'Nama transaksi wajib diisi.',
-        amountRequired: 'Jumlah transaksi harus lebih dari 0.',
-        categoryRequired: 'Kategori wajib dipilih.',
+        titleRequired: 'Judul transaksi wajib diisi.',
+        amountRequired: 'Jumlah transaksi harus lebih besar dari 0.',
+        categoryRequired: 'Kategori wajib diisi.',
         dateRequired: 'Tanggal wajib diisi.',
       },
+    },
+    notes: {
+      title: 'Catatan',
+      subtitle: 'Tulis ide, catat tugas, dan atur pemikiran Anda dengan cepat.',
+      searchPlaceholder: 'Cari catatan...',
+      addNote: 'Catatan Baru',
+      pinned: 'Disematkan',
+      otherNotes: 'Catatan Lainnya',
+      emptyNotes: 'Belum ada catatan',
+      emptyNotesDesc: 'Mulai dengan menambahkan catatan baru di panel samping.',
+      untitledNote: 'Catatan Tanpa Judul',
+      saving: 'Menyimpan...',
+      saved: 'Tersimpan otomatis',
+      editor: {
+        titlePlaceholder: 'Judul catatan...',
+        contentPlaceholder: 'Mulai mengetik di sini...',
+        attachToTask: 'Lampirkan ke Tugas',
+        noTaskAttached: 'Tidak ada tugas terlampir',
+        tagsLabel: 'Tag',
+        tagsPlaceholder: 'Tambah tag (tekan Enter)...',
+        bold: 'Tebal',
+        italic: 'Miring',
+        heading: 'Judul',
+        list: 'Daftar',
+        codeBlock: 'Blok Kode',
+      },
+      confirmDelete: 'Apakah Anda yakin ingin menghapus catatan ini?',
     }
   },
   en: {
@@ -566,6 +621,33 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         categoryRequired: 'Category is required.',
         dateRequired: 'Date is required.',
       },
+    },
+    notes: {
+      title: 'Quick Notes',
+      subtitle: 'Jot down ideas, draft lists, and capture your thoughts instantly.',
+      searchPlaceholder: 'Search notes...',
+      addNote: 'New Note',
+      pinned: 'Pinned',
+      otherNotes: 'Notes',
+      emptyNotes: 'No notes found',
+      emptyNotesDesc: 'Start by creating a new note in the sidebar.',
+      untitledNote: 'Untitled Note',
+      saving: 'Saving...',
+      saved: 'Auto-saved',
+      editor: {
+        titlePlaceholder: 'Note title...',
+        contentPlaceholder: 'Start typing here...',
+        attachToTask: 'Attach to Task',
+        noTaskAttached: 'No task attached',
+        tagsLabel: 'Tags',
+        tagsPlaceholder: 'Add tag (press Enter)...',
+        bold: 'Bold',
+        italic: 'Italic',
+        heading: 'Heading',
+        list: 'List',
+        codeBlock: 'Code Block',
+      },
+      confirmDelete: 'Are you sure you want to delete this note?',
     }
   }
 };

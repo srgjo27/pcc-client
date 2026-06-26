@@ -12,6 +12,7 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   error?: string;
   helperText?: string;
   options?: SelectOption[];
+  labelIcon?: React.ReactNode;
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
@@ -23,6 +24,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     id,
     options = [],
     children,
+    labelIcon,
     ...props
   }, ref) => {
     const generatedId = useId();
@@ -42,10 +44,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <label
             htmlFor={selectId}
             className={cn(
-              'text-sm font-medium',
+              'text-sm flex items-center gap-1',
               disabled && 'text-slate-400 cursor-not-allowed'
             )}
           >
+            {labelIcon && (
+              <span>{labelIcon}</span>
+            )}
             {label}
           </label>
         )}

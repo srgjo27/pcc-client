@@ -11,6 +11,7 @@ const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const TodoPage = lazy(() => import('./pages/TodoPage'));
 const SchedulePage = lazy(() => import('./pages/SchedulePage'));
 const FinancePage = lazy(() => import('./pages/FinancePage'));
+const NotesPage = lazy(() => import('./pages/NotesPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
@@ -46,6 +47,7 @@ const App: React.FC = () => {
                 <Route path="/to-do" element={<TodoPage />} />
                 <Route path="/schedule" element={<SchedulePage />} />
                 <Route path="/finance" element={<FinancePage />} />
+                <Route path="/notes" element={<NotesPage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

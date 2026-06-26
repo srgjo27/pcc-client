@@ -5,6 +5,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string;
   error?: string;
   helperText?: string;
+  labelIcon?: React.ReactNode
   leftElement?: React.ReactNode;
   rightElement?: React.ReactNode;
 }
@@ -17,6 +18,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     helperText,
     disabled,
     id,
+    labelIcon,
     leftElement,
     rightElement,
     ...props
@@ -38,10 +40,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <label
             htmlFor={inputId}
             className={cn(
-              'text-sm font-medium',
+              'text-sm flex items-center gap-1',
               disabled ? 'text-slate-400 cursor-not-allowed' : ''
             )}
           >
+            {labelIcon && (
+              <span>{labelIcon}</span>
+            )}
             {label}
           </label>
         )}
@@ -66,7 +71,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 ? 'bg-slate-50 text-slate-400 border-neutral-200 cursor-not-allowed'
                 : error
                   ? 'border-red-500 text-red-900 focus-visible:ring-red-500 focus-visible:border-transparent'
-                  : 'border-neutral-300 focus-visible:ring-blue-500 focus-visible:border-transparent',
+                  : 'border-neutral-300 focus-visible:ring-[#29B6F6] focus-visible:border-transparent',
               leftElement ? 'pl-10' : '',
               rightElement ? 'pr-10' : '',
               className
