@@ -24,7 +24,7 @@ import { Select } from '@/shared/components/ui/Select';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import { parseMarkdownToHtml } from '@/shared/utils/markdown';
 import type { UseFormRegister } from 'react-hook-form';
-import type { TranslationType } from '@/constants/strings';
+import type { TranslationType } from '@/shared/types/translation';
 
 export interface NoteEditorProps {
   activeNote: Note;

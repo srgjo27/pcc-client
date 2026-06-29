@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { strings, type TranslationType } from '../../../constants/strings';
+import { strings } from '../../../constants/strings';
+import type { TranslationType } from '@/shared/types/translation';
 
 // Base schemas for TypeScript type inference
 export const loginSchema = z.object({

@@ -24,14 +24,14 @@ import MonthView from './MonthView';
 import WeekView from './WeekView';
 import DayView from './DayView';
 import EventModal from './EventModal';
+import { Loading } from '@/shared/components/ui/Loading';
 
 export const ScheduleView: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [currentView, setCurrentView] = useState<'month' | 'week' | 'day'>('month');
   const [activeContexts, setActiveContexts] = useState<string[]>(['college', 'work', 'business', 'personal']);
 
-  // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(null);
 
@@ -53,17 +53,13 @@ export const ScheduleView: React.FC = () => {
     }
   }, [currentDate, currentView]);
 
-  // Generate all occurrences in range
   const occurrences = useMemo(() => {
     return generateOccurrences(events, viewRange.start, viewRange.end);
   }, [events, viewRange]);
 
-  // Check conflicts
   const conflicts = useMemo(() => {
     return checkConflicts(occurrences);
   }, [occurrences]);
-
-  // Has conflict indicator in current view
   const hasConflictInView = useMemo(() => {
     return Object.keys(conflicts).some(occId => {
       const occ = occurrences.find(o => o.occurrenceId === occId);
@@ -131,7 +127,6 @@ export const ScheduleView: React.FC = () => {
     );
   };
 
-  // Header Title Text
   const headerTitle = useMemo(() => {
     if (currentView === 'month') return format(currentDate, 'MMMM yyyy');
     if (currentView === 'week') {
@@ -172,7 +167,7 @@ export const ScheduleView: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
               <Filter className="h-3.5 w-3.5" />
-              <span>{t.schedule.filter}</span>
+              <span>FILTER</span>
             </div>
             <div className="flex flex-col gap-2">
               {(['college', 'work', 'business', 'personal'] as const).map((ctx) => (
@@ -184,9 +179,9 @@ export const ScheduleView: React.FC = () => {
                     type="checkbox"
                     checked={activeContexts.includes(ctx)}
                     onChange={() => toggleContext(ctx)}
-                    className="h-4.5 w-4.5 rounded border-neutral-300 accent-[#FFB300]"
+                    className="h-4.5 w-4.5 accent-[#FFB300]"
                   />
-                  <span className="text-xs font-medium text-slate-700 capitalize">
+                  <span className="text-xs font-medium">
                     {t.todo.aside.contexts[ctx]}
                   </span>
                 </label>
@@ -212,13 +207,13 @@ export const ScheduleView: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white border border-neutral-300 rounded-xl p-4">
             <div className="flex items-center gap-2 justify-between sm:justify-start">
               <div className="flex items-center gap-1">
-                <Button variant="outline" size="icon" onClick={handlePrev} aria-label={t.schedule.prevAriaLabel}>
+                <Button variant="outline" size="icon" onClick={handlePrev} aria-label="Sebelumnya">
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleToday}>
-                  {t.schedule.today}
+                  {t.today}
                 </Button>
-                <Button variant="outline" size="icon" onClick={handleNext} aria-label={t.schedule.nextAriaLabel}>
+                <Button variant="outline" size="icon" onClick={handleNext} aria-label="Berikutnya">
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -245,15 +240,12 @@ export const ScheduleView: React.FC = () => {
 
           {/* Content View Grid */}
           {isLoading ? (
-            <div className="flex min-h-75 items-center justify-center border border-neutral-300 rounded-xl bg-white">
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-[#26A69A]" />
-              </div>
-            </div>
+            <Loading />
           ) : (
             <div className="min-h-75">
               {currentView === 'month' && (
                 <MonthView
+                  lang={lang}
                   currentDate={currentDate}
                   occurrences={occurrences}
                   conflicts={conflicts}

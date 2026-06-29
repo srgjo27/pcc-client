@@ -31,16 +31,13 @@ export const QuickNotes: React.FC = () => {
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // Active note
   const activeNote = notes.find((n) => n.id === activeNoteId) || null;
 
-  // Helper to select a note and reset save status
   const handleSelectNote = (id: string | null) => {
     setActiveNoteId(id);
     setSaveStatus('idle');
   };
 
-  // React Hook Form for note editing
   const { register, control, setValue, reset, formState: { isDirty } } = useForm<NoteInput>({
     resolver: zodResolver(noteSchema),
     defaultValues: {
@@ -58,7 +55,6 @@ export const QuickNotes: React.FC = () => {
   const watchedTags = useWatch({ control, name: 'tags' });
   const tagsValue = useMemo(() => watchedTags || [], [watchedTags]);
 
-  // Reset form when active note changes
   useEffect(() => {
     if (activeNote) {
       reset({
@@ -77,9 +73,8 @@ export const QuickNotes: React.FC = () => {
         taskId: '',
       });
     }
-  }, [activeNote, reset]); // Depend on activeNote to get updates
+  }, [activeNote, reset]);
 
-  // Debounced auto-save effect
   useEffect(() => {
     if (!activeNoteId || !isDirty) return;
 
@@ -98,7 +93,6 @@ export const QuickNotes: React.FC = () => {
         {
           onSuccess: () => {
             setSaveStatus('saved');
-            // reset form as clean with current values to stop triggering
             reset(
               {
                 title: titleValue,
@@ -119,7 +113,6 @@ export const QuickNotes: React.FC = () => {
     return () => clearTimeout(timer);
   }, [titleValue, contentValue, taskIdValue, tagsValue, activeNoteId, isDirty, reset, updateNoteMutation]);
 
-  // Insert markdown helper
   const insertFormat = (formatType: string) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -159,7 +152,6 @@ export const QuickNotes: React.FC = () => {
     }, 0);
   };
 
-  // Tag actions
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -177,7 +169,6 @@ export const QuickNotes: React.FC = () => {
     setValue('tags', updatedTags, { shouldDirty: true });
   };
 
-  // Toggle Pinned status immediately
   const handleTogglePin = (note: Note, e: React.MouseEvent) => {
     e.stopPropagation();
     updateNoteMutation.mutate({
@@ -186,7 +177,6 @@ export const QuickNotes: React.FC = () => {
     });
   };
 
-  // Create Note
   const handleCreateNote = () => {
     createNoteMutation.mutate(
       {
@@ -205,7 +195,6 @@ export const QuickNotes: React.FC = () => {
     );
   };
 
-  // Delete Note
   const handleDeleteNote = (noteId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm(t.notes.confirmDelete)) {
@@ -219,7 +208,6 @@ export const QuickNotes: React.FC = () => {
     }
   };
 
-  // Filter notes
   const filteredNotes = notes.filter((note) => {
     const matchesSearch =
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -231,14 +219,11 @@ export const QuickNotes: React.FC = () => {
     return matchesSearch && matchesTag;
   });
 
-  // Split Pinned and Others
   const pinnedNotes = filteredNotes.filter((n) => n.isPinned);
   const otherNotes = filteredNotes.filter((n) => !n.isPinned);
 
-  // Extract all unique tags
   const allTags = Array.from(new Set(notes.flatMap((n) => n.tags)));
 
-  // Render context helper
   const getContextBg = (context?: string) => {
     switch (context) {
       case 'college':

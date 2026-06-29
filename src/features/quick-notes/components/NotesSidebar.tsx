@@ -1,11 +1,11 @@
 import React from 'react';
 import { Search, Plus } from 'lucide-react';
 import type { Note } from '@/features/quick-notes/types';
-import type { TranslationType } from '@/constants/strings';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/Card';
 import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
 import { NotesList } from './NotesList';
+import type { TranslationType } from '@/shared/types/translation';
 
 export interface NotesSidebarProps {
   t: TranslationType;

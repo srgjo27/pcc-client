@@ -12,9 +12,10 @@ import {
 import { AlertCircle } from 'lucide-react';
 import type { ScheduleEvent, ScheduleEventOccurrence } from '../types';
 import { cn } from '@/shared/utils/cn';
-import { useLanguage } from '@/shared/hooks/useLanguage';
+import { WEEKDAYS_SHORT, WEEKDAYS_SHORT_ID } from '@/shared/utils/date';
 
 interface MonthViewProps {
+  lang: string;
   currentDate: Date;
   occurrences: ScheduleEventOccurrence[];
   conflicts: Record<string, boolean>;
@@ -31,6 +32,7 @@ const contextStyles = {
 };
 
 export const MonthView: React.FC<MonthViewProps> = ({
+  lang,
   currentDate,
   occurrences,
   conflicts,
@@ -38,8 +40,6 @@ export const MonthView: React.FC<MonthViewProps> = ({
   onDateClick,
   activeContexts,
 }) => {
-  const { t } = useLanguage();
-
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const startDate = startOfWeek(monthStart);
@@ -52,7 +52,7 @@ export const MonthView: React.FC<MonthViewProps> = ({
     day = addDays(day, 1);
   }
 
-  const weekDays = t.schedule.monthView.weekDays;
+  const weekDays = lang === 'id' ? WEEKDAYS_SHORT_ID : WEEKDAYS_SHORT
 
   return (
     <div className="flex flex-col border border-neutral-300 rounded-xl overflow-hidden bg-white">

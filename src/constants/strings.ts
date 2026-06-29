@@ -1,221 +1,4 @@
-export interface TranslationType {
-  appName: string;
-  systemVersion: string;
-  version: string;
-  rightsReserved: string;
-  auth: {
-    loginTitle: string;
-    loginDescription: string;
-    registerTitle: string;
-    registerDescription: string;
-    emailLabel: string;
-    emailPlaceholder: string;
-    nameLabel: string;
-    namePlaceholder: string;
-    passwordLabel: string;
-    passwordPlaceholder: string;
-    confirmPasswordLabel: string;
-    confirmPasswordPlaceholder: string;
-    forgotPasswordLink: string;
-    dontHaveAccountText: string;
-    registerLinkText: string;
-    alreadyHaveAccountText: string;
-    loginLinkText: string;
-    submitButton: string;
-    registerButton: string;
-    validation: {
-      emailInvalid: string;
-      emailRequired: string;
-      nameRequired: string;
-      nameMin: string;
-      passwordMin: string;
-      passwordRequired: string;
-      confirmPasswordRequired: string;
-      passwordsMustMatch: string;
-      termsRequired: string;
-    };
-    termsLabel: string;
-    errorMessage: string;
-    errorRegisterMessage: string;
-  };
-  menu: {
-    dashboard: string;
-    todo: string;
-    schedule: string;
-    finance: string;
-    notes: string;
-    habits: string;
-    focus: string;
-    comingSoon: string;
-  };
-  dashboard: {
-    title: string;
-    subtitle: string;
-  };
-  todo: {
-    title: string;
-    subtitle: string;
-    addButton: string;
-    addAriaLabel: string;
-    activeTasksTitle: string;
-    activeTasksSubtitle: string;
-    emptyStateTitle: string;
-    emptyStateSubtitle: string;
-    modalDescription: string;
-    modalPlaceholder: string;
-    cancelButton: string;
-    saveButton: string;
-    aside: {
-      contextTitle: string;
-      priorityTitle: string;
-      reviewTitle: string;
-      contexts: {
-        college: string;
-        work: string;
-        business: string;
-        personal: string;
-      };
-      priorities: {
-        high: string;
-        medium: string;
-        low: string;
-      };
-      stats: {
-        completed: string;
-        pending: string;
-        completionRate: string;
-        tasksCount: string;
-      };
-    };
-  };
-  schedule: {
-    title: string;
-    subtitle: string;
-    addEvent: string;
-    editEvent: string;
-    eventDetails: string;
-    deleteEvent: string;
-    deleteConfirm: string;
-    filter: string;
-    today: string;
-    form: {
-      titleLabel: string;
-      titlePlaceholder: string;
-      descriptionLabel: string;
-      descriptionPlaceholder: string;
-      contextLabel: string;
-      startDateLabel: string;
-      endDateLabel: string;
-      isRecurringLabel: string;
-      recurringDaysLabel: string;
-      recurringEndDateLabel: string;
-    };
-    validation: {
-      titleRequired: string;
-      startDateRequired: string;
-      endDateRequired: string;
-      contextRequired: string;
-      dateOrderInvalid: string;
-    };
-    conflictWarningTitle: string;
-    conflictWarningDesc: string;
-    views: {
-      month: string;
-      week: string;
-      day: string;
-    };
-    dayView: {
-      eventsCountLabel: string;
-      noEvents: string;
-      emptyStateActionDesc: string;
-      recurring: string;
-      conflictMessage: string;
-    };
-    monthView: {
-      weekDays: string[];
-    };
-    weekView: {
-      noEvents: string;
-      conflictBadge: string;
-    };
-    prevAriaLabel: string;
-    nextAriaLabel: string;
-  };
-  finance: {
-    title: string;
-    subtitle: string;
-    totalIncome: string;
-    totalExpense: string;
-    netBalance: string;
-    addTransaction: string;
-    editTransaction: string;
-    deleteTransaction: string;
-    deleteConfirm: string;
-    setBudget: string;
-    budgetAlert: string;
-    budgetLimit: string;
-    budgetStatus: string;
-    incomeTrend: string;
-    expenseBreakdown: string;
-    categories: {
-      salary: string;
-      business: string;
-      freelance: string;
-      food: string;
-      transportation: string;
-      subscription: string;
-      education: string;
-      entertainment: string;
-      others: string;
-    };
-    form: {
-      titleLabel: string;
-      titlePlaceholder: string;
-      typeLabel: string;
-      amountLabel: string;
-      amountPlaceholder: string;
-      categoryLabel: string;
-      dateLabel: string;
-      descriptionLabel: string;
-      descriptionPlaceholder: string;
-    };
-    validation: {
-      titleRequired: string;
-      amountRequired: string;
-      categoryRequired: string;
-      dateRequired: string;
-    };
-  };
-  notes: {
-    title: string;
-    subtitle: string;
-    searchPlaceholder: string;
-    addNote: string;
-    pinned: string;
-    otherNotes: string;
-    emptyNotes: string;
-    emptyNotesDesc: string;
-    untitledNote: string;
-    saving: string;
-    saved: string;
-    editor: {
-      titlePlaceholder: string;
-      contentPlaceholder: string;
-      attachToTask: string;
-      noTaskAttached: string;
-      tagsLabel: string;
-      tagsPlaceholder: string;
-      bold: string;
-      italic: string;
-      heading: string;
-      list: string;
-      codeBlock: string;
-    };
-    confirmDelete: string;
-  };
-}
-
-
+import type { TranslationType } from "@/shared/types/translation";
 
 export const strings: Record<'id' | 'en', TranslationType> = {
   id: {
@@ -223,6 +6,9 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     systemVersion: '1.1.0',
     version: 'Versi',
     rightsReserved: 'Seluruh hak dilindungi.',
+    days: 'Hari',
+    times: 'Kali',
+    today: 'Hari Ini',
     auth: {
       loginTitle: 'Masuk ke Akun Anda',
       loginDescription: 'Silakan masukkan email dan kata sandi Anda untuk masuk.',
@@ -255,8 +41,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         termsRequired: 'Anda harus menyetujui Syarat dan Ketentuan.',
       },
       termsLabel: 'Saya menyetujui Syarat dan Ketentuan',
-      errorMessage: 'Login gagal. Silakan periksa kembali email atau kata sandi Anda.',
-      errorRegisterMessage: 'Pendaftaran gagal. Silakan coba lagi.',
     },
     menu: {
       dashboard: 'Dashboard',
@@ -316,14 +100,12 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       eventDetails: 'Detail Jadwal',
       deleteEvent: 'Hapus Jadwal',
       deleteConfirm: 'Apakah Anda yakin ingin menghapus jadwal ini?',
-      filter: 'Filter',
-      today: 'Hari Ini',
       form: {
         titleLabel: 'Nama Kegiatan',
         titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
         descriptionLabel: 'Keterangan',
         descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
-        contextLabel: 'Kategori / Konteks',
+        contextLabel: 'Kategori/Konteks',
         startDateLabel: 'Waktu Mulai',
         endDateLabel: 'Waktu Selesai',
         isRecurringLabel: 'Ulangi Kegiatan Ini',
@@ -351,15 +133,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         recurring: 'Berulang',
         conflictMessage: 'Bentrokan jadwal: Kegiatan ini bertabrakan dengan kegiatan lain!',
       },
-      monthView: {
-        weekDays: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-      },
       weekView: {
         noEvents: 'Tidak ada kegiatan',
         conflictBadge: 'Bentrokan',
       },
-      prevAriaLabel: 'Sebelumnya',
-      nextAriaLabel: 'Berikutnya',
     },
     finance: {
       title: 'Pelacak Keuangan',
@@ -432,6 +209,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         codeBlock: 'Blok Kode',
       },
       confirmDelete: 'Apakah Anda yakin ingin menghapus catatan ini?',
+    },
+    habits: {
+      title: 'Rutinitas',
+      subtitle: 'Bangun kebiasaan baik dan pantau latihan gym harian Anda untuk hidup lebih konsisten.',
+      addHabit: 'Tambah Kebiasaan',
+      emptyHabits: 'Belum ada kebiasaan',
+      emptyHabitsDesc: 'Mulai dengan menambahkan kebiasaan baru di atas.',
+      streak: 'Hari berturut-turut',
+      streakActive: 'Streak Aktif',
+      streakBest: 'Streak Terbaik',
+      totalCompletion: 'Total Penyelesaian',
+      activeHabits: 'Kebiasaan Aktif',
+      bestStreak: 'Streak Terbaik',
+      totalCheckIns: 'Total Penyelesaian',
+      dailyCheckIn: 'Check-in Hari Ini',
+      heatmapTitle: 'Heatmap Konsistensi (90 Hari Terakhir)',
+      historyDetail: 'Riwayat Penyelesaian',
+      frequencyLabel: 'Frekuensi',
+      daysLabel: 'Hari Target',
+      frequencyDaily: 'Setiap Hari',
+      frequencyCustom: 'Hari Tertentu',
+      myHabbits: 'Rutinitas Saya',
+      form: {
+        nameLabel: 'Nama Kebiasaan',
+        namePlaceholder: 'Misal: Gym, Baca 30 Menit, Minum Air...',
+        iconLabel: 'Pilih Ikon',
+        freqLabel: 'Frekuensi Target',
+        daysLabel: 'Pilih Hari Target',
+        submitAdd: 'Simpan Kebiasaan',
+        submitCancel: 'Batal',
+      },
+      confirmDelete: 'Apakah Anda yakin ingin menghapus kebiasaan ini? Semua data riwayat akan dihapus.',
     }
   },
   en: {
@@ -439,6 +248,9 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     systemVersion: '1.1.0',
     version: 'Version',
     rightsReserved: 'All rights reserved.',
+    days: 'Days',
+    times: 'Times',
+    today: 'Today',
     auth: {
       loginTitle: 'Sign In to Your Account',
       loginDescription: 'Please enter your email and password to sign in.',
@@ -471,8 +283,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         termsRequired: 'You must agree to the Terms and Conditions.',
       },
       termsLabel: 'I agree to the Terms and Conditions',
-      errorMessage: 'Login failed. Please double-check your email or password.',
-      errorRegisterMessage: 'Registration failed. Please try again.',
     },
     menu: {
       dashboard: 'Dashboard',
@@ -532,8 +342,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       eventDetails: 'Event Details',
       deleteEvent: 'Delete Event',
       deleteConfirm: 'Are you sure you want to delete this event?',
-      filter: 'Filters',
-      today: 'Today',
       form: {
         titleLabel: 'Event Title',
         titlePlaceholder: 'e.g., Linear Algebra Class',
@@ -567,15 +375,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         recurring: 'Recurring',
         conflictMessage: 'Schedule conflict: This event overlaps with another event!',
       },
-      monthView: {
-        weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      },
       weekView: {
         noEvents: 'No events scheduled',
         conflictBadge: 'Conflict',
       },
-      prevAriaLabel: 'Previous',
-      nextAriaLabel: 'Next',
     },
     finance: {
       title: 'Finance Tracker',
@@ -648,6 +451,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         codeBlock: 'Code Block',
       },
       confirmDelete: 'Are you sure you want to delete this note?',
+    },
+    habits: {
+      title: 'Habit & Gym Log',
+      subtitle: 'Build good habits and track your gym logs to maintain a consistent lifestyle.',
+      addHabit: 'Add Habit',
+      emptyHabits: 'No habits found',
+      emptyHabitsDesc: 'Get started by creating a new habit above.',
+      streak: 'days streak',
+      streakActive: 'Active Streak',
+      streakBest: 'Best Streak',
+      totalCompletion: 'Total Completion',
+      activeHabits: 'Active Habits',
+      bestStreak: 'Best Streak',
+      dailyCheckIn: 'Daily Check-in',
+      totalCheckIns: 'Total Check-ins',
+      heatmapTitle: 'Consistency Heatmap (Last 90 Days)',
+      historyDetail: 'Completion History',
+      frequencyLabel: 'Frequency',
+      daysLabel: 'Target Days',
+      frequencyDaily: 'Everyday',
+      frequencyCustom: 'Specific Days',
+      myHabbits: 'My Habits',
+      form: {
+        nameLabel: 'Habit Name',
+        namePlaceholder: 'e.g. Gym, Read 30m, Drink Water...',
+        iconLabel: 'Choose Icon',
+        freqLabel: 'Target Frequency',
+        daysLabel: 'Choose Target Days',
+        submitAdd: 'Save Habit',
+        submitCancel: 'Cancel',
+      },
+      confirmDelete: 'Are you sure you want to delete this habit? All history will be lost.',
     }
   }
 };
