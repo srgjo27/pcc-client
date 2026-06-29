@@ -139,7 +139,7 @@ export const HabitForm: React.FC<HabitFormProps> = ({
                     variant="custom"
                     size="custom"
                     onClick={() => handleDayToggle(idx)}
-                    className={`flex-1 min-w-10.5 py-2 rounded-lg text-xs font-semibold border duration-200 focus:outline-none ${isSelected
+                    className={`flex-1 min-w-10.5 py-2 rounded-lg text-xs border duration-200 focus:outline-none ${isSelected
                       ? 'bg-[#F0F9FF] text-[#26A69A] border-[#26A69A]'
                       : 'bg-white text-slate-500 border-neutral-300 hover:bg-slate-50'
                       }`}

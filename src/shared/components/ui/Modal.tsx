@@ -90,10 +90,10 @@ export const Modal: React.FC<ModalProps> = ({
         tabIndex={-1}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? 'modal-title' : undefined}
-        aria-describedby={description ? 'modal-description' : undefined}
+        aria-labelledby='modal-title'
+        aria-describedby='modal-description'
         className={cn(
-          'relative w-full rounded-xl bg-white border border-neutral-300 flex flex-col focus:outline-none max-h-[90vh] overflow-y-auto animate-scaleUp',
+          'relative w-full rounded-xl bg-white border border-neutral-300 flex flex-col max-h-[90vh] overflow-y-auto animate-scaleUp',
           sizeClasses[size],
           className
         )}
@@ -103,7 +103,7 @@ export const Modal: React.FC<ModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors focus:ring-2 focus:ring-[#26A69A]/30 focus:outline-none"
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
           aria-label="Tutup Dialog"
         >
           <X className="h-4 w-4" />

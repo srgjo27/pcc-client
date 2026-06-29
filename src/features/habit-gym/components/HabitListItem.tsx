@@ -5,7 +5,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { Button } from '@/shared/components/ui/Button';
 import { getLocalDateString } from '../services';
 import { cn } from '@/shared/utils/cn';
-import { Check, HelpCircle, Trash2, Zap } from 'lucide-react';
+import { Check, Trash2, Trophy, Zap } from 'lucide-react';
 
 interface HabitListItemProps {
   habit: Habit;
@@ -47,15 +47,15 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
     <Card className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4">
       <div className="flex items-center gap-3">
         <div className={cn(
-          'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200 border',
+          'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border',
           isCheckedToday
             ? 'bg-[#F0F9FF] text-[#26A69A] border-[#B2DFDB]'
             : 'bg-slate-50 text-slate-500 border-neutral-200'
         )}>
-          <HelpCircle className="h-5 w-5" />
+          <Trophy className="h-5 w-5" />
         </div>
         <div>
-          <h4 className="font-semibold text-xs sm:text-sm">
+          <h4 className="text-xs sm:text-sm">
             {habit.name}
           </h4>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -85,14 +85,10 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
             size="sm"
             onClick={() => onToggleCheckIn(habit.id, todayStr)}
             isLoading={isCheckingIn}
-            className={cn(
-              "font-medium",
-              isCheckedToday && "bg-[#26A69A] hover:bg-[#22948B] text-white"
-            )}
           >
             {isCheckedToday ? (
               <span className="flex items-center gap-1">
-                <Check className="h-4 w-4" />
+                <Check className="h-3.5 w-3.5" />
                 {lang == 'id' ? 'Selesai' : 'Done'}
               </span>
             ) : (
