@@ -49,7 +49,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     name: 'type',
   });
 
-  // Set default category when transaction type changes
   useEffect(() => {
     if (transactionType === 'income') {
       setValue('category', 'salary');
@@ -145,11 +144,18 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         />
 
         <div className="flex justify-end gap-3 pt-2">
-          <Button variant="outline" onClick={onClose} disabled={isLoading}>
-            {t.todo.cancelButton || 'Batal'}
+          <Button
+            variant="outline"
+            onClick={onClose}
+            disabled={isLoading}
+          >
+            {t.todo.cancelButton}
           </Button>
-          <Button type="submit" isLoading={isLoading}>
-            {t.todo.saveButton || 'Simpan'}
+          <Button
+            type="submit"
+            isLoading={isLoading}
+          >
+            {t.todo.saveButton}
           </Button>
         </div>
       </form>

@@ -71,11 +71,18 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
         />
 
         <div className="flex justify-end gap-3 pt-2">
-          <Button variant="outline" onClick={onClose} disabled={isLoading}>
-            {t.todo.cancelButton || 'Batal'}
+          <Button
+            variant="outline"
+            onClick={onClose}
+            disabled={isLoading}
+          >
+            {t.todo.cancelButton}
           </Button>
-          <Button type="submit" isLoading={isLoading}>
-            {t.todo.saveButton || 'Simpan'}
+          <Button
+            type="submit"
+            isLoading={isLoading}
+          >
+            {t.todo.saveButton}
           </Button>
         </div>
       </form>
