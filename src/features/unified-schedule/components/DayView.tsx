@@ -1,6 +1,6 @@
 import React from 'react';
 import { isSameDay, format } from 'date-fns';
-import { AlertCircle, Clock, FileText } from 'lucide-react';
+import { AlertCircle, Clock } from 'lucide-react';
 import type { ScheduleEvent, ScheduleEventOccurrence } from '../types';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
@@ -16,22 +16,18 @@ interface DayViewProps {
 
 const contextStyles = {
   college: {
-    bg: 'bg-teal-50 hover:bg-teal-50/80 border-teal-200',
     badge: 'bg-teal-100 text-teal-800 border-teal-200',
     accent: 'border-l-4 border-l-teal-500',
   },
   work: {
-    bg: 'bg-blue-50 hover:bg-blue-50/80 border-blue-200',
     badge: 'bg-blue-100 text-blue-800 border-blue-200',
     accent: 'border-l-4 border-l-blue-500',
   },
   business: {
-    bg: 'bg-amber-50 hover:bg-amber-50/80 border-amber-200',
     badge: 'bg-amber-100 text-amber-800 border-amber-200',
     accent: 'border-l-4 border-l-amber-500',
   },
   personal: {
-    bg: 'bg-purple-50 hover:bg-purple-50/80 border-purple-200',
     badge: 'bg-purple-100 text-purple-800 border-purple-200',
     accent: 'border-l-4 border-l-purple-500',
   },
@@ -66,7 +62,7 @@ export const DayView: React.FC<DayViewProps> = ({
 
       {dayOccurrences.length === 0 ? (
         <div className="py-12 flex flex-col items-center justify-center text-center">
-          <Clock className="h-10 w-10 text-[#26A69A] mb-3 animate-pulse" />
+          <Clock className="h-10 w-10 text-[#26A69A] mb-3" />
           <p className="text-sm font-medium text-slate-500">{t.schedule.dayView.noEvents}</p>
           <p className="text-xs text-slate-400 mt-1">{t.schedule.dayView.emptyStateActionDesc}</p>
         </div>
@@ -84,16 +80,15 @@ export const DayView: React.FC<DayViewProps> = ({
                 type="button"
                 onClick={() => onEventClick(occ)}
                 className={cn(
-                  'w-full text-left p-4 rounded-xl border flex flex-col gap-3 transition-colors cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#26A69A]',
-                  style.bg,
+                  'w-full text-left p-4 rounded-lg border border-neutral-200 flex flex-col gap-3 transition-colors cursor-pointer select-none',
                   style.accent
                 )}
               >
                 {/* Event header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-2 w-full">
                   <div className="space-y-1">
-                    <h4 className="text-sm font-bold">{occ.title}</h4>
-                    <div className="flex flex-wrap gap-2 items-center text-xs text-slate-500 font-medium">
+                    <h4 className="text-sm font-semibold">{occ.title}</h4>
+                    <div className="flex flex-wrap gap-2 items-center text-xs text-slate-500">
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {startTime} - {endTime}
@@ -116,16 +111,15 @@ export const DayView: React.FC<DayViewProps> = ({
 
                 {/* Description */}
                 {occ.description && (
-                  <p className="text-xs text-slate-600 flex gap-2 leading-relaxed bg-white/50 p-2.5 rounded-lg border border-neutral-100 w-full text-left">
-                    <FileText className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
+                  <p className="text-xs text-slate-600 leading-relaxed bg-neutral-50 rounded-sm p-2 border border-neutral-200 w-full text-left">
                     <span>{occ.description}</span>
                   </p>
                 )}
 
                 {/* Conflict badge */}
                 {hasConflict && (
-                  <div className="flex items-center gap-2 p-2 bg-red-100/60 border border-red-200 text-red-800 rounded-lg text-xs font-bold animate-pulse w-full text-left">
-                    <AlertCircle className="h-4 w-4 text-red-600 shrink-0" />
+                  <div className="flex items-center gap-1 px-2 py-1 bg-red-100/60 border border-red-200 text-red-800 rounded-md text-[10px] font-semibold animate-pulse w-full text-left">
+                    <AlertCircle className="h-3 w-3 text-red-600 shrink-0" />
                     <span>{t.schedule.dayView.conflictMessage}</span>
                   </div>
                 )}

@@ -32,7 +32,6 @@ export const ScheduleView: React.FC = () => {
   const [currentView, setCurrentView] = useState<'month' | 'week' | 'day'>('month');
   const [activeContexts, setActiveContexts] = useState<string[]>(['college', 'work', 'business', 'personal']);
 
-  // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(null);
 
@@ -54,17 +53,13 @@ export const ScheduleView: React.FC = () => {
     }
   }, [currentDate, currentView]);
 
-  // Generate all occurrences in range
   const occurrences = useMemo(() => {
     return generateOccurrences(events, viewRange.start, viewRange.end);
   }, [events, viewRange]);
 
-  // Check conflicts
   const conflicts = useMemo(() => {
     return checkConflicts(occurrences);
   }, [occurrences]);
-
-  // Has conflict indicator in current view
   const hasConflictInView = useMemo(() => {
     return Object.keys(conflicts).some(occId => {
       const occ = occurrences.find(o => o.occurrenceId === occId);
@@ -132,7 +127,6 @@ export const ScheduleView: React.FC = () => {
     );
   };
 
-  // Header Title Text
   const headerTitle = useMemo(() => {
     if (currentView === 'month') return format(currentDate, 'MMMM yyyy');
     if (currentView === 'week') {
