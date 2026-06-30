@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './shared/components/layout/Layout';
+import { Loading } from './shared/components/ui/Loading';
 
 // Lazy load pages for code splitting
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -13,6 +14,7 @@ const SchedulePage = lazy(() => import('./pages/SchedulePage'));
 const FinancePage = lazy(() => import('./pages/FinancePage'));
 const NotesPage = lazy(() => import('./pages/NotesPage'));
 const HabitsPage = lazy(() => import('./pages/HabitsPage'));
+const FocusPage = lazy(() => import('./pages/FocusPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
@@ -25,12 +27,7 @@ const queryClient = new QueryClient({
 });
 
 const PageLoader: React.FC = () => (
-  <div className="flex min-h-screen items-center justify-center bg-slate-50/50">
-    <div className="flex flex-col items-center gap-3">
-      <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-[#26A69A]" />
-      <span className="text-sm text-slate-500">Memuat halaman...</span>
-    </div>
-  </div>
+  <Loading />
 );
 
 const App: React.FC = () => {
@@ -50,6 +47,7 @@ const App: React.FC = () => {
                 <Route path="/finance" element={<FinancePage />} />
                 <Route path="/notes" element={<NotesPage />} />
                 <Route path="/habits" element={<HabitsPage />} />
+                <Route path="/focus" element={<FocusPage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

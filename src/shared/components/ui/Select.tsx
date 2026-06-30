@@ -64,7 +64,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               'appearance-none',
               'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
-              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+              'focus-visible:outline-none focus-visible:ring-1',
               disabled
                 ? 'bg-slate-50 text-slate-400 border-neutral-200 cursor-not-allowed'
                 : error
