@@ -42,6 +42,7 @@ export const FocusMode: React.FC = () => {
     : 25 * 60;
 
   const currentSecondsLeft = secondsLeft !== null ? secondsLeft : totalSeconds;
+
   const currentSecondsLeftRef = React.useRef(currentSecondsLeft);
 
   useEffect(() => {

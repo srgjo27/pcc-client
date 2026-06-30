@@ -129,10 +129,10 @@ export const FocusTimer: React.FC<FocusTimerProps> = ({
               !isRunning &&
               secondsLeft ===
               (mode === 'focus'
-                ? (settings?.focusDuration) * 60
-                : (settings?.breakDuration) * 60)
+                ? (settings?.focusDuration ?? 25) * 60
+                : (settings?.breakDuration ?? 5) * 60)
             }
-            aria-label={t.focus.resetBtn}
+            aria-label="Reset timer"
           >
             <RotateCcw className="h-5 w-5 text-slate-500" />
           </Button>
@@ -159,24 +159,24 @@ export const FocusTimer: React.FC<FocusTimerProps> = ({
           </Button>
         </div>
 
-        {/* Select Active Task (Focus Mode specific) */}
+        {/* Select Active Task */}
         {mode === 'focus' && (
           <div className="w-full max-w-md px-6 space-y-4">
             <Select
               id="task-select"
               label={t.focus.activeTaskLabel}
-              error={timerError}
+              error={timerError || undefined}
               disabled={isRunning}
               value={selectedTaskId}
               onChange={(e) => {
                 setSelectedTaskId(e.target.value);
                 setTimerError(null);
               }}
-              className="font-medium"
               options={[
                 { value: '', label: t.focus.selectTaskPlaceholder },
                 ...activeTasks.map((task) => ({ value: task.id, label: task.title })),
               ]}
+              className="font-medium"
             />
 
             {/* Quick Add Task */}
