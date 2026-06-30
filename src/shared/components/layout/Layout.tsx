@@ -30,7 +30,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const menuItems: Array<{
     name: string;
     path: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<{ className?: string }>;
     disabled?: boolean;
   }> = [
     {

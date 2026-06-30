@@ -31,44 +31,24 @@ export const FocusMode: React.FC = () => {
   const { data: stats, isLoading: isStatsLoading } = useGetFocusStats();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
   const [isRunning, setIsRunning] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
-  const [totalSeconds, setTotalSeconds] = useState<number>(25 * 60);
   const [selectedTaskId, setSelectedTaskId] = useState<string>('');
   const [timerError, setTimerError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (settings) {
-      const durationMin = mode === 'focus' ? settings.focusDuration : settings.breakDuration;
-      setSecondsLeft(durationMin * 60);
-      setTotalSeconds(durationMin * 60);
-    }
-  }, [settings, mode]);
+  const totalSeconds = settings
+    ? (mode === 'focus' ? settings.focusDuration : settings.breakDuration) * 60
+    : 25 * 60;
+
+  const currentSecondsLeft = secondsLeft !== null ? secondsLeft : totalSeconds;
+  const currentSecondsLeftRef = React.useRef(currentSecondsLeft);
 
   useEffect(() => {
-    if (settings && secondsLeft === null) {
-      setSecondsLeft(settings.focusDuration * 60);
-      setTotalSeconds(settings.focusDuration * 60);
-    }
-  }, [settings, secondsLeft]);
+    currentSecondsLeftRef.current = currentSecondsLeft;
+  }, [currentSecondsLeft]);
 
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null;
-    if (isRunning && secondsLeft !== null && secondsLeft > 0) {
-      interval = setInterval(() => {
-        setSecondsLeft((prev) => (prev !== null ? prev - 1 : null));
-      }, 1000);
-    } else if (isRunning && secondsLeft === 0) {
-      handleTimerComplete();
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isRunning, secondsLeft]);
-
-  const handleTimerComplete = async () => {
+  const handleTimerComplete = React.useCallback(async () => {
     setIsRunning(false);
 
     if (mode === 'focus') {
@@ -84,19 +64,33 @@ export const FocusMode: React.FC = () => {
 
       alert(t.focus.alertSessionCompleted);
       setMode('break');
-      if (settings) {
-        setSecondsLeft(settings.breakDuration * 60);
-        setTotalSeconds(settings.breakDuration * 60);
-      }
+      setSecondsLeft(null);
     } else {
       alert(t.focus.alertBreakCompleted);
       setMode('focus');
-      if (settings) {
-        setSecondsLeft(settings.focusDuration * 60);
-        setTotalSeconds(settings.focusDuration * 60);
-      }
+      setSecondsLeft(null);
     }
-  };
+  }, [mode, tasks, selectedTaskId, settings, createSession, t.focus.alertSessionCompleted, t.focus.alertBreakCompleted]);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | null = null;
+    if (isRunning && currentSecondsLeftRef.current > 0) {
+      interval = setInterval(() => {
+        setSecondsLeft((prev) => {
+          const val = prev !== null ? prev : totalSeconds;
+          if (val <= 1) {
+            if (interval) clearInterval(interval);
+            handleTimerComplete();
+            return 0;
+          }
+          return val - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isRunning, totalSeconds, handleTimerComplete]);
 
   const handleSkip = async () => {
     if (window.confirm('Apakah Anda ingin melompati sesi ini?')) {
@@ -115,13 +109,11 @@ export const FocusMode: React.FC = () => {
         setMode('break');
         if (settings) {
           setSecondsLeft(settings.breakDuration * 60);
-          setTotalSeconds(settings.breakDuration * 60);
         }
       } else {
         setMode('focus');
         if (settings) {
           setSecondsLeft(settings.focusDuration * 60);
-          setTotalSeconds(settings.focusDuration * 60);
         }
       }
     }
@@ -143,7 +135,6 @@ export const FocusMode: React.FC = () => {
       if (settings) {
         const durationMin = mode === 'focus' ? settings.focusDuration : settings.breakDuration;
         setSecondsLeft(durationMin * 60);
-        setTotalSeconds(durationMin * 60);
       }
     }
   };
@@ -192,7 +183,7 @@ export const FocusMode: React.FC = () => {
         <FocusTimer
           mode={mode}
           isRunning={isRunning}
-          secondsLeft={secondsLeft}
+          secondsLeft={currentSecondsLeft}
           totalSeconds={totalSeconds}
           settings={settings}
           selectedTaskId={selectedTaskId}
