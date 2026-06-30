@@ -66,7 +66,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               'flex h-10 w-full rounded-md border bg-transparent px-3 py-2 text-sm',
               'file:border-0 file:bg-transparent file:text-sm file:font-medium',
-              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+              'focus-visible:outline-none focus-visible:ring-1',
               disabled
                 ? 'bg-slate-50 text-slate-400 border-neutral-200 cursor-not-allowed'
                 : error
@@ -88,7 +88,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <p
             id={errorId}
             role="alert"
-            className="text-xs font-medium text-red-600 animate-fadeIn"
+            className="text-xs text-red-600 animate-fadeIn"
           >
             {error}
           </p>

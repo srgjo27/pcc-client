@@ -27,11 +27,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     // Standard visual variant classes
     const variantClasses: Record<ButtonVariant, string> = {
-      primary: 'bg-[#26A69A] text-white hover:bg-[#22948B] active:bg-[#1E847C] focus-visible:ring-2 focus-visible:ring-[#26A69A] focus-visible:ring-offset-2',
-      secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300 focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2',
-      outline: 'border border-slate-300 text-slate-700 bg-transparent hover:bg-slate-50 active:bg-slate-100 focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2',
-      ghost: 'text-slate-700 hover:bg-slate-100 active:bg-slate-200 focus-visible:ring-2 focus-visible:ring-slate-500',
-      danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2',
+      primary: 'bg-[#26A69A] text-white hover:bg-[#22948B] active:bg-[#1E847C]',
+      secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300',
+      outline: 'border border-slate-300 text-slate-700 bg-transparent hover:bg-slate-50 active:bg-slate-100',
+      ghost: 'text-slate-700 hover:bg-slate-100 active:bg-slate-200',
+      danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
       custom: '',
     };
 
@@ -55,7 +55,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-live={isLoading ? 'polite' : undefined}
         className={cn(
           'inline-flex items-center justify-center transition-all duration-200 ease-in-out',
-          'focus:outline-none focus-visible:outline-none',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           variantClasses[variant],
           sizeClasses[size],

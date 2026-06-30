@@ -239,4 +239,36 @@ export interface TranslationType {
         };
         confirmDelete: string;
     };
+    focus: {
+        title: string;
+        subtitle: string;
+        startBtn: string;
+        pauseBtn: string;
+        resumeBtn: string;
+        resetBtn: string;
+        customizeTimer: string;
+        focusDurationLabel: string;
+        breakDurationLabel: string;
+        minutesUnit: string;
+        activeTaskLabel: string;
+        selectTaskPlaceholder: string;
+        noTaskSelected: string;
+        dailyStatsTitle: string;
+        sessionsCompleted: string;
+        totalFocusTime: string;
+        sessionHistoryTitle: string;
+        noHistory: string;
+        completedAt: string;
+        duration: string;
+        minutesVal: string;
+        saveSettings: string;
+        cancelBtn: string;
+        taskTitle: string;
+        modeFocus: string;
+        modeBreak: string;
+        alertSessionCompleted: string;
+        alertBreakCompleted: string;
+        addTaskPlaceholder: string;
+        addNewTaskBtn: string;
+    };
 }

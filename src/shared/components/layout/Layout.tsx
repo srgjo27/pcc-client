@@ -27,7 +27,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
 
-  const menuItems = [
+  const menuItems: Array<{
+    name: string;
+    path: string;
+    icon: React.ComponentType<{ className?: string }>;
+    disabled?: boolean;
+  }> = [
     {
       name: t.menu.dashboard,
       path: '/dashboard',
@@ -60,9 +65,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     },
     {
       name: t.menu.focus,
-      path: '#',
+      path: '/focus',
       icon: BrainCog,
-      disabled: true,
     },
   ];
 
@@ -74,6 +78,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (location.pathname === '/finance') return t.menu.finance;
     if (location.pathname === '/notes') return t.menu.notes;
     if (location.pathname === '/habits') return t.menu.habits;
+    if (location.pathname === '/focus') return t.menu.focus;
     return t.appName;
   };
 
