@@ -1,81 +1,38 @@
 import { z } from 'zod';
-import { strings } from '../../../constants/strings';
-import type { TranslationType } from '@/shared/types/translation';
 
-// Base schemas for TypeScript type inference
 export const loginSchema = z.object({
   email: z
     .string()
-    .min(1, { message: strings.id.auth.validation.emailRequired })
-    .email({ message: strings.id.auth.validation.emailInvalid }),
+    .min(1, "Email is required")
+    .email("Invalid email format"),
   password: z
     .string()
-    .min(1, { message: strings.id.auth.validation.passwordRequired })
-    .min(8, { message: strings.id.auth.validation.passwordMin }),
+    .min(1, "Password is required")
+    .min(8, "Password must be at least 8 characters long")
 });
 
-export const registerSchema = z
-  .object({
-    name: z
-      .string()
-      .min(1, { message: strings.id.auth.validation.nameRequired })
-      .min(2, { message: strings.id.auth.validation.nameMin }),
-    email: z
-      .string()
-      .min(1, { message: strings.id.auth.validation.emailRequired })
-      .email({ message: strings.id.auth.validation.emailInvalid }),
-    password: z
-      .string()
-      .min(1, { message: strings.id.auth.validation.passwordRequired })
-      .min(8, { message: strings.id.auth.validation.passwordMin }),
-    confirmPassword: z
-      .string()
-      .min(1, { message: strings.id.auth.validation.confirmPasswordRequired }),
-    acceptTerms: z
-      .boolean()
-      .refine((val) => val === true, { message: strings.id.auth.validation.termsRequired }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: strings.id.auth.validation.passwordsMustMatch,
-    path: ['confirmPassword'],
-  });
-
-// Dynamic schema builder functions for forms
-export const getLoginSchema = (t: TranslationType) =>
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: t.auth.validation.emailRequired })
-      .email({ message: t.auth.validation.emailInvalid }),
-    password: z
-      .string()
-      .min(1, { message: t.auth.validation.passwordRequired })
-      .min(8, { message: t.auth.validation.passwordMin }),
-  });
-
-export const getRegisterSchema = (t: TranslationType) =>
-  z
-    .object({
-      name: z
-        .string()
-        .min(1, { message: t.auth.validation.nameRequired })
-        .min(2, { message: t.auth.validation.nameMin }),
-      email: z
-        .string()
-        .min(1, { message: t.auth.validation.emailRequired })
-        .email({ message: t.auth.validation.emailInvalid }),
-      password: z
-        .string()
-        .min(1, { message: t.auth.validation.passwordRequired })
-        .min(8, { message: t.auth.validation.passwordMin }),
-      confirmPassword: z
-        .string()
-        .min(1, { message: t.auth.validation.confirmPasswordRequired }),
-      acceptTerms: z
-        .boolean()
-        .refine((val) => val === true, { message: t.auth.validation.termsRequired }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t.auth.validation.passwordsMustMatch,
-      path: ['confirmPassword'],
-    });
+export const registerSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Name is required")
+    .max(100, "Name must be no more than 100 characters long"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Invalid email format"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(72, "Password must be no more than 72 characters long"),
+  confirmPassword: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(72, "Password must be no more than 72 characters long"),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});

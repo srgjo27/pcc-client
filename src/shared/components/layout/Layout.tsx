@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu,
   LayoutDashboard,
@@ -11,11 +11,13 @@ import {
   BrainCog,
   PanelLeftClose,
   PanelLeftOpen,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { ASSETS } from '@/constants/assets';
 import { LanguageSwitcher } from '@/shared/components/ui/LanguageSwitcher';
+import { logout } from '@/features/auth';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -26,6 +28,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const menuItems: Array<{
     name: string;
@@ -33,44 +41,43 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     icon: React.ComponentType<{ className?: string }>;
     disabled?: boolean;
   }> = [
-    {
-      name: t.menu.dashboard,
-      path: '/dashboard',
-      icon: LayoutDashboard,
-    },
-    {
-      name: t.menu.todo,
-      path: '/to-do',
-      icon: ClipboardList,
-    },
-    {
-      name: t.menu.schedule,
-      path: '/schedule',
-      icon: Calendar,
-    },
-    {
-      name: t.menu.finance,
-      path: '/finance',
-      icon: Wallet,
-    },
-    {
-      name: t.menu.notes,
-      path: '/notes',
-      icon: NotebookPen,
-    },
-    {
-      name: t.menu.habits,
-      path: '/habits',
-      icon: FishingRod,
-    },
-    {
-      name: t.menu.focus,
-      path: '/focus',
-      icon: BrainCog,
-    },
-  ];
+      {
+        name: t.menu.dashboard,
+        path: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        name: t.menu.todo,
+        path: '/to-do',
+        icon: ClipboardList,
+      },
+      {
+        name: t.menu.schedule,
+        path: '/schedule',
+        icon: Calendar,
+      },
+      {
+        name: t.menu.finance,
+        path: '/finance',
+        icon: Wallet,
+      },
+      {
+        name: t.menu.notes,
+        path: '/notes',
+        icon: NotebookPen,
+      },
+      {
+        name: t.menu.habits,
+        path: '/habits',
+        icon: FishingRod,
+      },
+      {
+        name: t.menu.focus,
+        path: '/focus',
+        icon: BrainCog,
+      },
+    ];
 
-  // Helper to determine page title based on route
   const getPageTitle = () => {
     if (location.pathname === '/dashboard') return t.menu.dashboard;
     if (location.pathname === '/to-do') return t.menu.todo;
@@ -133,7 +140,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div
                   key={item.name}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-300 cursor-not-allowed select-none',
+                    'flex items-center gap-3 p-3 rounded-lg text-xs font-medium text-slate-300 cursor-not-allowed select-none',
                     isCollapsed && 'justify-center'
                   )}
                   title={`${item.name} (${t.menu.comingSoon})`}
@@ -150,7 +157,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 to={item.path}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200',
+                    'flex items-center gap-3 p-3 rounded-lg text-xs font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#F0F9FF] text-[#26A69A] font-semibold'
                       : 'hover:bg-slate-100 hover:text-slate-600',
@@ -167,7 +174,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Sidebar Footer */}
         <div className="border-t border-neutral-300 p-3">
-          {/* Footer is empty for now */}
+          <button
+            onClick={handleLogout}
+            className={cn(
+              'flex items-center gap-3 p-3 rounded-lg text-xs font-medium text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200 w-full',
+              isCollapsed && 'justify-center'
+            )}
+            title={t.auth.logoutButton}
+            aria-label="Logout"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!isCollapsed && <span>{t.auth.logoutButton}</span>}
+          </button>
         </div>
       </aside>
 
@@ -241,6 +259,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             );
           })}
         </nav>
+        {/* Mobile Sidebar Footer */}
+        <div className="border-t border-neutral-300 p-3">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200 w-full"
+            aria-label="Logout"
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            <span>{t.auth.logoutButton}</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content Area */}

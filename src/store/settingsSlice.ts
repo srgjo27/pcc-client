@@ -19,7 +19,6 @@ const getInitialLanguage = (): Language => {
     // safe fallback
   }
 
-  // Default to 'id'
   return 'id';
 };
 
