@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './shared/components/layout/Layout';
 import { Loading } from './shared/components/ui/Loading';
+import { ProtectedRoute } from './features/auth';
 
-// Lazy load pages for code splitting
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
@@ -40,7 +40,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route element={<Layout />}>
+              <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/to-do" element={<TodoPage />} />
                 <Route path="/schedule" element={<SchedulePage />} />

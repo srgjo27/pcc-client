@@ -26,18 +26,8 @@ export interface TranslationType {
         loginLinkText: string;
         submitButton: string;
         registerButton: string;
-        validation: {
-            emailInvalid: string;
-            emailRequired: string;
-            nameRequired: string;
-            nameMin: string;
-            passwordMin: string;
-            passwordRequired: string;
-            confirmPasswordRequired: string;
-            passwordsMustMatch: string;
-            termsRequired: string;
-        };
         termsLabel: string;
+        logoutButton: string;
     };
     menu: {
         dashboard: string;
