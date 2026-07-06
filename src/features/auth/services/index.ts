@@ -2,6 +2,7 @@ import { axiosClient } from '@/services/axiosClient';
 import { ENDPOINTS } from '@/constants/endpoints';
 import type { ApiResponse } from '@/shared/types/api';
 import type { AuthResponse, LoginPayload } from '../types';
+import { removeSecureItem } from '@/shared/utils/storage';
 
 export async function loginUser(payload: LoginPayload): Promise<AuthResponse> {
   const response = await axiosClient.post<ApiResponse<AuthResponse>>(
@@ -26,7 +27,7 @@ export async function logout() {
     );
     return response.data.message;
   } finally {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    removeSecureItem('access_token');
+    removeSecureItem('refresh_token');
   }
 }

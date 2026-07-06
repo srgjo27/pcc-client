@@ -1,3 +1,4 @@
+import { getSecureItem } from '@/shared/utils/storage';
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const token = localStorage.getItem('access_token');
+  const token = getSecureItem('access_token');
 
   if (!token) {
     return <Navigate to="/login" replace />;

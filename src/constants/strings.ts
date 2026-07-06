@@ -64,21 +64,22 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         priorityTitle: 'Prioritas',
         reviewTitle: 'Tinjauan Hari Ini',
         contexts: {
-          college: 'Kuliah',
+          lecture: 'Belajar',
           work: 'Kerja',
           business: 'Usaha',
           personal: 'Personal',
         },
         priorities: {
-          high: 'Tinggi',
-          medium: 'Sedang',
           low: 'Rendah',
+          medium: 'Sedang',
+          high: 'Tinggi',
+          urgent: 'Urgensi',
         },
         stats: {
-          completed: 'Selesai',
-          pending: 'Tertunda',
+          inProgress: 'Sedang Dikerjakan',
+          done: 'Selesai',
           completionRate: 'Tingkat Penyelesaian',
-          tasksCount: '{completed} dari {total} tugas selesai',
+          tasksCount: '{done} dari {total} tugas selesai',
         }
       }
     },
@@ -328,21 +329,22 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         priorityTitle: 'Priority',
         reviewTitle: "Today's Review",
         contexts: {
-          college: 'College',
+          lecture: 'Lecture',
           work: 'Work',
           business: 'Business',
           personal: 'Personal',
         },
         priorities: {
-          high: 'High',
-          medium: 'Medium',
           low: 'Low',
+          medium: 'Medium',
+          high: 'High',
+          urgent: "Urgent"
         },
         stats: {
-          completed: 'Completed',
-          pending: 'Pending',
+          inProgress: 'In Progress',
+          done: 'Done',
           completionRate: 'Completion Rate',
-          tasksCount: '{completed} of {total} tasks completed',
+          tasksCount: '{done} of {total} tasks completed',
         }
       }
     },

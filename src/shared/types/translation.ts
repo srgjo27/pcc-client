@@ -61,19 +61,20 @@ export interface TranslationType {
             priorityTitle: string;
             reviewTitle: string;
             contexts: {
-                college: string;
+                lecture: string;
                 work: string;
                 business: string;
                 personal: string;
             };
             priorities: {
-                high: string;
-                medium: string;
                 low: string;
+                medium: string;
+                high: string;
+                urgent: string;
             };
             stats: {
-                completed: string;
-                pending: string;
+                inProgress: string;
+                done: string;
                 completionRate: string;
                 tasksCount: string;
             };

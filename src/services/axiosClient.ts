@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { ENDPOINTS } from '@/constants/endpoints';
+import { getSecureItem, removeSecureItem } from '@/shared/utils/storage';
 
 export const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL!,
@@ -12,7 +13,7 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = getSecureItem('access_token');
 
     const isPublicEndpoint =
       config.url === ENDPOINTS.AUTH.LOGIN ||
@@ -34,7 +35,8 @@ axiosClient.interceptors.response.use(
     if (error.response) {
       const { status } = error.response;
       if (status === 401) {
-        localStorage.removeItem('access_token');
+        removeSecureItem('access_token');
+        removeSecureItem('refresh_token');
       }
     }
     return Promise.reject(error);
