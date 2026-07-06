@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import type { TasksParams } from "../types";
-import { fetchTasks, getTaskInformation } from "../services";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { TaskPayload, TasksParams } from "../types";
+import { createTask, fetchTasks, getTaskInformation } from "../services";
 
 const TASKS_KEYS = {
     tasks: (params?: TasksParams) =>
@@ -19,5 +19,16 @@ export function useTaskInformation(id: string) {
     return useQuery({
         queryKey: TASKS_KEYS.view(id),
         queryFn: () => getTaskInformation(id)
+    });
+}
+
+export function useCreateTask() {
+    const queryClient = useQueryClient();
+    return useMutation<string, Error, TaskPayload>({
+        mutationFn: (payload) => createTask(payload),
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({ queryKey: ['tasks'] });
+            return res;
+        }
     });
 }

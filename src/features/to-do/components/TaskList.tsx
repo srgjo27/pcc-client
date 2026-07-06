@@ -46,7 +46,7 @@ const TaskListContent: React.FC<TaskListContentProps> = ({
     return <Loading />;
   }
 
-  if (tasks.length !== 0) {
+  if (tasks.length === 0) {
     return (
       <div className="flex flex-col bg-[#26A69A]/10 items-center justify-center py-8 text-center">
         <div className="p-4">

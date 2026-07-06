@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Button } from '@/shared/components/ui/Button';
-import { Modal } from '@/shared/components/ui/Modal';
 import { useTasks } from '../hooks';
 import { TaskList } from './TaskList';
 import { TodoSidebar } from './TodoSidebar';
+import { AddTaskModal } from './AddTaskModal';
 
 export const ToDo: React.FC = () => {
   const { t } = useLanguage();
@@ -53,31 +53,10 @@ export const ToDo: React.FC = () => {
       </div>
 
       {/* Modals */}
-      <Modal
+      <AddTaskModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title={t.todo.addButton}
-        description={t.todo.modalDescription}
-      >
-        <div className="space-y-4 py-2">
-          <p className="text-sm text-slate-600">{t.todo.modalPlaceholder}</p>
-          <div className="flex justify-end gap-2 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => setIsAddModalOpen(false)}
-              size="sm"
-            >
-              {t.todo.cancelButton}
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => setIsAddModalOpen(false)}
-            >
-              {t.todo.saveButton}
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      />
     </div>
   );
 };

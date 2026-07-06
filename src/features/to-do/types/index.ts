@@ -1,7 +1,9 @@
 import { z } from "zod";
-import type { tasksParamsSchema } from "../schemas";
+import type { createTaskSchema, tasksParamsSchema } from "../schemas";
 
 export type TasksParams = z.infer<typeof tasksParamsSchema>;
+
+export type TaskPayload = z.input<typeof createTaskSchema>;
 
 export interface Task {
     id: string,

@@ -160,7 +160,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     'flex items-center gap-3 p-3 rounded-lg text-xs font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#F0F9FF] text-[#26A69A] font-semibold'
-                      : 'hover:bg-slate-100 hover:text-slate-600',
+                      : 'hover:bg-slate-100 hover:text-slate-500',
                     isCollapsed && 'justify-center'
                   )
                 }
@@ -249,7 +249,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#F0F9FF] text-[#26A69A] font-semibold'
-                      : 'text-slate-600 hover:bg-slate-100'
+                      : 'text-slate-500 hover:bg-slate-100'
                   )
                 }
               >
@@ -288,7 +288,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </button>
 
             {/* View/Page Title */}
-            <h2 className="font-semibold text-slate-800">
+            <h2 className="font-semibold">
               {getPageTitle()}
             </h2>
           </div>
@@ -308,7 +308,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Sticky Footer */}
         <footer className="border-t border-neutral-300 py-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] sm:text-xs text-slate-400">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] sm:text-xs text-slate-500">
             <div>
               &copy; {`2026`} {`${t.appName}. ${t.rightsReserved}`}
             </div>

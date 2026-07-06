@@ -53,13 +53,9 @@ export interface TranslationType {
         emptyStateTitle: string;
         emptyStateSubtitle: string;
         modalDescription: string;
-        modalPlaceholder: string;
-        cancelButton: string;
-        saveButton: string;
         aside: {
             contextTitle: string;
             priorityTitle: string;
-            reviewTitle: string;
             contexts: {
                 lecture: string;
                 work: string;
@@ -71,12 +67,6 @@ export interface TranslationType {
                 medium: string;
                 high: string;
                 urgent: string;
-            };
-            stats: {
-                inProgress: string;
-                done: string;
-                completionRate: string;
-                tasksCount: string;
             };
         };
     };

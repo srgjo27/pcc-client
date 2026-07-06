@@ -56,13 +56,9 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emptyStateTitle: 'Belum ada tugas terpilih',
       emptyStateSubtitle: 'Pilih filter kategori di samping atau buat tugas baru untuk memulai.',
       modalDescription: 'Formulir untuk menambahkan tugas baru.',
-      modalPlaceholder: 'Konten form tambah tugas akan segera hadir di sini.',
-      cancelButton: 'Batal',
-      saveButton: 'Simpan',
       aside: {
         contextTitle: 'Konteks',
         priorityTitle: 'Prioritas',
-        reviewTitle: 'Tinjauan Hari Ini',
         contexts: {
           lecture: 'Belajar',
           work: 'Kerja',
@@ -75,12 +71,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
           high: 'Tinggi',
           urgent: 'Urgensi',
         },
-        stats: {
-          inProgress: 'Sedang Dikerjakan',
-          done: 'Selesai',
-          completionRate: 'Tingkat Penyelesaian',
-          tasksCount: '{done} dari {total} tugas selesai',
-        }
       }
     },
     schedule: {
@@ -321,13 +311,9 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emptyStateTitle: 'No task selected yet',
       emptyStateSubtitle: 'Select a category filter on the side or create a new task to start.',
       modalDescription: 'Form to add a new task.',
-      modalPlaceholder: 'Add task form content will be here soon.',
-      cancelButton: 'Cancel',
-      saveButton: 'Save',
       aside: {
         contextTitle: 'Context',
         priorityTitle: 'Priority',
-        reviewTitle: "Today's Review",
         contexts: {
           lecture: 'Lecture',
           work: 'Work',
@@ -340,12 +326,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
           high: 'High',
           urgent: "Urgent"
         },
-        stats: {
-          inProgress: 'In Progress',
-          done: 'Done',
-          completionRate: 'Completion Rate',
-          tasksCount: '{done} of {total} tasks completed',
-        }
       }
     },
     schedule: {

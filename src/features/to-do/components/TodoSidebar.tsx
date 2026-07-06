@@ -18,7 +18,7 @@ interface TodoSidebarProps {
 }
 
 export const TodoSidebar: React.FC<TodoSidebarProps> = ({ tasks = [] }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [selectedContext, setSelectedContext] = useState<string | null>(null);
   const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
 
@@ -77,7 +77,7 @@ export const TodoSidebar: React.FC<TodoSidebarProps> = ({ tasks = [] }) => {
           <div className="flex items-center gap-2">
             <CalendarDays className="h-4 w-4 text-[#26A69A]" />
             <CardTitle className="text-sm font-semibold">
-              {t.todo.aside.reviewTitle}
+              {lang === 'id' ? 'Tinjauan Hari Ini' : "Today's Review"}
             </CardTitle>
           </div>
         </CardHeader>
@@ -85,7 +85,7 @@ export const TodoSidebar: React.FC<TodoSidebarProps> = ({ tasks = [] }) => {
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-medium">
-              <span>{t.todo.aside.stats.completionRate}</span>
+              <span>{lang === 'id' ? 'Tingkat Penyelesaian' : 'Completion Rate'}</span>
               <span>{completionPercentage}%</span>
             </div>
             <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden">
@@ -95,9 +95,7 @@ export const TodoSidebar: React.FC<TodoSidebarProps> = ({ tasks = [] }) => {
               />
             </div>
             <p className="text-[11px] text-slate-500">
-              {t.todo.aside.stats.tasksCount
-                .replace('{done}', String(stats.done))
-                .replace('{total}', String(stats.total))}
+              {lang === 'id' ? `${stats.done} dari ${stats.total} tugas selesai` : `${stats.done} of ${stats.total} tasks completed`}
             </p>
           </div>
 
@@ -108,7 +106,7 @@ export const TodoSidebar: React.FC<TodoSidebarProps> = ({ tasks = [] }) => {
                 <Clock className="h-4 w-4 text-[#FFB300]" />
               </div>
               <div>
-                <p className="text-[10px] font-medium text-slate-500">{t.todo.aside.stats.inProgress}</p>
+                <p className="text-[10px] font-medium text-slate-500">{lang === 'id' ? 'Sedang Dikerjakan' : 'In Progress'}</p>
                 <p className="text-base font-bold">{stats.inProgress}</p>
               </div>
             </div>
@@ -117,7 +115,7 @@ export const TodoSidebar: React.FC<TodoSidebarProps> = ({ tasks = [] }) => {
                 <CheckCircle2 className="h-4 w-4 text-[#26A69A]" />
               </div>
               <div>
-                <p className="text-[10px] font-medium text-slate-500">{t.todo.aside.stats.done}</p>
+                <p className="text-[10px] font-medium text-slate-500">{lang === 'id' ? 'Selesai' : 'Done'}</p>
                 <p className="text-base font-bold">{stats.done}</p>
               </div>
             </div>
