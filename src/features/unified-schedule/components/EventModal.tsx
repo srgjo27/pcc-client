@@ -133,7 +133,6 @@ export const EventModal: React.FC<EventModalProps> = ({
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4" noValidate>
         {/* Title */}
         <Input
-          type="text"
           label={t.schedule.form.titleLabel}
           placeholder={t.schedule.form.titlePlaceholder}
           error={errors.title?.message}
@@ -185,12 +184,12 @@ export const EventModal: React.FC<EventModalProps> = ({
             id="event-isRecurring"
             type="checkbox"
             disabled={isLoading}
-            className="h-4.5 w-4.5 rounded border-neutral-300 accent-[#FFB300] cursor-pointer"
+            className="h-4.5 w-4.5 accent-[#FFB300] cursor-pointer"
             {...register('isRecurring')}
           />
           <label
             htmlFor="event-isRecurring"
-            className="text-sm font-medium text-slate-700 cursor-pointer select-none"
+            className="text-sm font-medium cursor-pointer select-none"
           >
             {t.schedule.form.isRecurringLabel}
           </label>

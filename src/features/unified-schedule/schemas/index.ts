@@ -1,5 +1,5 @@
+import type { TranslationType } from '@/shared/types/translation';
 import { z } from 'zod';
-import { type TranslationType } from '@/constants/strings';
 
 export const getEventSchema = (t: TranslationType) =>
   z

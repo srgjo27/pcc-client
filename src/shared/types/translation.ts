@@ -1,0 +1,272 @@
+export interface TranslationType {
+    appName: string;
+    systemVersion: string;
+    version: string;
+    rightsReserved: string;
+    days: string;
+    times: string;
+    today: string;
+    auth: {
+        loginTitle: string;
+        loginDescription: string;
+        registerTitle: string;
+        registerDescription: string;
+        emailLabel: string;
+        emailPlaceholder: string;
+        nameLabel: string;
+        namePlaceholder: string;
+        passwordLabel: string;
+        passwordPlaceholder: string;
+        confirmPasswordLabel: string;
+        confirmPasswordPlaceholder: string;
+        forgotPasswordLink: string;
+        dontHaveAccountText: string;
+        registerLinkText: string;
+        alreadyHaveAccountText: string;
+        loginLinkText: string;
+        submitButton: string;
+        registerButton: string;
+        termsLabel: string;
+        logoutButton: string;
+    };
+    menu: {
+        dashboard: string;
+        todo: string;
+        schedule: string;
+        finance: string;
+        notes: string;
+        habits: string;
+        focus: string;
+        comingSoon: string;
+    };
+    dashboard: {
+        title: string;
+        subtitle: string;
+    };
+    todo: {
+        title: string;
+        subtitle: string;
+        addButton: string;
+        addAriaLabel: string;
+        activeTasksTitle: string;
+        activeTasksSubtitle: string;
+        emptyStateTitle: string;
+        emptyStateSubtitle: string;
+        modalDescription: string;
+        aside: {
+            contextTitle: string;
+            priorityTitle: string;
+            contexts: {
+                lecture: string;
+                work: string;
+                business: string;
+                personal: string;
+            };
+            priorities: {
+                low: string;
+                medium: string;
+                high: string;
+                urgent: string;
+            };
+            status: {
+                todo: string;
+                inProgress: string;
+                done: string;
+                cancelled: string;
+            };
+        };
+        form: {
+            titleLabel: string;
+            titlePlaceholder: string;
+            descriptionLabel: string;
+            descriptionPlaceholder: string;
+            statusLabel: string;
+            dueDateLabel: string;
+            dueTimeLabel: string;
+            tagsLabel: string;
+            tagsPlaceholder: string;
+        }
+    };
+    schedule: {
+        title: string;
+        subtitle: string;
+        addEvent: string;
+        editEvent: string;
+        eventDetails: string;
+        deleteEvent: string;
+        deleteConfirm: string;
+        form: {
+            titleLabel: string;
+            titlePlaceholder: string;
+            descriptionLabel: string;
+            descriptionPlaceholder: string;
+            contextLabel: string;
+            startDateLabel: string;
+            endDateLabel: string;
+            isRecurringLabel: string;
+            recurringDaysLabel: string;
+            recurringEndDateLabel: string;
+        };
+        validation: {
+            titleRequired: string;
+            startDateRequired: string;
+            endDateRequired: string;
+            contextRequired: string;
+            dateOrderInvalid: string;
+        };
+        conflictWarningTitle: string;
+        conflictWarningDesc: string;
+        views: {
+            month: string;
+            week: string;
+            day: string;
+        };
+        dayView: {
+            eventsCountLabel: string;
+            noEvents: string;
+            emptyStateActionDesc: string;
+            recurring: string;
+            conflictMessage: string;
+        };
+        weekView: {
+            noEvents: string;
+            conflictBadge: string;
+        };
+    };
+    finance: {
+        title: string;
+        subtitle: string;
+        totalIncome: string;
+        totalExpense: string;
+        netBalance: string;
+        addTransaction: string;
+        editTransaction: string;
+        deleteTransaction: string;
+        deleteConfirm: string;
+        setBudget: string;
+        budgetAlert: string;
+        budgetLimit: string;
+        budgetStatus: string;
+        incomeTrend: string;
+        expenseBreakdown: string;
+        categories: {
+            salary: string;
+            business: string;
+            freelance: string;
+            food: string;
+            transportation: string;
+            subscription: string;
+            education: string;
+            entertainment: string;
+            others: string;
+        };
+        form: {
+            titleLabel: string;
+            titlePlaceholder: string;
+            typeLabel: string;
+            amountLabel: string;
+            amountPlaceholder: string;
+            categoryLabel: string;
+            dateLabel: string;
+            descriptionLabel: string;
+            descriptionPlaceholder: string;
+        };
+        validation: {
+            titleRequired: string;
+            amountRequired: string;
+            categoryRequired: string;
+            dateRequired: string;
+        };
+    };
+    notes: {
+        title: string;
+        subtitle: string;
+        searchPlaceholder: string;
+        addNote: string;
+        pinned: string;
+        otherNotes: string;
+        emptyNotes: string;
+        emptyNotesDesc: string;
+        untitledNote: string;
+        saving: string;
+        saved: string;
+        editor: {
+            titlePlaceholder: string;
+            contentPlaceholder: string;
+            attachToTask: string;
+            noTaskAttached: string;
+            tagsLabel: string;
+            tagsPlaceholder: string;
+            bold: string;
+            italic: string;
+            heading: string;
+            list: string;
+            codeBlock: string;
+        };
+        confirmDelete: string;
+    };
+    habits: {
+        title: string;
+        subtitle: string;
+        addHabit: string;
+        emptyHabits: string;
+        emptyHabitsDesc: string;
+        streak: string;
+        streakActive: string;
+        streakBest: string;
+        totalCompletion: string;
+        activeHabits: string;
+        bestStreak: string;
+        totalCheckIns: string
+        dailyCheckIn: string;
+        heatmapTitle: string;
+        historyDetail: string;
+        frequencyLabel: string;
+        daysLabel: string;
+        frequencyDaily: string;
+        frequencyCustom: string;
+        myHabbits: string;
+        form: {
+            nameLabel: string;
+            namePlaceholder: string;
+            iconLabel: string;
+            freqLabel: string;
+            daysLabel: string;
+            submitAdd: string;
+            submitCancel: string;
+        };
+        confirmDelete: string;
+    };
+    focus: {
+        title: string;
+        subtitle: string;
+        startBtn: string;
+        pauseBtn: string;
+        resumeBtn: string;
+        resetBtn: string;
+        customizeTimer: string;
+        focusDurationLabel: string;
+        breakDurationLabel: string;
+        minutesUnit: string;
+        activeTaskLabel: string;
+        selectTaskPlaceholder: string;
+        noTaskSelected: string;
+        dailyStatsTitle: string;
+        sessionsCompleted: string;
+        totalFocusTime: string;
+        sessionHistoryTitle: string;
+        noHistory: string;
+        completedAt: string;
+        duration: string;
+        minutesVal: string;
+        saveSettings: string;
+        cancelBtn: string;
+        taskTitle: string;
+        modeFocus: string;
+        modeBreak: string;
+        alertSessionCompleted: string;
+        alertBreakCompleted: string;
+        addTaskPlaceholder: string;
+        addNewTaskBtn: string;
+    };
+}

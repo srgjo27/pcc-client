@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Menu,
   LayoutDashboard,
@@ -11,11 +11,13 @@ import {
   BrainCog,
   PanelLeftClose,
   PanelLeftOpen,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { ASSETS } from '@/constants/assets';
 import { LanguageSwitcher } from '@/shared/components/ui/LanguageSwitcher';
+import { logout } from '@/features/auth';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -26,54 +28,64 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const menuItems = [
-    {
-      name: t.menu.dashboard,
-      path: '/dashboard',
-      icon: LayoutDashboard,
-    },
-    {
-      name: t.menu.todo,
-      path: '/to-do',
-      icon: ClipboardList,
-    },
-    {
-      name: t.menu.schedule,
-      path: '/schedule',
-      icon: Calendar,
-    },
-    {
-      name: t.menu.finance,
-      path: '/finance',
-      icon: Wallet,
-    },
-    {
-      name: t.menu.notes,
-      path: '#',
-      icon: NotebookPen,
-      disabled: true,
-    },
-    {
-      name: t.menu.habits,
-      path: '#',
-      icon: FishingRod,
-      disabled: true,
-    },
-    {
-      name: t.menu.focus,
-      path: '#',
-      icon: BrainCog,
-      disabled: true,
-    },
-  ];
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
-  // Helper to determine page title based on route
+  const menuItems: Array<{
+    name: string;
+    path: string;
+    icon: React.ComponentType<{ className?: string }>;
+    disabled?: boolean;
+  }> = [
+      {
+        name: t.menu.dashboard,
+        path: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        name: t.menu.todo,
+        path: '/to-do',
+        icon: ClipboardList,
+      },
+      {
+        name: t.menu.schedule,
+        path: '/schedule',
+        icon: Calendar,
+      },
+      {
+        name: t.menu.finance,
+        path: '/finance',
+        icon: Wallet,
+      },
+      {
+        name: t.menu.notes,
+        path: '/notes',
+        icon: NotebookPen,
+      },
+      {
+        name: t.menu.habits,
+        path: '/habits',
+        icon: FishingRod,
+      },
+      {
+        name: t.menu.focus,
+        path: '/focus',
+        icon: BrainCog,
+      },
+    ];
+
   const getPageTitle = () => {
     if (location.pathname === '/dashboard') return t.menu.dashboard;
     if (location.pathname === '/to-do') return t.menu.todo;
     if (location.pathname === '/schedule') return t.menu.schedule;
     if (location.pathname === '/finance') return t.menu.finance;
+    if (location.pathname === '/notes') return t.menu.notes;
+    if (location.pathname === '/habits') return t.menu.habits;
+    if (location.pathname === '/focus') return t.menu.focus;
     return t.appName;
   };
 
@@ -128,7 +140,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div
                   key={item.name}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-300 cursor-not-allowed select-none',
+                    'flex items-center gap-3 p-3 rounded-lg text-xs font-medium text-slate-300 cursor-not-allowed select-none',
                     isCollapsed && 'justify-center'
                   )}
                   title={`${item.name} (${t.menu.comingSoon})`}
@@ -145,10 +157,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 to={item.path}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200',
+                    'flex items-center gap-3 p-3 rounded-lg text-xs font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#F0F9FF] text-[#26A69A] font-semibold'
-                      : 'hover:bg-slate-100 hover:text-slate-600',
+                      : 'hover:bg-slate-100 hover:text-slate-500',
                     isCollapsed && 'justify-center'
                   )
                 }
@@ -162,7 +174,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Sidebar Footer */}
         <div className="border-t border-neutral-300 p-3">
-          {/* Footer is empty for now */}
+          <button
+            onClick={handleLogout}
+            className={cn(
+              'flex items-center gap-3 p-3 rounded-lg text-xs font-medium text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200 w-full',
+              isCollapsed && 'justify-center'
+            )}
+            title={t.auth.logoutButton}
+            aria-label="Logout"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!isCollapsed && <span>{t.auth.logoutButton}</span>}
+          </button>
         </div>
       </aside>
 
@@ -226,7 +249,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#F0F9FF] text-[#26A69A] font-semibold'
-                      : 'text-slate-600 hover:bg-slate-100'
+                      : 'text-slate-500 hover:bg-slate-100'
                   )
                 }
               >
@@ -236,6 +259,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             );
           })}
         </nav>
+        {/* Mobile Sidebar Footer */}
+        <div className="border-t border-neutral-300 p-3">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-500 transition-all duration-200 w-full"
+            aria-label="Logout"
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            <span>{t.auth.logoutButton}</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content Area */}
@@ -254,7 +288,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </button>
 
             {/* View/Page Title */}
-            <h2 className="font-semibold text-slate-800">
+            <h2 className="font-semibold">
               {getPageTitle()}
             </h2>
           </div>
@@ -274,7 +308,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Sticky Footer */}
         <footer className="border-t border-neutral-300 py-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] sm:text-xs text-slate-400">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] sm:text-xs text-slate-500">
             <div>
               &copy; {`2026`} {`${t.appName}. ${t.rightsReserved}`}
             </div>

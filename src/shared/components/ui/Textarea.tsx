@@ -47,13 +47,13 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={ariaDescribedBy}
           className={cn(
-            'flex min-h-20 w-full rounded-md border bg-transparent px-3 py-2 text-sm',
+            'flex min-h-20 w-full rounded-md border bg-transparent px-3 py-2 text-xs',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
             disabled
               ? 'bg-slate-50 text-slate-400 border-neutral-200 cursor-not-allowed'
               : error
                 ? 'border-red-500 text-red-900 focus-visible:ring-red-500 focus-visible:border-transparent'
-                : 'border-neutral-300 focus-visible:ring-blue-500 focus-visible:border-transparent',
+                : 'border-neutral-300 focus-visible:ring-[#29B6F6] focus-visible:border-transparent',
             className
           )}
           {...props}

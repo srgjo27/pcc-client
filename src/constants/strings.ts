@@ -1,200 +1,14 @@
-export interface TranslationType {
-  appName: string;
-  systemVersion: string;
-  version: string;
-  rightsReserved: string;
-  auth: {
-    loginTitle: string;
-    loginDescription: string;
-    registerTitle: string;
-    registerDescription: string;
-    emailLabel: string;
-    emailPlaceholder: string;
-    nameLabel: string;
-    namePlaceholder: string;
-    passwordLabel: string;
-    passwordPlaceholder: string;
-    confirmPasswordLabel: string;
-    confirmPasswordPlaceholder: string;
-    forgotPasswordLink: string;
-    dontHaveAccountText: string;
-    registerLinkText: string;
-    alreadyHaveAccountText: string;
-    loginLinkText: string;
-    submitButton: string;
-    registerButton: string;
-    validation: {
-      emailInvalid: string;
-      emailRequired: string;
-      nameRequired: string;
-      nameMin: string;
-      passwordMin: string;
-      passwordRequired: string;
-      confirmPasswordRequired: string;
-      passwordsMustMatch: string;
-      termsRequired: string;
-    };
-    termsLabel: string;
-    errorMessage: string;
-    errorRegisterMessage: string;
-  };
-  menu: {
-    dashboard: string;
-    todo: string;
-    schedule: string;
-    finance: string;
-    notes: string;
-    habits: string;
-    focus: string;
-    comingSoon: string;
-  };
-  dashboard: {
-    title: string;
-    subtitle: string;
-  };
-  todo: {
-    title: string;
-    subtitle: string;
-    addButton: string;
-    addAriaLabel: string;
-    activeTasksTitle: string;
-    activeTasksSubtitle: string;
-    emptyStateTitle: string;
-    emptyStateSubtitle: string;
-    modalDescription: string;
-    modalPlaceholder: string;
-    cancelButton: string;
-    saveButton: string;
-    aside: {
-      contextTitle: string;
-      priorityTitle: string;
-      reviewTitle: string;
-      contexts: {
-        college: string;
-        work: string;
-        business: string;
-        personal: string;
-      };
-      priorities: {
-        high: string;
-        medium: string;
-        low: string;
-      };
-      stats: {
-        completed: string;
-        pending: string;
-        completionRate: string;
-        tasksCount: string;
-      };
-    };
-  };
-  schedule: {
-    title: string;
-    subtitle: string;
-    addEvent: string;
-    editEvent: string;
-    eventDetails: string;
-    deleteEvent: string;
-    deleteConfirm: string;
-    filter: string;
-    today: string;
-    form: {
-      titleLabel: string;
-      titlePlaceholder: string;
-      descriptionLabel: string;
-      descriptionPlaceholder: string;
-      contextLabel: string;
-      startDateLabel: string;
-      endDateLabel: string;
-      isRecurringLabel: string;
-      recurringDaysLabel: string;
-      recurringEndDateLabel: string;
-    };
-    validation: {
-      titleRequired: string;
-      startDateRequired: string;
-      endDateRequired: string;
-      contextRequired: string;
-      dateOrderInvalid: string;
-    };
-    conflictWarningTitle: string;
-    conflictWarningDesc: string;
-    views: {
-      month: string;
-      week: string;
-      day: string;
-    };
-    dayView: {
-      eventsCountLabel: string;
-      noEvents: string;
-      emptyStateActionDesc: string;
-      recurring: string;
-      conflictMessage: string;
-    };
-    monthView: {
-      weekDays: string[];
-    };
-    weekView: {
-      noEvents: string;
-      conflictBadge: string;
-    };
-    prevAriaLabel: string;
-    nextAriaLabel: string;
-  };
-  finance: {
-    title: string;
-    subtitle: string;
-    totalIncome: string;
-    totalExpense: string;
-    netBalance: string;
-    addTransaction: string;
-    editTransaction: string;
-    deleteTransaction: string;
-    deleteConfirm: string;
-    setBudget: string;
-    budgetAlert: string;
-    budgetLimit: string;
-    budgetStatus: string;
-    incomeTrend: string;
-    expenseBreakdown: string;
-    categories: {
-      salary: string;
-      business: string;
-      freelance: string;
-      food: string;
-      transportation: string;
-      subscription: string;
-      education: string;
-      entertainment: string;
-      others: string;
-    };
-    form: {
-      titleLabel: string;
-      titlePlaceholder: string;
-      typeLabel: string;
-      amountLabel: string;
-      amountPlaceholder: string;
-      categoryLabel: string;
-      dateLabel: string;
-      descriptionLabel: string;
-      descriptionPlaceholder: string;
-    };
-    validation: {
-      titleRequired: string;
-      amountRequired: string;
-      categoryRequired: string;
-      dateRequired: string;
-    };
-  };
-}
-
+import type { TranslationType } from "@/shared/types/translation";
 
 export const strings: Record<'id' | 'en', TranslationType> = {
   id: {
     appName: 'PCC Client',
-    systemVersion: '1.1.0',
+    systemVersion: '1.2.0',
     version: 'Versi',
     rightsReserved: 'Seluruh hak dilindungi.',
+    days: 'Hari',
+    times: 'Kali',
+    today: 'Hari Ini',
     auth: {
       loginTitle: 'Masuk ke Akun Anda',
       loginDescription: 'Silakan masukkan email dan kata sandi Anda untuk masuk.',
@@ -203,7 +17,7 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emailLabel: 'Alamat Email',
       emailPlaceholder: 'nama@domain.com',
       nameLabel: 'Nama Lengkap',
-      namePlaceholder: 'John Doe',
+      namePlaceholder: 'Tim Cook',
       passwordLabel: 'Kata Sandi',
       passwordPlaceholder: '••••••••',
       confirmPasswordLabel: 'Konfirmasi Kata Sandi',
@@ -215,20 +29,8 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       loginLinkText: 'Masuk di sini',
       submitButton: 'Masuk',
       registerButton: 'Daftar',
-      validation: {
-        emailInvalid: 'Alamat email tidak valid.',
-        emailRequired: 'Email wajib diisi.',
-        nameRequired: 'Nama lengkap wajib diisi.',
-        nameMin: 'Nama lengkap minimal harus 2 karakter.',
-        passwordMin: 'Kata sandi minimal harus 8 karakter.',
-        passwordRequired: 'Kata sandi wajib diisi.',
-        confirmPasswordRequired: 'Konfirmasi kata sandi wajib diisi.',
-        passwordsMustMatch: 'Kata sandi tidak cocok.',
-        termsRequired: 'Anda harus menyetujui Syarat dan Ketentuan.',
-      },
       termsLabel: 'Saya menyetujui Syarat dan Ketentuan',
-      errorMessage: 'Login gagal. Silakan periksa kembali email atau kata sandi Anda.',
-      errorRegisterMessage: 'Pendaftaran gagal. Silakan coba lagi.',
+      logoutButton: 'Keluar',
     },
     menu: {
       dashboard: 'Dashboard',
@@ -254,30 +56,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emptyStateTitle: 'Belum ada tugas terpilih',
       emptyStateSubtitle: 'Pilih filter kategori di samping atau buat tugas baru untuk memulai.',
       modalDescription: 'Formulir untuk menambahkan tugas baru.',
-      modalPlaceholder: 'Konten form tambah tugas akan segera hadir di sini.',
-      cancelButton: 'Batal',
-      saveButton: 'Simpan',
       aside: {
         contextTitle: 'Konteks',
         priorityTitle: 'Prioritas',
-        reviewTitle: 'Tinjauan Hari Ini',
         contexts: {
-          college: 'Kuliah',
+          lecture: 'Belajar',
           work: 'Kerja',
           business: 'Usaha',
           personal: 'Personal',
         },
         priorities: {
-          high: 'Tinggi',
-          medium: 'Sedang',
           low: 'Rendah',
+          medium: 'Sedang',
+          high: 'Tinggi',
+          urgent: 'Urgensi',
         },
-        stats: {
-          completed: 'Selesai',
-          pending: 'Tertunda',
-          completionRate: 'Tingkat Penyelesaian',
-          tasksCount: '{completed} dari {total} tugas selesai',
+        status: {
+          todo: 'Menunggu',
+          inProgress: 'Dalam Proses',
+          done: 'Selesai',
+          cancelled: 'Dibatalkan',
         }
+      },
+      form: {
+        titleLabel: 'Judul',
+        titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
+        descriptionLabel: 'Keterangan',
+        descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
+        statusLabel: 'Status',
+        dueDateLabel: 'Tanggal Tenggat',
+        dueTimeLabel: 'Waktu Tenggat',
+        tagsLabel: 'Tag',
+        tagsPlaceholder: 'Contoh: Kuliah, Tugas, Meeting',
       }
     },
     schedule: {
@@ -288,14 +98,12 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       eventDetails: 'Detail Jadwal',
       deleteEvent: 'Hapus Jadwal',
       deleteConfirm: 'Apakah Anda yakin ingin menghapus jadwal ini?',
-      filter: 'Filter',
-      today: 'Hari Ini',
       form: {
         titleLabel: 'Nama Kegiatan',
         titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
         descriptionLabel: 'Keterangan',
         descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
-        contextLabel: 'Kategori / Konteks',
+        contextLabel: 'Kategori/Konteks',
         startDateLabel: 'Waktu Mulai',
         endDateLabel: 'Waktu Selesai',
         isRecurringLabel: 'Ulangi Kegiatan Ini',
@@ -323,15 +131,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         recurring: 'Berulang',
         conflictMessage: 'Bentrokan jadwal: Kegiatan ini bertabrakan dengan kegiatan lain!',
       },
-      monthView: {
-        weekDays: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-      },
       weekView: {
         noEvents: 'Tidak ada kegiatan',
         conflictBadge: 'Bentrokan',
       },
-      prevAriaLabel: 'Sebelumnya',
-      nextAriaLabel: 'Berikutnya',
     },
     finance: {
       title: 'Pelacak Keuangan',
@@ -372,18 +175,112 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         descriptionPlaceholder: 'Catatan opsional',
       },
       validation: {
-        titleRequired: 'Nama transaksi wajib diisi.',
-        amountRequired: 'Jumlah transaksi harus lebih dari 0.',
-        categoryRequired: 'Kategori wajib dipilih.',
+        titleRequired: 'Judul transaksi wajib diisi.',
+        amountRequired: 'Jumlah transaksi harus lebih besar dari 0.',
+        categoryRequired: 'Kategori wajib diisi.',
         dateRequired: 'Tanggal wajib diisi.',
       },
+    },
+    notes: {
+      title: 'Catatan',
+      subtitle: 'Tulis ide, catat tugas, dan atur pemikiran Anda dengan cepat.',
+      searchPlaceholder: 'Cari catatan',
+      addNote: 'Catatan Baru',
+      pinned: 'Disematkan',
+      otherNotes: 'Catatan Lainnya',
+      emptyNotes: 'Belum ada catatan',
+      emptyNotesDesc: 'Mulai dengan menambahkan catatan baru di panel samping.',
+      untitledNote: 'Catatan Tanpa Judul',
+      saving: 'Menyimpan',
+      saved: 'Tersimpan otomatis',
+      editor: {
+        titlePlaceholder: 'Judul catatan',
+        contentPlaceholder: 'Mulai mengetik di sini',
+        attachToTask: 'Lampirkan ke Tugas',
+        noTaskAttached: 'Tidak ada tugas terlampir',
+        tagsLabel: 'Tag',
+        tagsPlaceholder: 'Tambah tag (tekan Enter)',
+        bold: 'Tebal',
+        italic: 'Miring',
+        heading: 'Judul',
+        list: 'Daftar',
+        codeBlock: 'Blok Kode',
+      },
+      confirmDelete: 'Apakah Anda yakin ingin menghapus catatan ini?',
+    },
+    habits: {
+      title: 'Rutinitas',
+      subtitle: 'Bangun kebiasaan baik dan pantau latihan gym harian Anda untuk hidup lebih konsisten.',
+      addHabit: 'Tambah Kebiasaan',
+      emptyHabits: 'Belum ada kebiasaan',
+      emptyHabitsDesc: 'Mulai dengan menambahkan kebiasaan baru di atas.',
+      streak: 'Hari berturut-turut',
+      streakActive: 'Streak Aktif',
+      streakBest: 'Streak Terbaik',
+      totalCompletion: 'Total Penyelesaian',
+      activeHabits: 'Kebiasaan Aktif',
+      bestStreak: 'Streak Terbaik',
+      totalCheckIns: 'Total Penyelesaian',
+      dailyCheckIn: 'Check-in Hari Ini',
+      heatmapTitle: 'Heatmap Konsistensi (90 Hari Terakhir)',
+      historyDetail: 'Riwayat Penyelesaian',
+      frequencyLabel: 'Frekuensi',
+      daysLabel: 'Hari Target',
+      frequencyDaily: 'Setiap Hari',
+      frequencyCustom: 'Hari Tertentu',
+      myHabbits: 'Rutinitas Saya',
+      form: {
+        nameLabel: 'Nama Kebiasaan',
+        namePlaceholder: 'Misal: Gym, Baca 30 Menit, Minum Air',
+        iconLabel: 'Pilih Ikon',
+        freqLabel: 'Frekuensi Target',
+        daysLabel: 'Pilih Hari Target',
+        submitAdd: 'Simpan Kebiasaan',
+        submitCancel: 'Batal',
+      },
+      confirmDelete: 'Apakah Anda yakin ingin menghapus kebiasaan ini? Semua data riwayat akan dihapus.',
+    },
+    focus: {
+      title: 'Fokus Mode (Pomodoro)',
+      subtitle: 'Tingkatkan produktivitas Anda menggunakan teknik Pomodoro dengan melacak tugas.',
+      startBtn: 'Mulai Fokus',
+      pauseBtn: 'Jeda',
+      resumeBtn: 'Lanjutkan',
+      resetBtn: 'Atur Ulang',
+      customizeTimer: 'Kustomisasi Timer',
+      focusDurationLabel: 'Durasi Fokus (Menit)',
+      breakDurationLabel: 'Durasi Istirahat (Menit)',
+      minutesUnit: 'Menit',
+      activeTaskLabel: 'Pilih Tugas Aktif',
+      selectTaskPlaceholder: 'Pilih tugas untuk dikerjakan',
+      noTaskSelected: 'Silakan pilih tugas sebelum memulai sesi fokus.',
+      dailyStatsTitle: 'Statistik Harian',
+      sessionsCompleted: 'Sesi Selesai',
+      totalFocusTime: 'Total Waktu Fokus',
+      sessionHistoryTitle: 'Riwayat Sesi',
+      noHistory: 'Belum ada sesi fokus hari ini.',
+      completedAt: 'Selesai pada',
+      duration: 'Durasi',
+      minutesVal: '{minutes} menit',
+      saveSettings: 'Simpan Pengaturan',
+      cancelBtn: 'Batal',
+      taskTitle: 'Tugas',
+      modeFocus: 'Fokus',
+      modeBreak: 'Istirahat',
+      alertSessionCompleted: 'Sesi fokus selesai! Waktunya istirahat.',
+      alertBreakCompleted: 'Sesi istirahat selesai! Waktunya kembali fokus.',
+      addTaskPlaceholder: 'Tambah tugas baru',
+      addNewTaskBtn: 'Tambah',
     }
   },
   en: {
     appName: 'PCC Client',
-    systemVersion: '1.1.0',
+    systemVersion: '1.2.0',
     version: 'Version',
     rightsReserved: 'All rights reserved.',
+    days: 'Days',
+    times: 'Times',
+    today: 'Today',
     auth: {
       loginTitle: 'Sign In to Your Account',
       loginDescription: 'Please enter your email and password to sign in.',
@@ -404,20 +301,8 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       loginLinkText: 'Sign in here',
       submitButton: 'Sign In',
       registerButton: 'Register',
-      validation: {
-        emailInvalid: 'Invalid email address.',
-        emailRequired: 'Email is required.',
-        nameRequired: 'Full name is required.',
-        nameMin: 'Full name must be at least 2 characters.',
-        passwordMin: 'Password must be at least 8 characters.',
-        passwordRequired: 'Password is required.',
-        confirmPasswordRequired: 'Confirm password is required.',
-        passwordsMustMatch: 'Passwords do not match.',
-        termsRequired: 'You must agree to the Terms and Conditions.',
-      },
       termsLabel: 'I agree to the Terms and Conditions',
-      errorMessage: 'Login failed. Please double-check your email or password.',
-      errorRegisterMessage: 'Registration failed. Please try again.',
+      logoutButton: 'Logout',
     },
     menu: {
       dashboard: 'Dashboard',
@@ -443,30 +328,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emptyStateTitle: 'No task selected yet',
       emptyStateSubtitle: 'Select a category filter on the side or create a new task to start.',
       modalDescription: 'Form to add a new task.',
-      modalPlaceholder: 'Add task form content will be here soon.',
-      cancelButton: 'Cancel',
-      saveButton: 'Save',
       aside: {
         contextTitle: 'Context',
         priorityTitle: 'Priority',
-        reviewTitle: "Today's Review",
         contexts: {
-          college: 'College',
+          lecture: 'Lecture',
           work: 'Work',
           business: 'Business',
           personal: 'Personal',
         },
         priorities: {
-          high: 'High',
-          medium: 'Medium',
           low: 'Low',
+          medium: 'Medium',
+          high: 'High',
+          urgent: "Urgent"
         },
-        stats: {
-          completed: 'Completed',
-          pending: 'Pending',
-          completionRate: 'Completion Rate',
-          tasksCount: '{completed} of {total} tasks completed',
+        status: {
+          todo: 'To Do',
+          inProgress: 'In Progress',
+          done: 'Done',
+          cancelled: 'Cancelled',
         }
+      },
+      form: {
+        titleLabel: 'Title',
+        titlePlaceholder: 'e.g., Linear Algebra Class',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Add a description or meeting link',
+        statusLabel: 'Status',
+        dueDateLabel: 'Due Date',
+        dueTimeLabel: 'Due Time',
+        tagsLabel: 'Tags',
+        tagsPlaceholder: 'e.g., Class, Task, Meeting',
       }
     },
     schedule: {
@@ -477,8 +370,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       eventDetails: 'Event Details',
       deleteEvent: 'Delete Event',
       deleteConfirm: 'Are you sure you want to delete this event?',
-      filter: 'Filters',
-      today: 'Today',
       form: {
         titleLabel: 'Event Title',
         titlePlaceholder: 'e.g., Linear Algebra Class',
@@ -512,15 +403,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         recurring: 'Recurring',
         conflictMessage: 'Schedule conflict: This event overlaps with another event!',
       },
-      monthView: {
-        weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      },
       weekView: {
         noEvents: 'No events scheduled',
         conflictBadge: 'Conflict',
       },
-      prevAriaLabel: 'Previous',
-      nextAriaLabel: 'Next',
     },
     finance: {
       title: 'Finance Tracker',
@@ -566,6 +452,97 @@ export const strings: Record<'id' | 'en', TranslationType> = {
         categoryRequired: 'Category is required.',
         dateRequired: 'Date is required.',
       },
+    },
+    notes: {
+      title: 'Quick Notes',
+      subtitle: 'Jot down ideas, draft lists, and capture your thoughts instantly.',
+      searchPlaceholder: 'Search notes',
+      addNote: 'New Note',
+      pinned: 'Pinned',
+      otherNotes: 'Notes',
+      emptyNotes: 'No notes found',
+      emptyNotesDesc: 'Start by creating a new note in the sidebar.',
+      untitledNote: 'Untitled Note',
+      saving: 'Saving',
+      saved: 'Auto-saved',
+      editor: {
+        titlePlaceholder: 'Note title',
+        contentPlaceholder: 'Start typing here',
+        attachToTask: 'Attach to Task',
+        noTaskAttached: 'No task attached',
+        tagsLabel: 'Tags',
+        tagsPlaceholder: 'Add tag (press Enter)',
+        bold: 'Bold',
+        italic: 'Italic',
+        heading: 'Heading',
+        list: 'List',
+        codeBlock: 'Code Block',
+      },
+      confirmDelete: 'Are you sure you want to delete this note?',
+    },
+    habits: {
+      title: 'Habit & Gym Log',
+      subtitle: 'Build good habits and track your gym logs to maintain a consistent lifestyle.',
+      addHabit: 'Add Habit',
+      emptyHabits: 'No habits found',
+      emptyHabitsDesc: 'Get started by creating a new habit above.',
+      streak: 'days streak',
+      streakActive: 'Active Streak',
+      streakBest: 'Best Streak',
+      totalCompletion: 'Total Completion',
+      activeHabits: 'Active Habits',
+      bestStreak: 'Best Streak',
+      dailyCheckIn: 'Daily Check-in',
+      totalCheckIns: 'Total Check-ins',
+      heatmapTitle: 'Consistency Heatmap (Last 90 Days)',
+      historyDetail: 'Completion History',
+      frequencyLabel: 'Frequency',
+      daysLabel: 'Target Days',
+      frequencyDaily: 'Everyday',
+      frequencyCustom: 'Specific Days',
+      myHabbits: 'My Habits',
+      form: {
+        nameLabel: 'Habit Name',
+        namePlaceholder: 'e.g. Gym, Read 30m, Drink Water',
+        iconLabel: 'Choose Icon',
+        freqLabel: 'Target Frequency',
+        daysLabel: 'Choose Target Days',
+        submitAdd: 'Save Habit',
+        submitCancel: 'Cancel',
+      },
+      confirmDelete: 'Are you sure you want to delete this habit? All history will be lost.',
+    },
+    focus: {
+      title: 'Focus Mode (Pomodoro)',
+      subtitle: 'Boost your productivity using Pomodoro technique paired with task tracking.',
+      startBtn: 'Start Focus',
+      pauseBtn: 'Pause',
+      resumeBtn: 'Resume',
+      resetBtn: 'Reset',
+      customizeTimer: 'Customize Timer',
+      focusDurationLabel: 'Focus Duration (Minutes)',
+      breakDurationLabel: 'Break Duration (Minutes)',
+      minutesUnit: 'Minutes',
+      activeTaskLabel: 'Select Active Task',
+      selectTaskPlaceholder: 'Select a task to work on',
+      noTaskSelected: 'Please select a task before starting a focus session.',
+      dailyStatsTitle: 'Daily Statistics',
+      sessionsCompleted: 'Sessions Completed',
+      totalFocusTime: 'Total Focus Time',
+      sessionHistoryTitle: 'Session History',
+      noHistory: 'No focus sessions completed today.',
+      completedAt: 'Completed at',
+      duration: 'Duration',
+      minutesVal: '{minutes} mins',
+      saveSettings: 'Save Settings',
+      cancelBtn: 'Cancel',
+      taskTitle: 'Task',
+      modeFocus: 'Focus',
+      modeBreak: 'Break',
+      alertSessionCompleted: 'Focus session completed! Time for a break.',
+      alertBreakCompleted: 'Break session completed! Time to get back to focus.',
+      addTaskPlaceholder: 'Add a new task',
+      addNewTaskBtn: 'Add',
     }
   }
 };

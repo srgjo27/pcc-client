@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { CircleCheck, CircleX, Eye, EyeOff } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getRegisterSchema, useRegister, type RegisterPayload } from '@/features/auth';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/Card';
 import { ASSETS } from '@/constants/assets';
 import { Input } from '@/shared/components/ui/Input';
 import { Button } from '@/shared/components/ui/Button';
+import type { RegisterPayload } from '../types';
+import { useForm } from 'react-hook-form';
+import { useRegister } from '../hooks';
+import { registerSchema } from '../schemas';
+import { getErrorMessage } from '@/shared/utils/error';
 
 export const RegisterForm: React.FC = () => {
-  const navigate = useNavigate();
   const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [authFeedback, setAuthFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const { mutateAsync: registerUser, isPending } = useRegister();
+  const { mutateAsync: registration, isPending } = useRegister();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<RegisterPayload>({
-    resolver: zodResolver(getRegisterSchema(t)),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -35,18 +37,12 @@ export const RegisterForm: React.FC = () => {
   });
 
   const onSubmit = async (data: RegisterPayload) => {
-    setAuthFeedback(null);
     try {
-      await registerUser(data);
-      reset();
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
-    } catch (err) {
-      setAuthFeedback({
-        type: 'error',
-        message: err instanceof Error ? err.message : t.auth.errorRegisterMessage,
-      });
+      const result = await registration(data)
+      setSuccess(result);
+    } catch (e) {
+      const msg = getErrorMessage(e)
+      setError(msg);
     }
   };
 
@@ -64,10 +60,28 @@ export const RegisterForm: React.FC = () => {
             {t.auth.registerDescription}
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+            {error && (
+              <div className="flex items-center h-10 w-full p-4 rounded-lg border border-red-300 bg-red-500/15">
+                <div className="flex items-center gap-2">
+                  <CircleX className="h-4 w-4 text-red-500" />
+                  <p className="text-red-500 text-xs">{error}</p>
+                </div>
+              </div>
+            )}
+
+            {success && (
+              <div className="flex items-center min-h-15 w-full p-4 rounded-lg border border-emerald-300 bg-emerald-500/15">
+                <div className="flex items-center gap-2">
+                  <CircleCheck className="h-7 w-7 text-emerald-500" />
+                  <p className="text-emerald-500 text-xs">{success}. Click on the link sent to your email to verify your account.</p>
+                </div>
+              </div>
+            )}
+
             <Input
-              type="text"
               label={t.auth.nameLabel}
               placeholder={t.auth.namePlaceholder}
               error={errors.name?.message}
@@ -94,8 +108,8 @@ export const RegisterForm: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded p-1 transition-colors"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="text-slate-400 hover:text-slate-600"
+                  aria-label="Toggle password visibility"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -117,8 +131,8 @@ export const RegisterForm: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded p-1 transition-colors"
-                  aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                  className="text-slate-400 hover:text-slate-600"
+                  aria-label="Toggle confirm password visibility"
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -130,43 +144,27 @@ export const RegisterForm: React.FC = () => {
               {...register('confirmPassword')}
             />
 
-            <div className="flex flex-col gap-1.5 pt-1">
-              <label className="flex items-start gap-2.5 text-sm cursor-pointer select-none">
+            <div className="flex flex-col gap-2 pt-1">
+              <label className="flex items-start gap-2 text-sm cursor-pointer select-none">
                 <input
                   type="checkbox"
-                  disabled={isPending}
-                  className="h-4 w-4 mt-0.5 rounded border-neutral-300 text-blue-600 focus:ring-blue-500 focus:outline-none focus-visible:ring-2"
+                  className="h-4 w-4"
                   {...register('acceptTerms')}
                 />
-                <span className={errors.acceptTerms ? 'text-red-600 font-medium' : ''}>
+                <span>
                   {t.auth.termsLabel}
                 </span>
               </label>
-              {errors.acceptTerms && (
-                <p role="alert" className="text-xs font-medium text-red-600 animate-fadeIn">
-                  {errors.acceptTerms.message}
-                </p>
+              {errors.acceptTerms?.message && (
+                <p className="text-sm text-red-600">{errors.acceptTerms.message}</p>
               )}
             </div>
-
-            {authFeedback && (
-              <div
-                role="alert"
-                className={`p-3 rounded-lg text-sm font-medium border ${
-                  authFeedback.type === 'success'
-                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                    : 'bg-red-50 text-red-800 border-red-200'
-                }`}
-              >
-                {authFeedback.message}
-              </div>
-            )}
 
             <div className="space-y-4">
               <Button
                 type="submit"
+                className="w-full font-bold mt-2"
                 isLoading={isPending}
-                className="w-full mt-2"
               >
                 {!isPending && t.auth.registerButton}
               </Button>

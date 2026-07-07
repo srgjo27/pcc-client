@@ -3,14 +3,19 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './shared/components/layout/Layout';
+import { Loading } from './shared/components/ui/Loading';
+import { ProtectedRoute } from './features/auth';
 
-// Lazy load pages for code splitting
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
-const TodoPage = lazy(() => import('./pages/TodoPage'));
+const TodoPage = lazy(() => import('./pages/todo/TodoPage'));
+const TodoInfo = lazy(() => import('./pages/todo/TodoInfo'));
 const SchedulePage = lazy(() => import('./pages/SchedulePage'));
 const FinancePage = lazy(() => import('./pages/FinancePage'));
+const NotesPage = lazy(() => import('./pages/NotesPage'));
+const HabitsPage = lazy(() => import('./pages/HabitsPage'));
+const FocusPage = lazy(() => import('./pages/FocusPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
@@ -23,12 +28,7 @@ const queryClient = new QueryClient({
 });
 
 const PageLoader: React.FC = () => (
-  <div className="flex min-h-screen items-center justify-center bg-slate-50/50">
-    <div className="flex flex-col items-center gap-3">
-      <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-[#26A69A]" />
-      <span className="text-sm text-slate-500">Memuat halaman...</span>
-    </div>
-  </div>
+  <Loading />
 );
 
 const App: React.FC = () => {
@@ -41,11 +41,15 @@ const App: React.FC = () => {
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route element={<Layout />}>
+              <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/to-do" element={<TodoPage />} />
+                <Route path="/to-do/:id" element={<TodoInfo />} />
                 <Route path="/schedule" element={<SchedulePage />} />
                 <Route path="/finance" element={<FinancePage />} />
+                <Route path="/notes" element={<NotesPage />} />
+                <Route path="/habits" element={<HabitsPage />} />
+                <Route path="/focus" element={<FocusPage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

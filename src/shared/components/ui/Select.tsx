@@ -12,6 +12,8 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   error?: string;
   helperText?: string;
   options?: SelectOption[];
+  labelIcon?: React.ReactNode;
+  isRequired?: boolean;
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
@@ -23,6 +25,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     id,
     options = [],
     children,
+    labelIcon,
+    isRequired,
     ...props
   }, ref) => {
     const generatedId = useId();
@@ -42,11 +46,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <label
             htmlFor={selectId}
             className={cn(
-              'text-sm font-medium',
+              'text-sm flex items-center gap-1',
               disabled && 'text-slate-400 cursor-not-allowed'
             )}
           >
+            {labelIcon && (<span>{labelIcon}</span>)}
             {label}
+            {isRequired && <span className="text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <div className="relative">
@@ -59,12 +65,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               'appearance-none',
               'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
-              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+              'focus-visible:outline-none focus-visible:ring-1',
               disabled
                 ? 'bg-slate-50 text-slate-400 border-neutral-200 cursor-not-allowed'
                 : error
                   ? 'border-red-500 text-red-900 focus-visible:ring-red-500 focus-visible:border-transparent'
-                  : 'border-neutral-300 focus-visible:ring-blue-500 focus-visible:border-transparent',
+                  : 'border-neutral-300 focus-visible:ring-[#29B6F6] focus-visible:border-transparent',
               className
             )}
             {...props}
@@ -83,7 +89,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <p
             id={errorId}
             role="alert"
-            className="text-xs font-medium text-red-600 animate-fadeIn"
+            className="text-xs text-red-600 animate-fadeIn wrap-break-word"
           >
             {error}
           </p>

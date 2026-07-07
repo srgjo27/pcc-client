@@ -5,8 +5,10 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string;
   error?: string;
   helperText?: string;
+  labelIcon?: React.ReactNode
   leftElement?: React.ReactNode;
   rightElement?: React.ReactNode;
+  isRequired?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -17,8 +19,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     helperText,
     disabled,
     id,
+    labelIcon,
     leftElement,
     rightElement,
+    isRequired,
     ...props
   }, ref) => {
     const generatedId = useId();
@@ -38,11 +42,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <label
             htmlFor={inputId}
             className={cn(
-              'text-sm font-medium',
+              'text-sm flex items-center gap-2',
               disabled ? 'text-slate-400 cursor-not-allowed' : ''
             )}
           >
+            {labelIcon && (<span>{labelIcon}</span>)}
             {label}
+            {isRequired && <span className="text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <div className="relative">
@@ -61,12 +67,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               'flex h-10 w-full rounded-md border bg-transparent px-3 py-2 text-sm',
               'file:border-0 file:bg-transparent file:text-sm file:font-medium',
-              'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2',
+              'focus-visible:outline-none focus-visible:ring-1',
               disabled
                 ? 'bg-slate-50 text-slate-400 border-neutral-200 cursor-not-allowed'
                 : error
                   ? 'border-red-500 text-red-900 focus-visible:ring-red-500 focus-visible:border-transparent'
-                  : 'border-neutral-300 focus-visible:ring-blue-500 focus-visible:border-transparent',
+                  : 'border-neutral-300 focus-visible:ring-[#29B6F6] focus-visible:border-transparent',
               leftElement ? 'pl-10' : '',
               rightElement ? 'pr-10' : '',
               className
@@ -83,7 +89,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <p
             id={errorId}
             role="alert"
-            className="text-xs font-medium text-red-600 animate-fadeIn"
+            className="text-xs text-red-600 animate-fadeIn"
           >
             {error}
           </p>

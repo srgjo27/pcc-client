@@ -1,21 +1,23 @@
 import { useMutation } from '@tanstack/react-query';
-import { loginUser, registerUser } from '../services';
 import type { AuthResponse, LoginPayload, RegisterPayload } from '../types';
+import { loginUser, registerUser } from '../services';
+import { setSecureItem } from '@/shared/utils/storage';
 
-/**
- * Custom hook to handle login mutation using TanStack Query.
- */
 export function useLogin() {
   return useMutation<AuthResponse, Error, LoginPayload>({
     mutationFn: (payload) => loginUser(payload),
+    onSuccess: (data) => {
+      setSecureItem('access_token', data.session.access_token);
+      setSecureItem('refresh_token', data.session.refresh_token);
+    },
   });
 }
 
-/**
- * Custom hook to handle register mutation using TanStack Query.
- */
 export function useRegister() {
-  return useMutation<AuthResponse, Error, RegisterPayload>({
+  return useMutation<string, Error, RegisterPayload>({
     mutationFn: (payload) => registerUser(payload),
+    onSuccess: (res) => {
+      return res;
+    },
   });
 }
