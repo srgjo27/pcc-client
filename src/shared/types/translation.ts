@@ -68,7 +68,24 @@ export interface TranslationType {
                 high: string;
                 urgent: string;
             };
+            status: {
+                todo: string;
+                inProgress: string;
+                done: string;
+                cancelled: string;
+            };
         };
+        form: {
+            titleLabel: string;
+            titlePlaceholder: string;
+            descriptionLabel: string;
+            descriptionPlaceholder: string;
+            statusLabel: string;
+            dueDateLabel: string;
+            dueTimeLabel: string;
+            tagsLabel: string;
+            tagsPlaceholder: string;
+        }
     };
     schedule: {
         title: string;

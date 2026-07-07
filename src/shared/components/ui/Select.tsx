@@ -13,6 +13,7 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   helperText?: string;
   options?: SelectOption[];
   labelIcon?: React.ReactNode;
+  isRequired?: boolean;
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
@@ -25,6 +26,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     options = [],
     children,
     labelIcon,
+    isRequired,
     ...props
   }, ref) => {
     const generatedId = useId();
@@ -48,10 +50,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               disabled && 'text-slate-400 cursor-not-allowed'
             )}
           >
-            {labelIcon && (
-              <span>{labelIcon}</span>
-            )}
+            {labelIcon && (<span>{labelIcon}</span>)}
             {label}
+            {isRequired && <span className="text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <div className="relative">
@@ -88,7 +89,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <p
             id={errorId}
             role="alert"
-            className="text-xs font-medium text-red-600 animate-fadeIn"
+            className="text-xs text-red-600 animate-fadeIn wrap-break-word"
           >
             {error}
           </p>

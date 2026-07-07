@@ -30,19 +30,19 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
   });
 
   const onSubmit = (data: TaskPayload) => {
-    const payload = {
-      ...data,
-      tags: typeof data.tags === 'string'
-        ? (data.tags as string).split(',').map(tag => tag.trim()).filter(Boolean)
-        : data.tags || [],
-    };
-    mutate(payload, {
+    mutate(data, {
       onSuccess: () => {
         reset();
         onClose();
       }
     });
   };
+
+  React.useEffect(() => {
+    if (!isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
 
   return (
     <Modal
@@ -54,15 +54,16 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <Input
-          label="Title"
-          placeholder="Task title"
+          label={t.todo.form.titleLabel}
+          placeholder={t.todo.form.titlePlaceholder}
+          isRequired
           error={errors.title?.message}
           {...register('title')}
         />
 
         <Textarea
-          label="Description"
-          placeholder="Task description"
+          label={t.todo.form.descriptionLabel}
+          placeholder={t.todo.form.descriptionPlaceholder}
           error={errors.description?.message}
           {...register('description')}
         />
@@ -71,8 +72,9 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
           <Select
             label={t.todo.aside.contextTitle}
             error={errors.context?.message}
+            isRequired
             options={[
-              { value: '', label: 'Select context' },
+              { value: '', label: `${lang === 'id' ? 'Pilih konteks' : 'Select context'}` },
               { value: 'LECTURE', label: t.todo.aside.contexts.lecture },
               { value: 'WORK', label: t.todo.aside.contexts.work },
               { value: 'BUSINESS', label: t.todo.aside.contexts.business },
@@ -83,8 +85,9 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
           <Select
             label={t.todo.aside.priorityTitle}
             error={errors.priority?.message}
+            isRequired
             options={[
-              { value: '', label: 'Select priority' },
+              { value: '', label: `${lang === 'id' ? 'Pilih prioritas' : 'Select priority'}` },
               { value: 'LOW', label: t.todo.aside.priorities.low },
               { value: 'MEDIUM', label: t.todo.aside.priorities.medium },
               { value: 'HIGH', label: t.todo.aside.priorities.high },
@@ -93,14 +96,15 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
             {...register('priority')}
           />
           <Select
-            label="Status"
+            label={t.todo.form.statusLabel}
             error={errors.status?.message}
+            isRequired
             options={[
-              { value: '', label: 'Select status' },
-              { value: 'TODO', label: 'To Do' },
-              { value: 'IN_PROGRESS', label: 'In Progress' },
-              { value: 'DONE', label: 'Done' },
-              { value: 'CANCELLED', label: 'Cancelled' }
+              { value: '', label: `${lang === 'id' ? 'Pilih status' : 'Select status'}` },
+              { value: 'TODO', label: t.todo.aside.status.todo },
+              { value: 'IN_PROGRESS', label: t.todo.aside.status.inProgress },
+              { value: 'DONE', label: t.todo.aside.status.done },
+              { value: 'CANCELLED', label: t.todo.aside.status.cancelled }
             ]}
             {...register('status')}
           />
@@ -108,13 +112,13 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
-            label="Due Date"
+            label={t.todo.form.dueDateLabel}
             type="date"
             error={errors.dueDate?.message}
             {...register('dueDate')}
           />
           <Input
-            label="Due Time"
+            label={t.todo.form.dueTimeLabel}
             type="time"
             error={errors.dueTime?.message}
             {...register('dueTime')}
@@ -122,8 +126,8 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
         </div>
 
         <Input
-          label="Tags"
-          placeholder="Tags (separated by comma)"
+          label={t.todo.form.tagsLabel}
+          placeholder={t.todo.form.tagsPlaceholder}
           error={errors.tags?.message}
           {...register('tags')}
         />
@@ -142,7 +146,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose }) =
             className="font-semibold"
             isLoading={isPending}
           >
-            {lang === 'id' ? 'Simpan' : 'Save'}
+            {!isPending && (lang === 'id' ? 'Simpan' : 'Save')}
           </Button>
         </div>
       </form>

@@ -1,22 +1,26 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { ClipboardClock, Clock, Frown, Timer } from 'lucide-react';
-import { useTaskInformation } from '../hooks';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ClipboardClock, Clock, Frown, Timer, Trash } from 'lucide-react';
+import { useRemoveTask, useTaskInformation } from '../hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/Card';
 import { Loading } from '@/shared/components/ui/Loading';
 import { formatToDateLocal } from '@/shared/utils/date';
 import { Priority, type Task } from '../types';
+import { useLanguage } from '@/shared/hooks/useLanguage';
+import { Button } from '@/shared/components/ui/Button';
 
 interface ToDoInfoContentProps {
   isLoading: boolean;
   task?: Task;
   priorities: { id: Priority; dot: string }[];
+  lang: string;
 }
 
 const ToDoInfoContent: React.FC<ToDoInfoContentProps> = ({
   isLoading,
   task,
-  priorities
+  priorities,
+  lang,
 }) => {
   if (isLoading) {
     return <Loading />;
@@ -28,9 +32,9 @@ const ToDoInfoContent: React.FC<ToDoInfoContentProps> = ({
         <div className="p-4">
           <Frown className="h-8 w-8 text-slate-400" />
         </div>
-        <h3 className="text-sm font-medium">Tugas tidak ditemukan</h3>
+        <h3 className="text-sm font-medium">{lang === 'id' ? 'Tugas tidak ditemukan' : 'Task not found'}</h3>
         <p className="text-xs text-slate-500 max-w-xs mt-1">
-          Tugas yang kamu cari tidak ditemukan.
+          {lang === 'id' ? 'Tugas yang kamu cari tidak ditemukan.' : 'The task you are looking for was not found.'}
         </p>
       </div>
     );
@@ -89,9 +93,12 @@ const ToDoInfoContent: React.FC<ToDoInfoContentProps> = ({
 };
 
 export const ToDoInfo: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { lang } = useLanguage();
+  const navigate = useNavigate();
 
+  const { id } = useParams<{ id: string }>();
   const { data: task, isLoading } = useTaskInformation(id!);
+  const { mutate: deleteMutate } = useRemoveTask();
 
   const priorities = [
     { id: Priority.LOW, dot: 'bg-slate-400' },
@@ -100,13 +107,29 @@ export const ToDoInfo: React.FC = () => {
     { id: Priority.URGENT, dot: 'bg-red-500' },
   ];
 
+  const handleDelete = () => {
+    deleteMutate(id!);
+    navigate(-1);
+  }
+
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg font-bold tracking-tight">Detail Tugas</h1>
-          <p className="text-xs text-slate-500">Lihat informasi lengkap dari tugas Anda</p>
+          <h1 className="text-lg font-bold tracking-tight">{lang === 'id' ? "Detail Tugas" : "Task Detail"}</h1>
+          <p className="text-xs text-slate-500">{lang === 'id' ? "Lihat informasi lengkap dari tugas Anda" : "View complete information of your task"}</p>
+        </div>
+        <div>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={handleDelete}
+            className="font-semibold gap-2"
+          >
+            <Trash className="h-3 w-3" />
+            {lang === 'id' ? 'Hapus' : 'Delete'}
+          </Button>
         </div>
       </div>
 
@@ -115,6 +138,7 @@ export const ToDoInfo: React.FC = () => {
         isLoading={isLoading}
         task={task}
         priorities={priorities}
+        lang={lang}
       />
     </div>
   );

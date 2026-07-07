@@ -71,6 +71,23 @@ export const strings: Record<'id' | 'en', TranslationType> = {
           high: 'Tinggi',
           urgent: 'Urgensi',
         },
+        status: {
+          todo: 'Menunggu',
+          inProgress: 'Dalam Proses',
+          done: 'Selesai',
+          cancelled: 'Dibatalkan',
+        }
+      },
+      form: {
+        titleLabel: 'Judul',
+        titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
+        descriptionLabel: 'Keterangan',
+        descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
+        statusLabel: 'Status',
+        dueDateLabel: 'Tanggal Tenggat',
+        dueTimeLabel: 'Waktu Tenggat',
+        tagsLabel: 'Tag',
+        tagsPlaceholder: 'Contoh: Kuliah, Tugas, Meeting',
       }
     },
     schedule: {
@@ -326,6 +343,23 @@ export const strings: Record<'id' | 'en', TranslationType> = {
           high: 'High',
           urgent: "Urgent"
         },
+        status: {
+          todo: 'To Do',
+          inProgress: 'In Progress',
+          done: 'Done',
+          cancelled: 'Cancelled',
+        }
+      },
+      form: {
+        titleLabel: 'Title',
+        titlePlaceholder: 'e.g., Linear Algebra Class',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Add a description or meeting link',
+        statusLabel: 'Status',
+        dueDateLabel: 'Due Date',
+        dueTimeLabel: 'Due Time',
+        tagsLabel: 'Tags',
+        tagsPlaceholder: 'e.g., Class, Task, Meeting',
       }
     },
     schedule: {
