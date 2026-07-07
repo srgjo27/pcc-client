@@ -103,7 +103,7 @@ export const Modal: React.FC<ModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-black"
           aria-label="Tutup Dialog"
         >
           <X className="h-4 w-4" />

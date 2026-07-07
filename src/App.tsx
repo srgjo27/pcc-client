@@ -9,7 +9,8 @@ import { ProtectedRoute } from './features/auth';
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
-const TodoPage = lazy(() => import('./pages/TodoPage'));
+const TodoPage = lazy(() => import('./pages/todo/TodoPage'));
+const TodoInfo = lazy(() => import('./pages/todo/TodoInfo'));
 const SchedulePage = lazy(() => import('./pages/SchedulePage'));
 const FinancePage = lazy(() => import('./pages/FinancePage'));
 const NotesPage = lazy(() => import('./pages/NotesPage'));
@@ -43,6 +44,7 @@ const App: React.FC = () => {
               <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/to-do" element={<TodoPage />} />
+                <Route path="/to-do/:id" element={<TodoInfo />} />
                 <Route path="/schedule" element={<SchedulePage />} />
                 <Route path="/finance" element={<FinancePage />} />
                 <Route path="/notes" element={<NotesPage />} />

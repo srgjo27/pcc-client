@@ -8,6 +8,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   labelIcon?: React.ReactNode
   leftElement?: React.ReactNode;
   rightElement?: React.ReactNode;
+  isRequired?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -21,6 +22,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     labelIcon,
     leftElement,
     rightElement,
+    isRequired,
     ...props
   }, ref) => {
     const generatedId = useId();
@@ -40,14 +42,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <label
             htmlFor={inputId}
             className={cn(
-              'text-sm flex items-center gap-1',
+              'text-sm flex items-center gap-2',
               disabled ? 'text-slate-400 cursor-not-allowed' : ''
             )}
           >
-            {labelIcon && (
-              <span>{labelIcon}</span>
-            )}
+            {labelIcon && (<span>{labelIcon}</span>)}
             {label}
+            {isRequired && <span className="text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <div className="relative">

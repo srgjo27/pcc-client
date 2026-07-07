@@ -1,13 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import type { AuthResponse, LoginPayload, RegisterPayload } from '../types';
 import { loginUser, registerUser } from '../services';
+import { setSecureItem } from '@/shared/utils/storage';
 
 export function useLogin() {
   return useMutation<AuthResponse, Error, LoginPayload>({
     mutationFn: (payload) => loginUser(payload),
     onSuccess: (data) => {
-      localStorage.setItem('access_token', data.session.access_token);
-      localStorage.setItem('refresh_token', data.session.refresh_token);
+      setSecureItem('access_token', data.session.access_token);
+      setSecureItem('refresh_token', data.session.refresh_token);
     },
   });
 }

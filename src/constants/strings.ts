@@ -56,30 +56,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emptyStateTitle: 'Belum ada tugas terpilih',
       emptyStateSubtitle: 'Pilih filter kategori di samping atau buat tugas baru untuk memulai.',
       modalDescription: 'Formulir untuk menambahkan tugas baru.',
-      modalPlaceholder: 'Konten form tambah tugas akan segera hadir di sini.',
-      cancelButton: 'Batal',
-      saveButton: 'Simpan',
       aside: {
         contextTitle: 'Konteks',
         priorityTitle: 'Prioritas',
-        reviewTitle: 'Tinjauan Hari Ini',
         contexts: {
-          college: 'Kuliah',
+          lecture: 'Belajar',
           work: 'Kerja',
           business: 'Usaha',
           personal: 'Personal',
         },
         priorities: {
-          high: 'Tinggi',
-          medium: 'Sedang',
           low: 'Rendah',
+          medium: 'Sedang',
+          high: 'Tinggi',
+          urgent: 'Urgensi',
         },
-        stats: {
-          completed: 'Selesai',
-          pending: 'Tertunda',
-          completionRate: 'Tingkat Penyelesaian',
-          tasksCount: '{completed} dari {total} tugas selesai',
+        status: {
+          todo: 'Menunggu',
+          inProgress: 'Dalam Proses',
+          done: 'Selesai',
+          cancelled: 'Dibatalkan',
         }
+      },
+      form: {
+        titleLabel: 'Judul',
+        titlePlaceholder: 'Contoh: Kuliah Aljabar Linear',
+        descriptionLabel: 'Keterangan',
+        descriptionPlaceholder: 'Tambahkan deskripsi atau tautan pertemuan',
+        statusLabel: 'Status',
+        dueDateLabel: 'Tanggal Tenggat',
+        dueTimeLabel: 'Waktu Tenggat',
+        tagsLabel: 'Tag',
+        tagsPlaceholder: 'Contoh: Kuliah, Tugas, Meeting',
       }
     },
     schedule: {
@@ -320,30 +328,38 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       emptyStateTitle: 'No task selected yet',
       emptyStateSubtitle: 'Select a category filter on the side or create a new task to start.',
       modalDescription: 'Form to add a new task.',
-      modalPlaceholder: 'Add task form content will be here soon.',
-      cancelButton: 'Cancel',
-      saveButton: 'Save',
       aside: {
         contextTitle: 'Context',
         priorityTitle: 'Priority',
-        reviewTitle: "Today's Review",
         contexts: {
-          college: 'College',
+          lecture: 'Lecture',
           work: 'Work',
           business: 'Business',
           personal: 'Personal',
         },
         priorities: {
-          high: 'High',
-          medium: 'Medium',
           low: 'Low',
+          medium: 'Medium',
+          high: 'High',
+          urgent: "Urgent"
         },
-        stats: {
-          completed: 'Completed',
-          pending: 'Pending',
-          completionRate: 'Completion Rate',
-          tasksCount: '{completed} of {total} tasks completed',
+        status: {
+          todo: 'To Do',
+          inProgress: 'In Progress',
+          done: 'Done',
+          cancelled: 'Cancelled',
         }
+      },
+      form: {
+        titleLabel: 'Title',
+        titlePlaceholder: 'e.g., Linear Algebra Class',
+        descriptionLabel: 'Description',
+        descriptionPlaceholder: 'Add a description or meeting link',
+        statusLabel: 'Status',
+        dueDateLabel: 'Due Date',
+        dueTimeLabel: 'Due Time',
+        tagsLabel: 'Tags',
+        tagsPlaceholder: 'e.g., Class, Task, Meeting',
       }
     },
     schedule: {

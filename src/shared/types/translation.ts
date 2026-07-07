@@ -53,31 +53,39 @@ export interface TranslationType {
         emptyStateTitle: string;
         emptyStateSubtitle: string;
         modalDescription: string;
-        modalPlaceholder: string;
-        cancelButton: string;
-        saveButton: string;
         aside: {
             contextTitle: string;
             priorityTitle: string;
-            reviewTitle: string;
             contexts: {
-                college: string;
+                lecture: string;
                 work: string;
                 business: string;
                 personal: string;
             };
             priorities: {
-                high: string;
-                medium: string;
                 low: string;
+                medium: string;
+                high: string;
+                urgent: string;
             };
-            stats: {
-                completed: string;
-                pending: string;
-                completionRate: string;
-                tasksCount: string;
+            status: {
+                todo: string;
+                inProgress: string;
+                done: string;
+                cancelled: string;
             };
         };
+        form: {
+            titleLabel: string;
+            titlePlaceholder: string;
+            descriptionLabel: string;
+            descriptionPlaceholder: string;
+            statusLabel: string;
+            dueDateLabel: string;
+            dueTimeLabel: string;
+            tagsLabel: string;
+            tagsPlaceholder: string;
+        }
     };
     schedule: {
         title: string;
