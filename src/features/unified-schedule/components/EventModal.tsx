@@ -1,296 +1,263 @@
-// import React, { useEffect } from 'react';
-// import { useForm, Controller, useWatch } from 'react-hook-form';
-// import { zodResolver } from '@hookform/resolvers/zod';
-// import { Modal } from '@/shared/components/ui/Modal';
-// import { Input } from '@/shared/components/ui/Input';
-// import { Button } from '@/shared/components/ui/Button';
-// import { useLanguage } from '@/shared/hooks/useLanguage';
-// import { Textarea } from '@/shared/components/ui/Textarea';
-// import { Select } from '@/shared/components/ui/Select';
-// import { formatToDatetimeLocal, formatToDateLocal } from '@/shared/utils/date';
-// import { getEventSchema, type EventFormPayload } from '../schemas';
-// import type { ScheduleEvent, EventContext } from '../types';
+import React, { useEffect } from 'react';
+import { useForm, Controller, useWatch } from 'react-hook-form';
+import { Modal } from '@/shared/components/ui/Modal';
+import { Input } from '@/shared/components/ui/Input';
+import { Button } from '@/shared/components/ui/Button';
+import { useLanguage } from '@/shared/hooks/useLanguage';
+import { Textarea } from '@/shared/components/ui/Textarea';
+import { Select } from '@/shared/components/ui/Select';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { formatToDatetimeLocal } from '@/shared/utils/date';
+import { createEventSchema } from '../schemas';
+import type { EventPayload } from '../types';
+import { useCreateEvent } from '../hooks';
 
-// interface EventModalProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-//   onSubmit: (data: EventFormPayload) => Promise<void>;
-//   onDelete?: () => Promise<void>;
-//   event?: ScheduleEvent | null;
-//   isLoading?: boolean;
-// }
+interface EventModalProps {
+    lang: string;
+    isOpen: boolean;
+    onClose: () => void;
+}
 
-// const DAYS_OF_WEEK = [
-//   { value: 1, label: 'Mon' },
-//   { value: 2, label: 'Tue' },
-//   { value: 3, label: 'Wed' },
-//   { value: 4, label: 'Thu' },
-//   { value: 5, label: 'Fri' },
-//   { value: 6, label: 'Sat' },
-//   { value: 0, label: 'Sun' },
-// ];
+const DAYS_OF_WEEK = (lang: string) => [
+    { value: 'MONDAY', label: lang === 'id' ? 'Senin' : 'Monday' },
+    { value: 'TUESDAY', label: lang === 'id' ? 'Selasa' : 'Tuesday' },
+    { value: 'WEDNESDAY', label: lang === 'id' ? 'Rabu' : 'Wednesday' },
+    { value: 'THURSDAY', label: lang === 'id' ? 'Kamis' : 'Thursday' },
+    { value: 'FRIDAY', label: lang === 'id' ? 'Jumat' : 'Friday' },
+    { value: 'SATURDAY', label: lang === 'id' ? 'Sabtu' : 'Saturday' },
+    { value: 'SUNDAY', label: lang === 'id' ? 'Minggu' : 'Sunday' },
+];
 
-// export const EventModal: React.FC<EventModalProps> = ({
-//   isOpen,
-//   onClose,
-//   onSubmit,
-//   onDelete,
-//   event,
-//   isLoading = false,
-// }) => {
-//   const { t } = useLanguage();
+export const EventModal: React.FC<EventModalProps> = ({
+    lang,
+    isOpen,
+    onClose,
+}) => {
+    const { t } = useLanguage();
+    const { mutate, isPending } = useCreateEvent();
 
-//   const {
-//     register,
-//     handleSubmit,
-//     control,
-//     setValue,
-//     reset,
-//     formState: { errors },
-//   } = useForm<EventFormPayload>({
-//     resolver: zodResolver(getEventSchema(t)),
-//     defaultValues: {
-//       title: '',
-//       description: '',
-//       context: 'personal',
-//       startDate: '',
-//       endDate: '',
-//       isRecurring: false,
-//       recurringDays: [],
-//       recurringEndDate: '',
-//     },
-//   });
+    const {
+        register,
+        handleSubmit,
+        control,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm<EventPayload>({
+        resolver: zodResolver(createEventSchema),
+        defaultValues: {
+            title: '',
+            description: '',
+            context: 'PERSONAL',
+            startTime: new Date(),
+            endTime: new Date(),
+            isRecurring: false,
+            recurrence: {
+                frequency: 'WEEKLY',
+                days: [],
+            },
+            location: '',
+            color: '#26A69A',
+        },
+    });
 
-//   const isRecurring = useWatch({
-//     control,
-//     name: 'isRecurring',
-//   });
+    const isRecurring = useWatch({
+        control,
+        name: 'isRecurring',
+    });
 
-//   // Reset form when event changes or modal opens
-//   useEffect(() => {
-//     if (isOpen) {
-//       if (event) {
-//         reset({
-//           title: event.title,
-//           description: event.description || '',
-//           context: event.context,
-//           startDate: formatToDatetimeLocal(event.startDate),
-//           endDate: formatToDatetimeLocal(event.endDate),
-//           isRecurring: event.isRecurring,
-//           recurringDays: event.recurringDays || [],
-//           recurringEndDate: event.recurringEndDate ? formatToDateLocal(event.recurringEndDate) : '',
-//         });
-//       } else {
-//         const now = new Date();
-//         const start = new Date(now);
-//         start.setMinutes(0, 0, 0); // round to current hour
-//         const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour duration
+    const onSubmit = async (data: EventPayload) => {
+        const payload: EventPayload = {
+            ...data,
+            recurrence: data.isRecurring
+                ? {
+                    frequency: data.recurrence?.frequency || 'WEEKLY',
+                    days: data.recurrence?.days || [],
+                }
+                : null,
+        };
 
-//         reset({
-//           title: '',
-//           description: '',
-//           context: 'personal',
-//           startDate: formatToDatetimeLocal(start.toISOString()),
-//           endDate: formatToDatetimeLocal(end.toISOString()),
-//           isRecurring: false,
-//           recurringDays: [],
-//           recurringEndDate: '',
-//         });
-//       }
-//     }
-//   }, [isOpen, event, reset]);
+        mutate(payload, {
+            onSuccess: () => {
+                reset();
+                onClose();
+            },
+        });
+    };
 
-//   const handleFormSubmit = async (data: EventFormPayload) => {
-//     // Format recurring dates properly if recurring
-//     const formattedData: EventFormPayload = {
-//       ...data,
-//       startDate: new Date(data.startDate).toISOString(),
-//       endDate: new Date(data.endDate).toISOString(),
-//       recurringEndDate: data.recurringEndDate && data.isRecurring
-//         ? new Date(data.recurringEndDate + 'T23:59:59').toISOString()
-//         : undefined,
-//       recurringDays: data.isRecurring ? data.recurringDays : undefined,
-//     };
-//     await onSubmit(formattedData);
-//     onClose();
-//   };
+    useEffect(() => {
+        if (isOpen) {
+            const now = new Date();
+            const start = new Date(now);
+            start.setMinutes(0, 0, 0);
+            const end = new Date(start.getTime() + 60 * 60 * 1000);
 
-//   const contexts: { value: EventContext; label: string }[] = [
-//     { value: 'college', label: t.todo.aside.contexts.college },
-//     { value: 'work', label: t.todo.aside.contexts.work },
-//     { value: 'business', label: t.todo.aside.contexts.business },
-//     { value: 'personal', label: t.todo.aside.contexts.personal },
-//   ];
+            reset({
+                title: '',
+                description: '',
+                context: 'PERSONAL',
+                startTime: formatToDatetimeLocal(start.toISOString()),
+                endTime: formatToDatetimeLocal(end.toISOString()),
+                isRecurring: false,
+                recurrence: {
+                    frequency: 'WEEKLY',
+                    days: [],
+                },
+                location: '',
+                color: '#26A69A',
+            });
+        }
+    }, [isOpen, reset]);
 
-//   return (
-//     <Modal
-//       isOpen={isOpen}
-//       onClose={onClose}
-//       title={event ? t.schedule.editEvent : t.schedule.addEvent}
-//       description={t.schedule.eventDetails}
-//       size="md"
-//     >
-//       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4" noValidate>
-//         {/* Title */}
-//         <Input
-//           label={t.schedule.form.titleLabel}
-//           placeholder={t.schedule.form.titlePlaceholder}
-//           error={errors.title?.message}
-//           disabled={isLoading}
-//           {...register('title')}
-//         />
+    const contexts: { value: string; label: string }[] = [
+        { value: 'LECTURE', label: lang === 'id' ? 'Kuliah' : 'Lecture' },
+        { value: 'WORK', label: lang === 'id' ? 'Kerja' : 'Work' },
+        { value: 'BUSINESS', label: lang === 'id' ? 'Bisnis' : 'Business' },
+        { value: 'PERSONAL', label: lang === 'id' ? 'Pribadi' : 'Personal' },
+        { value: 'GYM', label: lang === 'id' ? 'Gym' : 'Gym' },
+    ];
 
-//         {/* Description */}
-//         <Textarea
-//           id="event-description"
-//           label={t.schedule.form.descriptionLabel}
-//           placeholder={t.schedule.form.descriptionPlaceholder}
-//           error={errors.description?.message}
-//           disabled={isLoading}
-//           {...register('description')}
-//         />
+    return (
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={lang === 'id' ? 'Tambah Jadwal Baru' : 'Add New Event'}
+            size="md"
+        >
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+                <Input
+                    label={t.schedule.form.titleLabel}
+                    placeholder={t.schedule.form.titlePlaceholder}
+                    isRequired
+                    error={errors.title?.message}
+                    disabled={isPending}
+                    {...register('title')}
+                />
 
-//         {/* Category Context & Colors */}
-//         <Select
-//           id="event-context"
-//           label={t.schedule.form.contextLabel}
-//           error={errors.context?.message}
-//           disabled={isLoading}
-//           options={contexts}
-//           {...register('context')}
-//         />
+                <Textarea
+                    label={t.schedule.form.descriptionLabel}
+                    placeholder={t.schedule.form.descriptionPlaceholder}
+                    error={errors.description?.message}
+                    disabled={isPending}
+                    {...register('description')}
+                />
 
-//         {/* Dates */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//           <Input
-//             type="datetime-local"
-//             label={t.schedule.form.startDateLabel}
-//             error={errors.startDate?.message}
-//             disabled={isLoading}
-//             {...register('startDate')}
-//           />
-//           <Input
-//             type="datetime-local"
-//             label={t.schedule.form.endDateLabel}
-//             error={errors.endDate?.message}
-//             disabled={isLoading}
-//             {...register('endDate')}
-//           />
-//         </div>
+                <Select
+                    label={t.schedule.form.contextLabel}
+                    error={errors.context?.message}
+                    disabled={isPending}
+                    options={contexts}
+                    {...register('context')}
+                />
 
-//         {/* Recurrence Toggle */}
-//         <div className="flex items-center gap-3 py-2 mt-2">
-//           <input
-//             id="event-isRecurring"
-//             type="checkbox"
-//             disabled={isLoading}
-//             className="h-4.5 w-4.5 accent-[#FFB300] cursor-pointer"
-//             {...register('isRecurring')}
-//           />
-//           <label
-//             htmlFor="event-isRecurring"
-//             className="text-sm font-medium cursor-pointer select-none"
-//           >
-//             {t.schedule.form.isRecurringLabel}
-//           </label>
-//         </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Input
+                        type="datetime-local"
+                        label={t.schedule.form.startDateLabel}
+                        error={errors.startTime?.message}
+                        disabled={isPending}
+                        {...register('startTime')}
+                    />
+                    <Input
+                        type="datetime-local"
+                        label={t.schedule.form.endDateLabel}
+                        error={errors.endTime?.message}
+                        disabled={isPending}
+                        {...register('endTime')}
+                    />
+                </div>
 
-//         {/* Recurrence Pattern Configuration */}
-//         {isRecurring && (
-//           <div className="space-y-4 p-4 rounded-xl bg-slate-50 border border-neutral-300 animate-fadeIn">
-//             {/* Days of week selection */}
-//             <div className="flex flex-col gap-2">
-//               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-//                 {t.schedule.form.recurringDaysLabel}
-//               </span>
-//               <Controller
-//                 control={control}
-//                 name="recurringDays"
-//                 render={({ field }) => {
-//                   const currentDays = field.value || [];
-//                   const toggleDay = (day: number) => {
-//                     const next = currentDays.includes(day)
-//                       ? currentDays.filter((d) => d !== day)
-//                       : [...currentDays, day];
-//                     setValue('recurringDays', next, { shouldValidate: true });
-//                   };
+                <Input
+                    label={lang === 'id' ? 'Lokasi' : 'Location'}
+                    placeholder={lang === 'id' ? 'Contoh: Ruang Rapat 1' : 'Example: Meeting Room 1'}
+                    error={errors.location?.message}
+                    disabled={isPending}
+                    {...register('location')}
+                />
 
-//                   return (
-//                     <div className="flex flex-wrap gap-2">
-//                       {DAYS_OF_WEEK.map((day) => {
-//                         const isSelected = currentDays.includes(day.value);
-//                         return (
-//                           <button
-//                             key={day.value}
-//                             type="button"
-//                             disabled={isLoading}
-//                             onClick={() => toggleDay(day.value)}
-//                             className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 ${isSelected
-//                               ? 'bg-[#29B6F6] text-white'
-//                               : 'bg-white text-slate-600 border-neutral-300 hover:bg-slate-50'
-//                               }`}
-//                           >
-//                             {day.label}
-//                           </button>
-//                         );
-//                       })}
-//                     </div>
-//                   );
-//                 }}
-//               />
-//             </div>
+                <div className="flex items-center gap-3 py-2 mt-2">
+                    <input
+                        id="event-isRecurring"
+                        type="checkbox"
+                        disabled={isPending}
+                        className="h-4.5 w-4.5 accent-[#FFB300] cursor-pointer"
+                        {...register('isRecurring')}
+                    />
+                    <label
+                        htmlFor="event-isRecurring"
+                        className="text-sm font-medium cursor-pointer select-none"
+                    >
+                        {t.schedule.form.isRecurringLabel}
+                    </label>
+                </div>
 
-//             {/* Recurrence End Date */}
-//             <Input
-//               type="date"
-//               label={t.schedule.form.recurringEndDateLabel}
-//               error={errors.recurringEndDate?.message}
-//               disabled={isLoading}
-//               {...register('recurringEndDate')}
-//             />
-//           </div>
-//         )}
+                {isRecurring && (
+                    <div className="space-y-4 p-4 rounded-lg bg-slate-50 border border-neutral-300 animate-fadeIn">
+                        <div className="flex flex-col gap-2">
+                            <span className="text-xs font-semibold text-slate-500 capitalize tracking-wider">
+                                {t.schedule.form.recurringDaysLabel}
+                            </span>
+                            <Controller
+                                control={control}
+                                name="recurrence.days"
+                                render={({ field }) => {
+                                    const currentDays = field.value || [];
+                                    const toggleDay = (dayVal: string) => {
+                                        const next = currentDays.includes(dayVal)
+                                            ? currentDays.filter((d) => d !== dayVal)
+                                            : [...currentDays, dayVal];
+                                        setValue('recurrence.days', next, { shouldValidate: true });
+                                    };
 
-//         {/* Submit & Action Buttons */}
-//         <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-4">
-//           <div>
-//             {event && onDelete && (
-//               <Button
-//                 type="button"
-//                 variant="danger"
-//                 size="sm"
-//                 disabled={isLoading}
-//                 onClick={onDelete}
-//                 className="w-full sm:w-auto"
-//               >
-//                 {t.schedule.deleteEvent}
-//               </Button>
-//             )}
-//           </div>
-//           <div className="flex flex-col sm:flex-row gap-2">
-//             <Button
-//               type="button"
-//               variant="outline"
-//               size="sm"
-//               disabled={isLoading}
-//               onClick={onClose}
-//               className="w-full sm:w-auto"
-//             >
-//               {t.todo.cancelButton}
-//             </Button>
-//             <Button
-//               type="submit"
-//               variant="custom"
-//               size="sm"
-//               isLoading={isLoading}
-//               className="w-full sm:w-auto bg-[#26A69A] hover:bg-[#23968b] text-white"
-//             >
-//               {t.todo.saveButton}
-//             </Button>
-//           </div>
-//         </div>
-//       </form>
-//     </Modal>
-//   );
-// };
-// export default EventModal;
+                                    return (
+                                        <div className="flex flex-wrap gap-2">
+                                            {DAYS_OF_WEEK(lang).map((day) => {
+                                                const isSelected = currentDays.includes(day.value);
+                                                return (
+                                                    <button
+                                                        key={day.value}
+                                                        type="button"
+                                                        disabled={isPending}
+                                                        onClick={() => toggleDay(day.value)}
+                                                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-300 ${isSelected
+                                                            ? 'bg-[#29B6F6] text-white'
+                                                            : 'bg-white text-slate-500 border-neutral-300 hover:bg-slate-50'
+                                                            }`}
+                                                    >
+                                                        {day.label}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    );
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={isPending}
+                        onClick={onClose}
+                        className="sm:w-auto"
+                    >
+                        {lang === 'id' ? "Kembali" : "Close"}
+                    </Button>
+                    <Button
+                        type="submit"
+                        size="sm"
+                        isLoading={isPending}
+                        className="sm:w-auto"
+                    >
+                        {!isPending && (lang === 'id' ? "Kirim" : "Submit")}
+                    </Button>
+                </div>
+            </form>
+        </Modal>
+    );
+};
+
+export default EventModal;

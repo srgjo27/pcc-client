@@ -54,9 +54,6 @@ export const formatTimeShort = (dateInput?: string | Date): string => {
   });
 };
 
-export const WEEKDAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-export const WEEKDAYS_SHORT_ID = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-
 /**
  * Format total seconds into MM:SS format (e.g. 1500 seconds -> 25:00)
  */
@@ -66,3 +63,13 @@ export const formatDurationSeconds = (totalSecs: number | null): string => {
   const secs = totalSecs % 60;
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 };
+
+/**
+ * Array of short weekday names in English (0 = Sunday)
+ */
+export const WEEKDAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+/**
+ * Array of short weekday names in Indonesian (0 = Sunday)
+ */
+export const WEEKDAYS_SHORT_ID = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];

@@ -12,5 +12,6 @@ export const ENDPOINTS = {
   },
   EVENT: {
     EVENTS: '/schedule/schedules',
+    CREATE: '/schedule/schedules',
   }
 } as const;

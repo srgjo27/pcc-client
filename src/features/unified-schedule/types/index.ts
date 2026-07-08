@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { eventsParamsSchema } from "../schemas"
+import type { createEventSchema, eventsParamsSchema } from "../schemas"
 
 export interface Event {
   id: string,
@@ -21,3 +21,5 @@ export interface Event {
 }
 
 export type EventsParams = z.infer<typeof eventsParamsSchema>
+
+export type EventPayload = z.input<typeof createEventSchema>

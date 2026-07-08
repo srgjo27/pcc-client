@@ -6,11 +6,13 @@ import { Button } from '@/shared/components/ui/Button';
 interface SidebarControlsProps {
   activeContexts: string[];
   onToggleContext: (ctx: string) => void;
+  setIsModalOpen: (open: boolean) => void;
 }
 
 export const SidebarControls: React.FC<SidebarControlsProps> = ({
   activeContexts,
   onToggleContext,
+  setIsModalOpen,
 }) => {
   const { lang } = useLanguage();
 
@@ -18,6 +20,7 @@ export const SidebarControls: React.FC<SidebarControlsProps> = ({
     <aside className="w-full lg:w-64 shrink-0 flex flex-col gap-4 border border-neutral-300 rounded-xl p-4 bg-white">
       <Button
         size="sm"
+        onClick={() => setIsModalOpen(true)}
         className="gap-2 font-semibold hover:scale-[1.02] active:scale-[0.98]"
       >
         <Plus className="h-4 w-4" />

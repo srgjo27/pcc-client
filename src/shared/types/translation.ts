@@ -90,10 +90,6 @@ export interface TranslationType {
     schedule: {
         title: string;
         subtitle: string;
-        editEvent: string;
-        eventDetails: string;
-        deleteEvent: string;
-        deleteConfirm: string;
         form: {
             titleLabel: string;
             titlePlaceholder: string;
@@ -105,13 +101,6 @@ export interface TranslationType {
             isRecurringLabel: string;
             recurringDaysLabel: string;
             recurringEndDateLabel: string;
-        };
-        validation: {
-            titleRequired: string;
-            startDateRequired: string;
-            endDateRequired: string;
-            contextRequired: string;
-            dateOrderInvalid: string;
         };
         conflictWarningTitle: string;
         conflictWarningDesc: string;
