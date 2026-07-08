@@ -93,7 +93,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     schedule: {
       title: 'Jadwal Terpadu',
       subtitle: 'Pantau dan kelola jadwal aktivitas Anda dari semua kategori secara terintegrasi.',
-      addEvent: 'Tambah Jadwal Baru',
       editEvent: 'Ubah Jadwal',
       eventDetails: 'Detail Jadwal',
       deleteEvent: 'Hapus Jadwal',
@@ -365,7 +364,6 @@ export const strings: Record<'id' | 'en', TranslationType> = {
     schedule: {
       title: 'Unified Schedule',
       subtitle: 'Monitor and manage your schedules across all categories in an integrated view.',
-      addEvent: 'Add New Event',
       editEvent: 'Edit Event',
       eventDetails: 'Event Details',
       deleteEvent: 'Delete Event',

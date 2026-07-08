@@ -90,7 +90,6 @@ export interface TranslationType {
     schedule: {
         title: string;
         subtitle: string;
-        addEvent: string;
         editEvent: string;
         eventDetails: string;
         deleteEvent: string;
