@@ -1,5 +1,5 @@
 import React from 'react';
-import { isSameDay, format } from 'date-fns';
+import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { Clock } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -91,7 +91,6 @@ export const DayView: React.FC<DayViewProps> = ({
                   </p>
                 )}
 
-                {/* Conflict badge */}
                 {/* {hasConflict && (
                   <div className="flex items-center gap-1 px-2 py-1 bg-red-100/60 border border-red-200 text-red-800 rounded-md text-[10px] font-semibold animate-pulse w-full text-left">
                     <AlertCircle className="h-3 w-3 text-red-600 shrink-0" />

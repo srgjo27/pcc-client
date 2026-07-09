@@ -1,6 +1,6 @@
 import { BriefcaseBusiness, Dumbbell, GraduationCap, MonitorCloud, User } from "lucide-react";
 
-export const CONTEXT_STYLES = {
+export const CONTEXT_STYLES: Record<string, { badge: string; accent: string }> = {
     lecture: {
         badge: 'bg-teal-50 text-teal-800 border-teal-200 hover:bg-teal-100',
         accent: 'border-l-4 border-l-teal-500',
