@@ -11,27 +11,23 @@ import {
 import { cn } from '@/shared/utils/cn';
 import { WEEKDAYS_SHORT, WEEKDAYS_SHORT_ID } from '@/shared/utils/date';
 import type { Event } from '../types';
+import { CONTEXT_ICON, CONTEXT_STYLES } from '../constants/styles';
+import { isEventOnDate } from '../utils/date';
 
 interface MonthViewProps {
   lang: string;
   events?: Event[];
   currentDate: Date;
+  onEventClick?: (id: string) => void;
 }
-
-const contextStyles: Record<string, string> = {
-  lecture: 'bg-teal-50 text-teal-800 border-teal-200 hover:bg-teal-100',
-  work: 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100',
-  business: 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100',
-  personal: 'bg-gold-50 text-gold-800 border-gold-200 hover:bg-gold-100',
-  gym: 'bg-pink-50 text-pink-800 border-pink-200 hover:bg-pink-100',
-};
 
 export const MonthView: React.FC<MonthViewProps> = ({
   lang,
   events = [],
   currentDate,
+  onEventClick,
 }) => {
-  const weekDays = lang === 'id' ? WEEKDAYS_SHORT_ID : WEEKDAYS_SHORT
+  const weekDays = lang === 'id' ? WEEKDAYS_SHORT_ID : WEEKDAYS_SHORT;
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const startDate = startOfWeek(monthStart);
@@ -60,20 +56,17 @@ export const MonthView: React.FC<MonthViewProps> = ({
           const isCurrentMonth = isSameMonth(date, currentDate);
           const isToday = isSameDay(date, new Date());
 
-          const dayOccurrences = events.filter((occ) => {
-            const occDate = new Date(occ.startTime);
-            return isSameDay(occDate, date);
-          });
+          const dayOccurrences = events.filter((occ) => isEventOnDate(occ, date));
 
           return (
             <div
               key={date.toISOString()}
               className={cn(
-                'min-h-27.5 p-2 bg-white flex flex-col justify-between transition-colors hover:bg-slate-50/30 cursor-pointer select-none',
+                'min-h-27.5 p-2 bg-white flex flex-col justify-between transition-colors hover:bg-slate-50/30 cursor-pointer select-none'
               )}
             >
               {/* Date Header */}
-              <div className="flex justify-between items-center mb-1">
+              <div className="flex justify-between items-center">
                 <span
                   className={cn(
                     'text-xs font-bold flex items-center justify-center h-6 w-6 rounded-full',
@@ -87,21 +80,19 @@ export const MonthView: React.FC<MonthViewProps> = ({
               </div>
 
               {/* Event Occurrences List */}
-              <div className="flex-1 flex flex-col gap-1 overflow-y-auto max-h-20">
+              <div className="grid grid-cols-2 overflow-y-auto max-h-20">
                 {dayOccurrences.map((occ) => {
+                  const IconComponent = CONTEXT_ICON[occ.context.toLowerCase()];
                   return (
                     <button
                       key={occ.id}
                       type="button"
-                      className={cn(
-                        'w-full text-left text-[10px] font-semibold px-2 py-1 rounded-md border flex items-center justify-between transition-all duration-150',
-                        contextStyles[occ.context.toLowerCase()]
-                      )}
+                      title={occ.title}
+                      onClick={() => onEventClick?.(occ.id)}
+                      className={cn('flex justify-center items-center rounded-full w-8 h-8',
+                        CONTEXT_STYLES[occ.context.toLowerCase()].badge)}
                     >
-                      <span className="truncate mr-1">{occ.title}</span>
-                      {/* {hasConflict && (
-                        <AlertCircle className="h-3.5 w-3.5 text-red-500 shrink-0 animate-pulse" />
-                      )} */}
+                      <IconComponent className='h-4 w-4' />
                     </button>
                   );
                 })}

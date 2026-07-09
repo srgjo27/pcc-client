@@ -1,43 +1,31 @@
 import React from 'react';
 import { id } from 'date-fns/locale';
 import { startOfWeek, addDays, isSameDay, format } from 'date-fns';
-import { CalendarRange } from 'lucide-react';
+import { AlertCircle, CalendarRange } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import type { Event } from '../types';
+import { isEventOnDate, isOverlappingTimeOnly } from '../utils/date';
+import { CONTEXT_STYLES } from '../constants/styles';
 
 interface WeekViewProps {
   events?: Event[];
   currentDate: Date;
+  onEventClick?: (id: string) => void;
 }
-
-const contextBadgeStyles = {
-  lecture: 'bg-teal-50 text-teal-800 border-teal-200 hover:bg-teal-100',
-  work: 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100',
-  business: 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100',
-  personal: 'bg-gold-50 text-gold-800 border-gold-200 hover:bg-gold-100',
-  gym: 'bg-pink-50 text-pink-800 border-pink-200 hover:bg-pink-100',
-};
-
-const borderStyles = {
-  lecture: 'border-l-4 border-l-teal-500',
-  work: 'border-l-4 border-l-blue-500',
-  business: 'border-l-4 border-l-amber-500',
-  personal: 'border-l-4 border-l-gold-500',
-  gym: 'border-l-4 border-l-pink-500',
-};
 
 export const WeekView: React.FC<WeekViewProps> = ({
   events = [],
   currentDate,
+  onEventClick,
 }) => {
   const { t, lang } = useLanguage();
 
-  const weekStart = startOfWeek(currentDate);
-
+  const start = startOfWeek(currentDate);
   const days: Date[] = [];
+
   for (let i = 0; i < 7; i++) {
-    days.push(addDays(weekStart, i));
+    days.push(addDays(start, i));
   }
 
   return (
@@ -45,10 +33,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
       {days.map((date) => {
         const isToday = isSameDay(date, new Date());
 
-        const dayOccurrences = events.filter((occ) => {
-          const occDate = new Date(occ.startTime);
-          return isSameDay(occDate, date);
-        });
+        const dayOccurrences = events.filter((occ) => isEventOnDate(occ, date));
 
         return (
           <div
@@ -63,19 +48,18 @@ export const WeekView: React.FC<WeekViewProps> = ({
               <div className="flex items-center gap-2">
                 <span className={cn(
                   'text-sm font-bold',
-                  isToday && 'text-[#26A69A]'
+                  isToday ? 'text-[#26A69A]' : ''
                 )}>
-                  {lang === 'id' ? format(date, 'EEEE', { locale: id }) : format(date, 'EEEE')}
+                  {lang === 'id'
+                    ? format(date, 'EEEE', { locale: id })
+                    : format(date, 'EEEE')}
                 </span>
                 <span className="text-xs text-slate-500">
-                  {lang === 'id' ? format(date, 'dd MMM yyyy', { locale: id }) : format(date, 'dd MMM yyyy')}
+                  {lang === 'id'
+                    ? format(date, 'd MMM yyyy', { locale: id })
+                    : format(date, 'd MMM yyyy')}
                 </span>
               </div>
-              {isToday && (
-                <span className="text-[10px] font-bold bg-[#26A69A]/10 text-[#26A69A] border border-[#26A69A]/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  {t.today}
-                </span>
-              )}
             </div>
 
             {/* Day Events */}
@@ -89,14 +73,19 @@ export const WeekView: React.FC<WeekViewProps> = ({
                   const startTime = format(new Date(occ.startTime), 'HH:mm');
                   const endTime = format(new Date(occ.endTime), 'HH:mm');
 
+                  const hasConflict = dayOccurrences.some((otherOcc) =>
+                    otherOcc.id !== occ.id && isOverlappingTimeOnly(occ, otherOcc)
+                  );
+
                   return (
                     <button
                       key={occ.id}
                       type="button"
+                      onClick={() => onEventClick?.(occ.id)}
                       className={cn(
                         'w-full text-left p-3 rounded-lg border border-neutral-200 bg-slate-50/50 hover:bg-slate-100/50',
                         'transition-colors cursor-pointer select-none flex flex-col justify-between gap-2',
-                        borderStyles[occ.context.toLowerCase()]
+                        CONTEXT_STYLES[occ.context.toLowerCase()].accent
                       )}
                     >
                       <div className="space-y-1 w-full">
@@ -106,7 +95,7 @@ export const WeekView: React.FC<WeekViewProps> = ({
                           </h4>
                           <span className={cn(
                             'text-[6px] font-semibold px-1.5 rounded-full border shrink-0',
-                            contextBadgeStyles[occ.context.toLowerCase()]
+                            CONTEXT_STYLES[occ.context.toLowerCase()].badge
                           )}>
                             {occ.context}
                           </span>
@@ -124,12 +113,12 @@ export const WeekView: React.FC<WeekViewProps> = ({
                           {startTime} - {endTime}
                         </span>
 
-                        {/* {hasConflict && (
-                          <div className="flex items-center gap-1 text-[10px] font-bold text-red-600 animate-pulse">
+                        {hasConflict && (
+                          <div className="flex items-center gap-2 text-[10px] font-bold text-red-700 animate-pulse">
                             <AlertCircle className="h-3.5 w-3.5" />
                             <span>{t.schedule.weekView.conflictBadge}</span>
                           </div>
-                        )} */}
+                        )}
                       </div>
                     </button>
                   );

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import SidebarControls from './SidebarControls';
 import CalendarArea from './CalendarArea';
-import EventModal from './EventModal';
+import CreateModal from './CreateModal';
 
 export const ScheduleView: React.FC = () => {
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const [activeContexts, setActiveContexts] = useState<string[]>([
     'LECTURE',
     'WORK',
@@ -15,6 +15,7 @@ export const ScheduleView: React.FC = () => {
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasConflict, setHasConflict] = useState(false);
 
   const handleToggleContext = (ctx: string) => {
     setActiveContexts((prev) =>
@@ -38,15 +39,18 @@ export const ScheduleView: React.FC = () => {
           activeContexts={activeContexts}
           onToggleContext={handleToggleContext}
           setIsModalOpen={setIsModalOpen}
+          hasConflict={hasConflict}
         />
 
         {/* Calendar Area */}
-        <CalendarArea activeContexts={activeContexts} />
+        <CalendarArea
+          activeContexts={activeContexts}
+          onConflictChange={setHasConflict}
+        />
       </div>
 
       {/* Modals */}
-      <EventModal
-        lang={lang}
+      <CreateModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Filter } from 'lucide-react';
+import { Plus, Filter, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Button } from '@/shared/components/ui/Button';
 
@@ -7,14 +7,16 @@ interface SidebarControlsProps {
   activeContexts: string[];
   onToggleContext: (ctx: string) => void;
   setIsModalOpen: (open: boolean) => void;
+  hasConflict?: boolean;
 }
 
 export const SidebarControls: React.FC<SidebarControlsProps> = ({
   activeContexts,
   onToggleContext,
   setIsModalOpen,
+  hasConflict = false,
 }) => {
-  const { lang } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <aside className="w-full lg:w-64 shrink-0 flex flex-col gap-4 border border-neutral-300 rounded-xl p-4 bg-white">
@@ -55,15 +57,15 @@ export const SidebarControls: React.FC<SidebarControlsProps> = ({
       </div>
 
       {/* Conflict Warning Indicator */}
-      {/* {hasConflictInView && (
-        <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-[11px] font-semibold animate-pulse">
-          <AlertTriangle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+      {hasConflict && (
+        <div className="flex items-start gap-2 p-2 bg-red-50 border border-red-300 rounded-lg text-[11px] animate-pulse">
+          <AlertTriangle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold text-red-900">{t.schedule.conflictWarningTitle}</p>
-            <p className="text-red-700 font-medium">{t.schedule.conflictWarningDesc}</p>
+            <p className="font-semibold text-red-700">{t.schedule.conflictWarningTitle}</p>
+            <p className="text-red-700">{t.schedule.conflictWarningDesc}</p>
           </div>
         </div>
-      )} */}
+      )}
     </aside>
   );
 };

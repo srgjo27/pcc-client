@@ -5,45 +5,23 @@ import { Clock } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import type { Event } from '../types';
+import { CONTEXT_STYLES } from '../constants/styles';
+import { isEventOnDate } from '../utils/date';
 
 interface DayViewProps {
   events?: Event[];
   currentDate: Date;
+  onEventClick?: (id: string) => void;
 }
-
-const contextStyles = {
-  lecture: {
-    badge: 'bg-teal-100 text-teal-800 border-teal-200',
-    accent: 'border-l-4 border-l-teal-500',
-  },
-  work: {
-    badge: 'bg-blue-100 text-blue-800 border-blue-200',
-    accent: 'border-l-4 border-l-blue-500',
-  },
-  business: {
-    badge: 'bg-amber-100 text-amber-800 border-amber-200',
-    accent: 'border-l-4 border-l-amber-500',
-  },
-  personal: {
-    badge: 'bg-gold-100 text-gold-800 border-gold-200',
-    accent: 'border-l-4 border-l-gold-500',
-  },
-  gym: {
-    badge: 'bg-pink-100 text-pink-800 border-pink-200',
-    accent: 'border-l-4 border-l-pink-500',
-  },
-};
 
 export const DayView: React.FC<DayViewProps> = ({
   events = [],
   currentDate,
+  onEventClick,
 }) => {
   const { t, lang } = useLanguage();
 
-  const dayOccurrences = events.filter((occ) => {
-    const occDate = new Date(occ.startTime);
-    return isSameDay(occDate, currentDate);
-  });
+  const dayOccurrences = events.filter((occ) => isEventOnDate(occ, currentDate));
 
   return (
     <div className="bg-white border border-neutral-300 rounded-xl p-4">
@@ -67,7 +45,7 @@ export const DayView: React.FC<DayViewProps> = ({
       ) : (
         <div className="space-y-4">
           {dayOccurrences.map((occ) => {
-            const style = contextStyles[occ.context.toLowerCase()];
+            const style = CONTEXT_STYLES[occ.context.toLowerCase()];
             const startTime = format(new Date(occ.startTime), 'HH:mm');
             const endTime = format(new Date(occ.endTime), 'HH:mm');
 
@@ -75,6 +53,7 @@ export const DayView: React.FC<DayViewProps> = ({
               <button
                 key={occ.id}
                 type="button"
+                onClick={() => onEventClick?.(occ.id)}
                 className={cn(
                   'w-full text-left p-4 rounded-lg border border-neutral-200 flex flex-col gap-3 transition-colors cursor-pointer select-none',
                   style.accent
@@ -107,7 +86,7 @@ export const DayView: React.FC<DayViewProps> = ({
 
                 {/* Description */}
                 {occ.description && (
-                  <p className="text-xs text-slate-500 leading-relaxed bg-neutral-50 rounded-sm p-2 border border-neutral-200 w-full text-left">
+                  <p className="text-xs text-slate-500 leading-relaxed w-full text-left">
                     <span>{occ.description}</span>
                   </p>
                 )}

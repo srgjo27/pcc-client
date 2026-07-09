@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import { Loading } from '@/shared/components/ui/Loading';
@@ -6,7 +6,9 @@ import { useEvents } from '../hooks';
 import MonthView from './MonthView';
 import WeekView from './WeekView';
 import DayView from './DayView';
+import DetailModal from './DetailModal';
 import { Button } from '@/shared/components/ui/Button';
+import { hasAnyConflict, getVisibleDates } from '../utils/date';
 import {
   endOfWeek,
   format,
@@ -20,21 +22,19 @@ import {
   startOfMonth,
   endOfMonth,
 } from 'date-fns';
-
-export enum TimeInterval {
-  MONTH = "month",
-  WEEK = "week",
-  DAY = "day",
-}
+import { TimeInterval } from '../types';
 
 interface CalendarAreaProps {
   activeContexts: string[];
+  onConflictChange?: (hasConflict: boolean) => void;
 }
 
-export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts }) => {
+export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts, onConflictChange }) => {
   const { t, lang } = useLanguage();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [currentView, setCurrentView] = useState<TimeInterval>(TimeInterval.MONTH);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
 
   const { data: events, isLoading } = useEvents({
     startTime: currentView === TimeInterval.MONTH ? startOfMonth(currentDate) : startOfWeek(currentDate),
@@ -45,6 +45,20 @@ export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts }) =>
     if (!events) return [];
     return events.filter(event => activeContexts.includes(event.context.toUpperCase()));
   }, [events, activeContexts]);
+
+  const visibleDates = useMemo(() => {
+    return getVisibleDates(currentDate, currentView);
+  }, [currentDate, currentView]);
+
+  const hasConflict = useMemo(() => {
+    return hasAnyConflict(filteredEvents, visibleDates);
+  }, [filteredEvents, visibleDates]);
+
+  useEffect(() => {
+    if (onConflictChange) {
+      onConflictChange(hasConflict);
+    }
+  }, [hasConflict, onConflictChange]);
 
   const handlePrevious = () => {
     setCurrentDate((prev) => {
@@ -64,6 +78,11 @@ export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts }) =>
 
   const handleToday = () => {
     setCurrentDate(new Date());
+  };
+
+  const handleEventClick = (id: string) => {
+    setSelectedEventId(id);
+    setIsDetailOpen(true);
   };
 
   const headerTitle = useMemo(() => {
@@ -108,11 +127,11 @@ export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts }) =>
 
         {/* View Switcher */}
         <div className="flex bg-slate-100 p-1 rounded-lg border border-neutral-100">
-          {(['month', 'week', 'day'] as const).map((view) => (
+          {Object.values(TimeInterval).map((view) => (
             <button
               key={view}
               type="button"
-              onClick={() => setCurrentView(view as TimeInterval)}
+              onClick={() => setCurrentView(view)}
               className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-300 
                 ${currentView === view
                   ? 'bg-white text-emerald-700 shadow-xs'
@@ -135,21 +154,36 @@ export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts }) =>
               lang={lang}
               events={filteredEvents}
               currentDate={currentDate}
+              onEventClick={handleEventClick}
             />
           )}
           {currentView === TimeInterval.WEEK && (
             <WeekView
               events={filteredEvents}
               currentDate={currentDate}
+              onEventClick={handleEventClick}
             />
           )}
           {currentView === TimeInterval.DAY && (
             <DayView
               events={filteredEvents}
               currentDate={currentDate}
+              onEventClick={handleEventClick}
             />
           )}
         </div>
+      )}
+
+      {/* Modals */}
+      {selectedEventId && (
+        <DetailModal
+          id={selectedEventId}
+          isOpen={isDetailOpen}
+          onClose={() => {
+            setIsDetailOpen(false);
+            setSelectedEventId(null);
+          }}
+        />
       )}
     </div>
   );

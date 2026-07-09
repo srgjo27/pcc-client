@@ -13,5 +13,7 @@ export const ENDPOINTS = {
   EVENT: {
     EVENTS: '/schedule/schedules',
     CREATE: '/schedule/schedules',
+    VIEW: '/schedule/schedules/{id}',
+    REMOVE: '/schedule/schedules/{id}',
   }
 } as const;

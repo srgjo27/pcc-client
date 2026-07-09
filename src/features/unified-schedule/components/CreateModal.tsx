@@ -12,8 +12,7 @@ import { createEventSchema } from '../schemas';
 import type { EventPayload } from '../types';
 import { useCreateEvent } from '../hooks';
 
-interface EventModalProps {
-    lang: string;
+interface CreateModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
@@ -28,12 +27,11 @@ const DAYS_OF_WEEK = (lang: string) => [
     { value: 'SUNDAY', label: lang === 'id' ? 'Minggu' : 'Sunday' },
 ];
 
-export const EventModal: React.FC<EventModalProps> = ({
-    lang,
+export const CreateModal: React.FC<CreateModalProps> = ({
     isOpen,
     onClose,
 }) => {
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
     const { mutate, isPending } = useCreateEvent();
 
     const {
@@ -168,8 +166,8 @@ export const EventModal: React.FC<EventModalProps> = ({
                 </div>
 
                 <Input
-                    label={lang === 'id' ? 'Lokasi' : 'Location'}
-                    placeholder={lang === 'id' ? 'Contoh: Ruang Rapat 1' : 'Example: Meeting Room 1'}
+                    label={t.schedule.form.locationLabel}
+                    placeholder={t.schedule.form.locationPlaceholder}
                     error={errors.location?.message}
                     disabled={isPending}
                     {...register('location')}
@@ -250,7 +248,7 @@ export const EventModal: React.FC<EventModalProps> = ({
                         type="submit"
                         size="sm"
                         isLoading={isPending}
-                        className="sm:w-auto"
+                        className="sm:w-auto font-semibold"
                     >
                         {!isPending && (lang === 'id' ? "Kirim" : "Submit")}
                     </Button>
@@ -260,4 +258,4 @@ export const EventModal: React.FC<EventModalProps> = ({
     );
 };
 
-export default EventModal;
+export default CreateModal;

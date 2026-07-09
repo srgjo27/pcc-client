@@ -23,3 +23,9 @@ export interface Event {
 export type EventsParams = z.infer<typeof eventsParamsSchema>
 
 export type EventPayload = z.input<typeof createEventSchema>
+
+export enum TimeInterval {
+  MONTH = "month",
+  WEEK = "week",
+  DAY = "day",
+}

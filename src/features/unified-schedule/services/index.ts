@@ -20,3 +20,17 @@ export async function createEvent(payload: EventPayload) {
   );
   return response.data.message;
 }
+
+export async function deleteEvent(id: string) {
+  const response = await axiosClient.delete<ApiResponse<string>>(
+    ENDPOINTS.EVENT.REMOVE.replace("{id}", id),
+  );
+  return response.data.message;
+}
+
+export async function getEventInformation(id: string) {
+  const response = await axiosClient.get<ApiResponse<Event>>(
+    ENDPOINTS.EVENT.VIEW.replace("{id}", id),
+  );
+  return response.data.data;
+}

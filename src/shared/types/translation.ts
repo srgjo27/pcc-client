@@ -100,7 +100,8 @@ export interface TranslationType {
             endDateLabel: string;
             isRecurringLabel: string;
             recurringDaysLabel: string;
-            recurringEndDateLabel: string;
+            locationLabel: string;
+            locationPlaceholder: string;
         };
         conflictWarningTitle: string;
         conflictWarningDesc: string;

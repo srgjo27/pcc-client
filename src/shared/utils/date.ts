@@ -1,3 +1,18 @@
+import { format } from 'date-fns';
+import { id as localeID } from 'date-fns/locale';
+
+/**
+ * Format start and end date/time to localized human readable string.
+ */
+export const formatStartEndDate = (startStr: string, endStr: string, lang: string = 'id'): string => {
+  if (!startStr || !endStr) return '';
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+  const pattern = 'EEEE, d MMMM yyyy HH:mm';
+  const opt = { locale: lang === 'id' ? localeID : undefined };
+  return `${format(start, pattern, opt)} - ${format(end, 'HH:mm', opt)}`;
+};
+
 /**
  * Convert ISO string to YYYY-MM-DDTHH:MM for datetime-local inputs
  */
