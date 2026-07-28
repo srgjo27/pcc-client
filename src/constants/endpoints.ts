@@ -9,5 +9,12 @@ export const ENDPOINTS = {
     CREATE: '/task/tasks',
     VIEW: '/task/tasks/{id}',
     REMOVE: '/task/tasks/{id}',
+  },
+  EVENT: {
+    EVENTS: '/schedule',
+    CREATE: '/schedule',
+    VIEW: '/schedule/{id}',
+    REMOVE: '/schedule/{id}',
+    UPDATE: '/schedule/{id}',
   }
 } as const;
