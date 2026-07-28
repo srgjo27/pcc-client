@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { createEventSchema, eventsParamsSchema } from "../schemas"
+import type { baseEventSchema, eventsParamsSchema } from "../schemas"
 
 export interface Event {
   id: string,
@@ -22,7 +22,7 @@ export interface Event {
 
 export type EventsParams = z.infer<typeof eventsParamsSchema>
 
-export type EventPayload = z.input<typeof createEventSchema>
+export type EventPayload = z.input<typeof baseEventSchema>
 
 export enum TimeInterval {
   MONTH = "month",

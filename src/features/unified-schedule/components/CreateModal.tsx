@@ -18,13 +18,13 @@ interface CreateModalProps {
 }
 
 const DAYS_OF_WEEK = (lang: string) => [
-    { value: 'MONDAY', label: lang === 'id' ? 'Senin' : 'Monday' },
-    { value: 'TUESDAY', label: lang === 'id' ? 'Selasa' : 'Tuesday' },
-    { value: 'WEDNESDAY', label: lang === 'id' ? 'Rabu' : 'Wednesday' },
-    { value: 'THURSDAY', label: lang === 'id' ? 'Kamis' : 'Thursday' },
-    { value: 'FRIDAY', label: lang === 'id' ? 'Jumat' : 'Friday' },
-    { value: 'SATURDAY', label: lang === 'id' ? 'Sabtu' : 'Saturday' },
-    { value: 'SUNDAY', label: lang === 'id' ? 'Minggu' : 'Sunday' },
+    { value: 'MON' as const, label: lang === 'id' ? 'Senin' : 'Monday' },
+    { value: 'TUE' as const, label: lang === 'id' ? 'Selasa' : 'Tuesday' },
+    { value: 'WED' as const, label: lang === 'id' ? 'Rabu' : 'Wednesday' },
+    { value: 'THU' as const, label: lang === 'id' ? 'Kamis' : 'Thursday' },
+    { value: 'FRI' as const, label: lang === 'id' ? 'Jumat' : 'Friday' },
+    { value: 'SAT' as const, label: lang === 'id' ? 'Sabtu' : 'Saturday' },
+    { value: 'SUN' as const, label: lang === 'id' ? 'Minggu' : 'Sunday' },
 ];
 
 export const CreateModal: React.FC<CreateModalProps> = ({
@@ -50,10 +50,7 @@ export const CreateModal: React.FC<CreateModalProps> = ({
             startTime: new Date(),
             endTime: new Date(),
             isRecurring: false,
-            recurrence: {
-                frequency: 'WEEKLY',
-                days: [],
-            },
+            recurrence: null,
             location: '',
             color: '#26A69A',
         },
@@ -63,6 +60,20 @@ export const CreateModal: React.FC<CreateModalProps> = ({
         control,
         name: 'isRecurring',
     });
+
+    useEffect(() => {
+        if (isRecurring) {
+            const currentRecurrence = control._formValues.recurrence;
+            if (!currentRecurrence) {
+                setValue('recurrence', {
+                    frequency: 'WEEKLY',
+                    days: [],
+                });
+            }
+        } else {
+            setValue('recurrence', null);
+        }
+    }, [isRecurring, setValue, control]);
 
     const onSubmit = async (data: EventPayload) => {
         const payload: EventPayload = {
@@ -97,10 +108,7 @@ export const CreateModal: React.FC<CreateModalProps> = ({
                 startTime: formatToDatetimeLocal(start.toISOString()),
                 endTime: formatToDatetimeLocal(end.toISOString()),
                 isRecurring: false,
-                recurrence: {
-                    frequency: 'WEEKLY',
-                    days: [],
-                },
+                recurrence: null,
                 location: '',
                 color: '#26A69A',
             });
@@ -199,8 +207,8 @@ export const CreateModal: React.FC<CreateModalProps> = ({
                                 control={control}
                                 name="recurrence.days"
                                 render={({ field }) => {
-                                    const currentDays = field.value || [];
-                                    const toggleDay = (dayVal: string) => {
+                                    const currentDays = (field.value || []) as ("MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN")[];
+                                    const toggleDay = (dayVal: "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN") => {
                                         const next = currentDays.includes(dayVal)
                                             ? currentDays.filter((d) => d !== dayVal)
                                             : [...currentDays, dayVal];

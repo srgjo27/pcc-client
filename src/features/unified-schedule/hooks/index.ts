@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { EventPayload, EventsParams } from "../types";
-import { createEvent, deleteEvent, fetchEvents, getEventInformation } from "../services";
+import { createEvent, deleteEvent, fetchEvents, getEventInformation, updateEvent } from "../services";
 
 const EVENTS_KEYS = {
   events: (params?: EventsParams) => ['events', 'data', params] as const,
@@ -40,5 +40,17 @@ export function useEventInformation(id: string | null) {
     queryKey: EVENTS_KEYS.view(id || ''),
     queryFn: () => getEventInformation(id!),
     enabled: !!id,
+  });
+}
+
+export function useUpdateEvent() {
+  const queryClient = useQueryClient();
+  return useMutation<string, Error, { id: string; payload: EventPayload }>({
+    mutationFn: ({ id, payload }) => updateEvent(id, payload),
+    onSuccess: (res, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['events', 'data'] });
+      queryClient.invalidateQueries({ queryKey: EVENTS_KEYS.view(variables.id) });
+      return res;
+    }
   });
 }

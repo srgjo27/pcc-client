@@ -7,6 +7,7 @@ import MonthView from './MonthView';
 import WeekView from './WeekView';
 import DayView from './DayView';
 import DetailModal from './DetailModal';
+import EditModal from './EditModal';
 import { Button } from '@/shared/components/ui/Button';
 import { hasAnyConflict, getVisibleDates } from '../utils/date';
 import {
@@ -35,6 +36,7 @@ export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts, onCo
   const [currentView, setCurrentView] = useState<TimeInterval>(TimeInterval.MONTH);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
   const { data: events, isLoading } = useEvents({
     startTime: currentView === TimeInterval.MONTH ? startOfMonth(currentDate) : startOfWeek(currentDate),
@@ -181,6 +183,20 @@ export const CalendarArea: React.FC<CalendarAreaProps> = ({ activeContexts, onCo
           isOpen={isDetailOpen}
           onClose={() => {
             setIsDetailOpen(false);
+            setSelectedEventId(null);
+          }}
+          onEdit={() => {
+            setIsDetailOpen(false);
+            setIsEditOpen(true);
+          }}
+        />
+      )}
+      {selectedEventId && (
+        <EditModal
+          id={selectedEventId}
+          isOpen={isEditOpen}
+          onClose={() => {
+            setIsEditOpen(false);
             setSelectedEventId(null);
           }}
         />

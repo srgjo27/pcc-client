@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MapPin, AlignLeft, RefreshCw, Trash2 } from 'lucide-react';
+import { Calendar, MapPin, AlignLeft, RefreshCw, Trash2, Edit } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/Modal';
 import { Button } from '@/shared/components/ui/Button';
 import { useLanguage } from '@/shared/hooks/useLanguage';
@@ -11,9 +11,10 @@ interface DetailModalProps {
   id: string | null;
   isOpen: boolean;
   onClose: () => void;
+  onEdit: () => void;
 }
 
-export const DetailModal: React.FC<DetailModalProps> = ({ id, isOpen, onClose }) => {
+export const DetailModal: React.FC<DetailModalProps> = ({ id, isOpen, onClose, onEdit }) => {
   const { lang } = useLanguage();
   const { data: event, isLoading } = useEventInformation(id!);
   const { mutate: deleteEvent, isPending: isDeleting } = useRemoveEvent();
@@ -122,16 +123,27 @@ export const DetailModal: React.FC<DetailModalProps> = ({ id, isOpen, onClose })
           </div>
 
           <div className="flex items-center justify-between">
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="flex items-center gap-2"
-            >
-              <Trash2 className="h-4 w-4" />
-              {lang === 'id' ? 'Hapus' : 'Delete'}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onEdit}
+                className="flex items-center gap-2 border-neutral-300"
+              >
+                <Edit className="h-4 w-4" />
+                {lang === 'id' ? 'Ubah' : 'Edit'}
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex items-center gap-2"
+              >
+                <Trash2 className="h-4 w-4" />
+                {lang === 'id' ? 'Hapus' : 'Delete'}
+              </Button>
+            </div>
             <Button
               variant="outline"
               size="sm"

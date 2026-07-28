@@ -34,3 +34,11 @@ export async function getEventInformation(id: string) {
   );
   return response.data.data;
 }
+
+export async function updateEvent(id: string, payload: EventPayload) {
+  const response = await axiosClient.patch<ApiResponse<string>>(
+    ENDPOINTS.EVENT.UPDATE.replace("{id}", id),
+    payload,
+  );
+  return response.data.message;
+}
