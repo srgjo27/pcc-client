@@ -3,10 +3,9 @@ import { AlertTriangle } from 'lucide-react';
 import { Card } from '@/shared/components/ui/Card';
 import { formatCurrency } from '@/shared/utils/currency';
 import { useLanguage } from '@/shared/hooks/useLanguage';
-import type { ExpenseCategory } from '../types';
 
 interface BudgetAlertItem {
-  category: ExpenseCategory;
+  category: string;
   label: string;
   spent: number;
   limit: number;
@@ -34,7 +33,7 @@ export const BudgetAlerts: React.FC<BudgetAlertsProps> = ({ alerts }) => {
             <div>
               <span className="font-semibold">{alert.label}</span>
               <div className="text-slate-500 mt-1">
-                {t.finance.budgetLimit}: <span className="font-medium text-slate-700">{formatCurrency(alert.limit)}</span>
+                {t.finance.budgetLimit}: <span className="font-medium">{formatCurrency(alert.limit)}</span>
               </div>
             </div>
             <div className="text-right">
