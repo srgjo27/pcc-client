@@ -24,7 +24,7 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
   isLoading = false,
   defaultValues,
 }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const {
     register,
@@ -32,18 +32,25 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
     formState: { errors },
   } = useForm<BudgetFormPayload>({
     resolver: zodResolver(budgetSchema),
-    defaultValues: {
-      category: defaultValues?.category || 'food',
+    values: {
+      category: defaultValues?.category || 'consumption',
       amount: defaultValues?.amount || 0,
+      month: defaultValues?.month || new Date().getMonth() + 1,
+      year: defaultValues?.year || new Date().getFullYear(),
     },
   });
 
   const expenseCategories = [
-    { value: 'food', label: t.finance.categories.food },
+    { value: 'housing', label: t.finance.categories.housing },
+    { value: 'consumption', label: t.finance.categories.consumption },
+    { value: 'health', label: t.finance.categories.health },
+    { value: 'personal', label: t.finance.categories.personal },
+    { value: 'communication', label: t.finance.categories.communication },
     { value: 'transportation', label: t.finance.categories.transportation },
-    { value: 'subscription', label: t.finance.categories.subscription },
-    { value: 'education', label: t.finance.categories.education },
-    { value: 'entertainment', label: t.finance.categories.entertainment },
+    { value: 'laundry', label: t.finance.categories.laundry },
+    { value: 'investment', label: t.finance.categories.investment },
+    { value: 'familySupport', label: t.finance.categories.familySupport },
+    { value: 'emergencyFund', label: t.finance.categories.emergencyFund },
     { value: 'others', label: t.finance.categories.others },
   ];
 
@@ -55,6 +62,9 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
       size="sm"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <input type="hidden" {...register('month', { valueAsNumber: true })} />
+        <input type="hidden" {...register('year', { valueAsNumber: true })} />
+
         <Select
           label={t.finance.form.categoryLabel}
           error={errors.category?.message}
@@ -76,13 +86,13 @@ export const BudgetForm: React.FC<BudgetFormProps> = ({
             onClick={onClose}
             disabled={isLoading}
           >
-            {t.todo.cancelButton}
+            {lang === 'id' ? 'Batal' : 'Cancel'}
           </Button>
           <Button
             type="submit"
             isLoading={isLoading}
           >
-            {t.todo.saveButton}
+            {lang === 'id' ? 'Simpan' : 'Save'}
           </Button>
         </div>
       </form>

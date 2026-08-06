@@ -40,5 +40,5 @@ export function useRemoveTask() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
         }
-    })
+    });
 }

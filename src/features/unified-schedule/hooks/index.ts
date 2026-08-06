@@ -1,46 +1,56 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchEvents, createEvent, updateEvent, deleteEvent } from '../services';
-import type { ScheduleEvent, EventFormPayload } from '../types';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { EventPayload, EventsParams } from "../types";
+import { createEvent, deleteEvent, fetchEvents, getEventInformation, updateEvent } from "../services";
 
-// Query Key Factory
-export const scheduleKeys = {
-  all: ['schedule'] as const,
-  events: () => [...scheduleKeys.all, 'events'] as const,
-};
+const EVENTS_KEYS = {
+  events: (params?: EventsParams) => ['events', 'data', params] as const,
+  view: (id: string) => ['events', 'detail', id] as const,
+}
 
-export function useGetEvents() {
-  return useQuery<ScheduleEvent[], Error>({
-    queryKey: scheduleKeys.events(),
-    queryFn: fetchEvents,
+export function useEvents(parameters?: EventsParams) {
+  return useQuery({
+    queryKey: EVENTS_KEYS.events(parameters),
+    queryFn: () => fetchEvents(parameters),
   });
 }
 
 export function useCreateEvent() {
   const queryClient = useQueryClient();
-  return useMutation<ScheduleEvent, Error, EventFormPayload>({
-    mutationFn: createEvent,
+  return useMutation<string, Error, EventPayload>({
+    mutationFn: (payload) => createEvent(payload),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ['events', 'data'] });
+      return res;
+    }
+  });
+}
+
+export function useRemoveEvent() {
+  const queryClient = useQueryClient();
+  return useMutation<string, Error, string>({
+    mutationFn: (id) => deleteEvent(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: scheduleKeys.events() });
-    },
+      queryClient.invalidateQueries({ queryKey: ['events', 'data'] });
+    }
+  });
+}
+
+export function useEventInformation(id: string | null) {
+  return useQuery({
+    queryKey: EVENTS_KEYS.view(id || ''),
+    queryFn: () => getEventInformation(id!),
+    enabled: !!id,
   });
 }
 
 export function useUpdateEvent() {
   const queryClient = useQueryClient();
-  return useMutation<ScheduleEvent, Error, { id: string; payload: EventFormPayload }>({
+  return useMutation<string, Error, { id: string; payload: EventPayload }>({
     mutationFn: ({ id, payload }) => updateEvent(id, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: scheduleKeys.events() });
-    },
-  });
-}
-
-export function useDeleteEvent() {
-  const queryClient = useQueryClient();
-  return useMutation<string, Error, string>({
-    mutationFn: deleteEvent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: scheduleKeys.events() });
-    },
+    onSuccess: (res, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['events', 'data'] });
+      queryClient.invalidateQueries({ queryKey: EVENTS_KEYS.view(variables.id) });
+      return res;
+    }
   });
 }
