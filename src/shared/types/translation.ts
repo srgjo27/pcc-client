@@ -140,13 +140,18 @@ export interface TranslationType {
         expenseBreakdown: string;
         categories: {
             salary: string;
-            business: string;
             freelance: string;
-            food: string;
+            business: string;
+            housing: string;
+            consumption: string;
+            health: string;
+            personal: string;
+            communication: string;
             transportation: string;
-            subscription: string;
-            education: string;
-            entertainment: string;
+            laundry: string;
+            investment: string;
+            familySupport: string;
+            emergencyFund: string;
             others: string;
         };
         form: {
@@ -159,12 +164,6 @@ export interface TranslationType {
             dateLabel: string;
             descriptionLabel: string;
             descriptionPlaceholder: string;
-        };
-        validation: {
-            titleRequired: string;
-            amountRequired: string;
-            categoryRequired: string;
-            dateRequired: string;
         };
     };
     notes: {
