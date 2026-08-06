@@ -93,17 +93,27 @@ export const Modal: React.FC<ModalProps> = ({
         aria-labelledby='modal-title'
         aria-describedby='modal-description'
         className={cn(
-          'relative w-full rounded-xl bg-white border border-neutral-300 flex flex-col max-h-[90vh] overflow-hidden animate-scaleUp',
+          'relative w-full rounded-xl bg-white border border-neutral-300 flex flex-col max-h-[90vh] overflow-y-auto animate-scaleUp',
           sizeClasses[size],
           className
         )}
         {...props}
       >
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-black"
+          aria-label="Tutup Dialog"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
         {/* Modal Header */}
-        <div className="bg-slate-100/30 px-6 pt-4 pb-3 border-b border-neutral-300 relative">
-          <div className="flex flex-col gap-1">
+        {(title || description) && (
+          <div className="p-6 pb-0 flex flex-col gap-1 pr-12">
             {title && (
-              <h2 id="modal-title" className="text-base font-bold leading-none tracking-tight">
+              <h2 id="modal-title" className="text-lg font-bold leading-none tracking-tight">
                 {title}
               </h2>
             )}
@@ -113,19 +123,10 @@ export const Modal: React.FC<ModalProps> = ({
               </p>
             )}
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-500 hover:bg-slate-200 hover:text-black"
-            aria-label="Tutup Dialog"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+        )}
 
         {/* Modal Content */}
-        <div className="px-6 py-4 flex-1 overflow-y-auto">
+        <div className="p-6 flex-1">
           {children}
         </div>
       </div>
@@ -134,5 +135,3 @@ export const Modal: React.FC<ModalProps> = ({
 
   return createPortal(modalElement, document.body);
 };
-
-export default Modal;

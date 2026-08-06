@@ -29,8 +29,6 @@ interface PieChartItem {
 interface AnalyticsVisualizationsProps {
   trendChartData: TrendChartItem[];
   pieChartData: PieChartItem[];
-  month: number;
-  year: number;
 }
 
 const RADIAN = Math.PI / 180;
@@ -73,32 +71,19 @@ const renderCustomizedLabel = ({
 };
 
 const COLORS: Record<string, string> = {
-  housing: '#F59E0B',
-  consumption: '#EF4444',
-  health: '#10B981',
-  personal: '#8B5CF6',
-  communication: '#06B6D4',
-  transportation: '#3B82F6',
-  laundry: '#0EA5E9',
-  investment: '#14B8A6',
-  familySupport: '#D946EF',
-  emergencyFund: '#6366F1',
-  others: '#64748B',
+  food: '#FF6B6B',
+  transportation: '#4DABF7',
+  subscription: '#BE4BDB',
+  education: '#20C997',
+  entertainment: '#FAB005',
+  others: '#A0AEC0',
 };
 
 export const AnalyticsVisualizations: React.FC<AnalyticsVisualizationsProps> = ({
   trendChartData,
   pieChartData,
-  month,
-  year,
 }) => {
   const { t, lang } = useLanguage();
-
-  const monthLabel = React.useMemo(() => {
-    const d = new Date(year, month - 1, 1);
-    const monthName = d.toLocaleString(lang === 'id' ? 'id-ID' : 'en-US', { month: 'long' });
-    return lang === 'id' ? `Bulan ${monthName} ${year}` : `Month of ${monthName} ${year}`;
-  }, [month, year, lang]);
 
   const coloredPieData = React.useMemo(() => {
     return pieChartData.map((entry) => ({
@@ -130,7 +115,7 @@ export const AnalyticsVisualizations: React.FC<AnalyticsVisualizationsProps> = (
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
               <XAxis dataKey="name" tickLine={false} style={{ fontSize: '11px', fill: '#64748B' }} />
               <YAxis tickLine={false} axisLine={false} style={{ fontSize: '11px', fill: '#64748B' }} />
-              <Tooltip formatter={(value: any) => formatCurrency(Number(value))} />
+              <Tooltip formatter={(value) => formatCurrency(Number(value))} />
               <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
               <Area type="monotone" dataKey={t.finance.totalIncome} stroke="#10B981" fillOpacity={1} fill="url(#colorIncome)" strokeWidth={2} />
               <Area type="monotone" dataKey={t.finance.totalExpense} stroke="#EF4444" fillOpacity={1} fill="url(#colorExpense)" strokeWidth={2} />
@@ -143,10 +128,10 @@ export const AnalyticsVisualizations: React.FC<AnalyticsVisualizationsProps> = (
       <Card className="p-6 flex flex-col justify-between">
         <div className="mb-4">
           <h3 className="font-bold text-sm tracking-tight">{t.finance.expenseBreakdown}</h3>
-          <p className="text-xs text-slate-400 mt-0.5">{monthLabel}</p>
+          <p className="text-xs text-slate-400 mt-0.5">{lang === 'id' ? 'Bulan Juni 2026' : 'Month of June 2026'}</p>
         </div>
         {pieChartData.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-slate-500 text-xs">
+          <div className="flex-1 flex flex-col items-center justify-center text-slate-400 text-xs">
             <span>{lang === 'id' ? 'Belum ada pengeluaran bulan ini' : 'No expenses recorded this month'}</span>
           </div>
         ) : (
@@ -158,20 +143,20 @@ export const AnalyticsVisualizations: React.FC<AnalyticsVisualizationsProps> = (
                     data={coloredPieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={50}
+                    innerRadius={60}
                     outerRadius={80}
-                    paddingAngle={4}
+                    paddingAngle={2}
                     dataKey="value"
                     labelLine={false}
                     label={renderCustomizedLabel}
                   />
-                  <Tooltip formatter={(value: any) => formatCurrency(Number(value))} />
+                  <Tooltip formatter={(value) => formatCurrency(Number(value))} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2 max-h-24 overflow-y-auto pr-1">
               {pieChartData.map((entry) => (
-                <div key={entry.category} className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
+                <div key={entry.category} className="flex items-center gap-1.5 text-[10px] text-slate-600 font-medium">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[entry.category] }} />
                   <span className="truncate">{entry.name}</span>
                 </div>

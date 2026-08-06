@@ -1,11 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Trash2, ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
+import { Search, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card } from '@/shared/components/ui/Card';
 import { Input } from '@/shared/components/ui/Input';
 import { Button } from '@/shared/components/ui/Button';
 import { Loading } from '@/shared/components/ui/Loading';
 import { formatCurrency } from '@/shared/utils/currency';
-import { formatDateShort } from '@/shared/utils/date';
 import { useLanguage } from '@/shared/hooks/useLanguage';
 import type { Transaction } from '../types';
 
@@ -13,7 +12,6 @@ interface TransactionHistoryProps {
   transactions: Transaction[];
   isTxLoading: boolean;
   onDelete: (id: string) => void;
-  onEdit: (transaction: Transaction) => void;
 }
 
 interface TransactionHistoryContentProps {
@@ -25,7 +23,6 @@ interface TransactionHistoryContentProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   onDelete: (id: string) => void;
-  onEdit: (transaction: Transaction) => void;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -39,9 +36,8 @@ const TransactionHistoryContent: React.FC<TransactionHistoryContentProps> = ({
   totalPages,
   onPageChange,
   onDelete,
-  onEdit,
 }) => {
-  const { lang } = useLanguage();
+  const { t, lang } = useLanguage();
 
   if (isTxLoading) {
     return <Loading />;
@@ -49,7 +45,7 @@ const TransactionHistoryContent: React.FC<TransactionHistoryContentProps> = ({
 
   if (transactionsCount === 0) {
     return (
-      <div className="py-12 flex justify-center items-center text-slate-500 text-xs">
+      <div className="py-12 flex justify-center items-center text-slate-400 text-xs">
         <span>{lang === 'id' ? 'Belum ada transaksi' : 'No transactions recorded yet'}</span>
       </div>
     );
@@ -57,7 +53,7 @@ const TransactionHistoryContent: React.FC<TransactionHistoryContentProps> = ({
 
   if (filteredTransactions.length === 0) {
     return (
-      <div className="py-12 flex justify-center items-center text-slate-500 text-xs">
+      <div className="py-12 flex justify-center items-center text-slate-400 text-xs">
         <span>{lang === 'id' ? 'Tidak ada transaksi yang cocok' : 'No matching transactions found'}</span>
       </div>
     );
@@ -68,10 +64,9 @@ const TransactionHistoryContent: React.FC<TransactionHistoryContentProps> = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-neutral-300 uppercase tracking-wider text-[10px]">
+            <tr className="border-b border-neutral-200 text-slate-400 uppercase tracking-wider text-[10px]">
               <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Tanggal' : 'Date'}</th>
-              <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Tipe' : 'Type'}</th>
-              <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Konteks' : 'Context'}</th>
+              <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Transaksi' : 'Title'}</th>
               <th className="py-3 px-2 font-semibold">{lang === 'id' ? 'Kategori' : 'Category'}</th>
               <th className="py-3 px-2 font-semibold text-right">{lang === 'id' ? 'Jumlah' : 'Amount'}</th>
               <th className="py-3 px-2 font-semibold text-center">{lang === 'id' ? 'Aksi' : 'Action'}</th>
@@ -80,54 +75,29 @@ const TransactionHistoryContent: React.FC<TransactionHistoryContentProps> = ({
           <tbody className="divide-y divide-slate-100">
             {paginatedTransactions.map((tx) => (
               <tr key={tx.id} className="hover:bg-slate-50/50 transition-colors">
-                <td className="py-3.5 px-2 text-slate-500 font-medium whitespace-nowrap">{formatDateShort(tx.date, lang)}</td>
+                <td className="py-3.5 px-2 text-slate-500 font-medium whitespace-nowrap">{tx.date}</td>
                 <td className="py-3.5 px-2">
-                  <span className={`px-2 py-0.5 rounded font-medium text-[10px] ${tx.type === 'INCOME' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
-                    }`}>
-                    {tx.type === 'INCOME' ? (lang === 'id' ? 'Pemasukan' : 'Income') : (lang === 'id' ? 'Pengeluaran' : 'Expense')}
-                  </span>
-                </td>
-                <td className="py-3.5 px-2 text-slate-500 whitespace-nowrap">
-                  {(() => {
-                    const contextMapping: Record<string, Record<'id' | 'en', string>> = {
-                      GAJI: { id: 'Gaji', en: 'Salary' },
-                      USAHA: { id: 'Usaha', en: 'Business' },
-                      FREELANCE: { id: 'Freelance', en: 'Freelance' },
-                      INVESTASI: { id: 'Investasi', en: 'Investment' },
-                      PERSONAL: { id: 'Personal', en: 'Personal' },
-                    };
-                    return contextMapping[tx.context]?.[lang] || tx.context;
-                  })()}
+                  <span>{tx.title}</span>
+                  {tx.description && <span className="text-[10px] text-slate-400 mt-0.5">{tx.description}</span>}
                 </td>
                 <td className="py-3.5 px-2">
-                  <span className="px-2 py-0.5 bg-slate-100 rounded-full font-medium text-slate-500 text-[10px]">
-                    {tx.category}
+                  <span className="px-2 py-0.5 bg-slate-100 rounded-full font-medium text-slate-600 text-[10px]">
+                    {t.finance.categories[tx.category] || tx.category}
                   </span>
                 </td>
-                <td className={`py-3.5 px-2 text-right whitespace-nowrap ${tx.type === 'INCOME' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                  {tx.type === 'INCOME' ? '+' : '-'}{formatCurrency(tx.amount)}
+                <td className={`py-3.5 px-2 text-right whitespace-nowrap ${tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                  {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                 </td>
-                <td className="py-3.5 px-2 text-center whitespace-nowrap">
-                  <div className="inline-flex items-center gap-1">
-                    <Button
-                      variant="custom"
-                      size="icon"
-                      onClick={() => onEdit(tx)}
-                      className="h-8 w-8 text-slate-500 hover:text-[#26A69A] hover:bg-teal-50/50 transition-colors"
-                      aria-label={lang === 'id' ? 'Ubah' : 'Edit'}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="custom"
-                      size="icon"
-                      onClick={() => onDelete(tx.id)}
-                      className="h-8 w-8 text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                      aria-label={lang === 'id' ? 'Hapus' : 'Delete'}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                <td className="py-3.5 px-2 text-center">
+                  <Button
+                    variant="custom"
+                    size="icon"
+                    onClick={() => onDelete(tx.id)}
+                    className="h-8 w-8 text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                    aria-label="Hapus"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -186,18 +156,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   transactions,
   isTxLoading,
   onDelete,
-  onEdit,
 }) => {
-  const { lang } = useLanguage();
+  const { t, lang } = useLanguage();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
 
   const sortedTransactions = useMemo(() => {
-    return [...transactions].sort((a, b) => {
-      const dateA = a?.date || '';
-      const dateB = b?.date || '';
-      return dateB.localeCompare(dateA);
-    });
+    return [...transactions].sort((a, b) => b.date.localeCompare(a.date));
   }, [transactions]);
 
   const filteredTransactions = useMemo(() => {
@@ -205,11 +170,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
     if (!query) return sortedTransactions;
 
     return sortedTransactions.filter((tx) => {
-      const categoryLabel = tx?.category || '';
+      const titleMatch = tx.title.toLowerCase().includes(query);
+      const descMatch = tx.description ? tx.description.toLowerCase().includes(query) : false;
+      const categoryLabel = t.finance.categories[tx.category] || tx.category;
       const categoryMatch = categoryLabel.toLowerCase().includes(query);
-      return categoryMatch;
+      return titleMatch || descMatch || categoryMatch;
     });
-  }, [sortedTransactions, searchQuery]);
+  }, [sortedTransactions, searchQuery, t.finance.categories]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -237,7 +204,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
             onChange={handleSearchChange}
             aria-label="Cari Transaksi"
             className="!h-9 !text-xs"
-            leftElement={<Search className="h-3 w-3 text-slate-500" />}
+            leftElement={<Search className="h-3 w-3 text-slate-400" />}
           />
         </div>
       </div>
@@ -251,7 +218,6 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
         totalPages={totalPages}
         onPageChange={setCurrentPage}
         onDelete={onDelete}
-        onEdit={onEdit}
       />
     </Card>
   );

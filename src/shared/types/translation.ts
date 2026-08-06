@@ -90,6 +90,11 @@ export interface TranslationType {
     schedule: {
         title: string;
         subtitle: string;
+        addEvent: string;
+        editEvent: string;
+        eventDetails: string;
+        deleteEvent: string;
+        deleteConfirm: string;
         form: {
             titleLabel: string;
             titlePlaceholder: string;
@@ -100,8 +105,14 @@ export interface TranslationType {
             endDateLabel: string;
             isRecurringLabel: string;
             recurringDaysLabel: string;
-            locationLabel: string;
-            locationPlaceholder: string;
+            recurringEndDateLabel: string;
+        };
+        validation: {
+            titleRequired: string;
+            startDateRequired: string;
+            endDateRequired: string;
+            contextRequired: string;
+            dateOrderInvalid: string;
         };
         conflictWarningTitle: string;
         conflictWarningDesc: string;
@@ -140,18 +151,13 @@ export interface TranslationType {
         expenseBreakdown: string;
         categories: {
             salary: string;
-            freelance: string;
             business: string;
-            housing: string;
-            consumption: string;
-            health: string;
-            personal: string;
-            communication: string;
+            freelance: string;
+            food: string;
             transportation: string;
-            laundry: string;
-            investment: string;
-            familySupport: string;
-            emergencyFund: string;
+            subscription: string;
+            education: string;
+            entertainment: string;
             others: string;
         };
         form: {
@@ -164,6 +170,12 @@ export interface TranslationType {
             dateLabel: string;
             descriptionLabel: string;
             descriptionPlaceholder: string;
+        };
+        validation: {
+            titleRequired: string;
+            amountRequired: string;
+            categoryRequired: string;
+            dateRequired: string;
         };
     };
     notes: {
