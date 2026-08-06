@@ -15,6 +15,7 @@ interface TransactionFormProps {
   onClose: () => void;
   onSubmit: (data: TransactionFormPayload) => void;
   isLoading?: boolean;
+  defaultValues?: TransactionFormPayload;
 }
 
 export const TransactionForm: React.FC<TransactionFormProps> = ({
@@ -22,8 +23,9 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
   onClose,
   onSubmit,
   isLoading = false,
+  defaultValues,
 }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const {
     register,
@@ -31,14 +33,16 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     setValue,
     reset,
     control,
+    getValues,
     formState: { errors },
   } = useForm<TransactionFormPayload>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       title: '',
-      type: 'expense',
+      type: 'EXPENSE',
+      context: 'PERSONAL',
       amount: 0,
-      category: 'food',
+      category: 'consumption',
       date: new Date().toISOString().split('T')[0],
       description: '',
     },
@@ -49,51 +53,124 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     name: 'type',
   });
 
+  const category = useWatch({
+    control,
+    name: 'category',
+  });
+
   useEffect(() => {
-    if (transactionType === 'income') {
-      setValue('category', 'salary');
-    } else {
-      setValue('category', 'food');
+    if (isOpen) {
+      if (defaultValues) {
+        reset({
+          title: defaultValues.title,
+          type: defaultValues.type,
+          context: defaultValues.context,
+          amount: defaultValues.amount,
+          category: defaultValues.category,
+          date: defaultValues.date,
+          description: defaultValues.description || '',
+        });
+      } else {
+        reset({
+          title: '',
+          type: 'EXPENSE',
+          context: 'PERSONAL',
+          amount: 0,
+          category: 'consumption',
+          date: new Date().toISOString().split('T')[0],
+          description: '',
+        });
+      }
     }
-  }, [transactionType, setValue]);
+  }, [isOpen, defaultValues, reset]);
+
+  useEffect(() => {
+    // Only apply category adjustment if we aren't loading initial defaultValues (to prevent resetting category on load)
+    if (defaultValues && isOpen) {
+      // Skip automatic override if values match defaultValues
+      if (transactionType === defaultValues.type && category === defaultValues.category) {
+        return;
+      }
+    }
+
+    if (transactionType === 'INCOME') {
+      const isIncomeCategory = ['salary', 'freelance', 'business'].includes(category);
+      if (!isIncomeCategory) {
+        setValue('category', 'salary');
+      }
+    } else {
+      const isExpenseCategory = [
+        'housing',
+        'consumption',
+        'health',
+        'personal',
+        'communication',
+        'transportation',
+        'laundry',
+        'investment',
+        'familySupport',
+        'emergencyFund',
+        'others'
+      ].includes(category);
+      if (!isExpenseCategory) {
+        setValue('category', 'consumption');
+      }
+    }
+  }, [transactionType, setValue, category, defaultValues, isOpen]);
+
+  useEffect(() => {
+    if (defaultValues && isOpen) {
+      if (transactionType === defaultValues.type && category === defaultValues.category && getValues('context') === defaultValues.context) {
+        return;
+      }
+    }
+
+    if (transactionType === 'INCOME') {
+      if (category === 'salary') setValue('context', 'GAJI');
+      else if (category === 'business') setValue('context', 'USAHA');
+      else if (category === 'freelance') setValue('context', 'FREELANCE');
+      else setValue('context', 'PERSONAL');
+    } else {
+      setValue('context', 'PERSONAL');
+    }
+  }, [transactionType, category, setValue, defaultValues, isOpen, control]);
 
   const incomeCategories = [
     { value: 'salary', label: t.finance.categories.salary },
-    { value: 'business', label: t.finance.categories.business },
     { value: 'freelance', label: t.finance.categories.freelance },
+    { value: 'business', label: t.finance.categories.business },
   ];
 
   const expenseCategories = [
-    { value: 'food', label: t.finance.categories.food },
+    { value: 'housing', label: t.finance.categories.housing },
+    { value: 'consumption', label: t.finance.categories.consumption },
+    { value: 'health', label: t.finance.categories.health },
+    { value: 'personal', label: t.finance.categories.personal },
+    { value: 'communication', label: t.finance.categories.communication },
     { value: 'transportation', label: t.finance.categories.transportation },
-    { value: 'subscription', label: t.finance.categories.subscription },
-    { value: 'education', label: t.finance.categories.education },
-    { value: 'entertainment', label: t.finance.categories.entertainment },
+    { value: 'laundry', label: t.finance.categories.laundry },
+    { value: 'investment', label: t.finance.categories.investment },
+    { value: 'familySupport', label: t.finance.categories.familySupport },
+    { value: 'emergencyFund', label: t.finance.categories.emergencyFund },
     { value: 'others', label: t.finance.categories.others },
   ];
 
-  const categoryOptions = transactionType === 'income' ? incomeCategories : expenseCategories;
+  const categoryOptions = transactionType === 'INCOME' ? incomeCategories : expenseCategories;
 
   const handleFormSubmit = (data: TransactionFormPayload) => {
     onSubmit(data);
-    reset({
-      title: '',
-      type: 'expense',
-      amount: 0,
-      category: 'food',
-      date: new Date().toISOString().split('T')[0],
-      description: '',
-    });
   };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={t.finance.addTransaction}
+      title={defaultValues ? (lang === 'id' ? 'Edit Transaksi' : 'Edit Transaction') : t.finance.addTransaction}
       size="md"
     >
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+        <input type="hidden" {...register('context')} />
+
         <Input
           label={t.finance.form.titleLabel}
           placeholder={t.finance.form.titlePlaceholder}
@@ -107,8 +184,8 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             error={errors.type?.message}
             {...register('type')}
           >
-            <option value="expense">{t.finance.form.typeLabel === 'Transaction Type' ? 'Expense' : 'Pengeluaran'}</option>
-            <option value="income">{t.finance.form.typeLabel === 'Transaction Type' ? 'Income' : 'Pemasukan'}</option>
+            <option value="EXPENSE">{t.finance.form.typeLabel === 'Transaction Type' ? 'Expense' : 'Pengeluaran'}</option>
+            <option value="INCOME">{t.finance.form.typeLabel === 'Transaction Type' ? 'Income' : 'Pemasukan'}</option>
           </Select>
 
           <Select
@@ -149,13 +226,13 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             onClick={onClose}
             disabled={isLoading}
           >
-            {t.todo.cancelButton}
+            {lang === 'id' ? 'Batal' : 'Cancel'}
           </Button>
           <Button
             type="submit"
             isLoading={isLoading}
           >
-            {t.todo.saveButton}
+            {lang === 'id' ? 'Simpan' : 'Save'}
           </Button>
         </div>
       </form>
