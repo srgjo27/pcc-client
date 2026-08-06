@@ -3,7 +3,7 @@ import type { TranslationType } from "@/shared/types/translation";
 export const strings: Record<'id' | 'en', TranslationType> = {
   id: {
     appName: 'PCC Client',
-    systemVersion: '1.2.0',
+    systemVersion: '1.3.0',
     version: 'Versi',
     rightsReserved: 'Seluruh hak dilindungi.',
     days: 'Hari',
@@ -275,7 +275,7 @@ export const strings: Record<'id' | 'en', TranslationType> = {
   },
   en: {
     appName: 'PCC Client',
-    systemVersion: '1.2.0',
+    systemVersion: '1.3.0',
     version: 'Version',
     rightsReserved: 'All rights reserved.',
     days: 'Days',
