@@ -45,6 +45,8 @@ export interface NoteEditorProps {
   handleRemoveTag: (tag: string) => void;
   tagsValue: string[];
   contentValue: string;
+  handleSave?: () => void;
+  isDirty: boolean;
 }
 
 export const NoteEditor: React.FC<NoteEditorProps> = ({
@@ -66,6 +68,8 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
   handleRemoveTag,
   tagsValue,
   contentValue,
+  handleSave,
+  isDirty,
 }) => {
   return (
     <Card>
@@ -84,7 +88,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
             <Pin className={`h-4 w-4 ${!activeNote.isPinned && 'rotate-45'}`} />
           </Button>
 
-          {/* Auto-save indicator */}
+          {/* Save indicator */}
           <div className="flex items-center gap-1.5 text-xs">
             {saveStatus === 'saving' && (
               <>
@@ -95,7 +99,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
             {saveStatus === 'saved' && (
               <>
                 <Check className="h-3 w-3 text-emerald-500" />
-                <span className="text-emerald-600 font-medium text-[11px]">{t.notes.saved}</span>
+                <span className="text-emerald-600 font-medium text-[11px]">{lang === 'id' ? 'Berhasil diperbarui' : 'Successfully updated'}</span>
               </>
             )}
             {saveStatus === 'error' && (
@@ -107,15 +111,39 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
           </div>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1 !text-rose-600 hover:!bg-rose-50 !border-rose-200 hover:!text-rose-700"
-          onClick={(e) => handleDeleteNote(activeNote.id, e)}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-          <span>{lang === 'id' ? 'Hapus' : 'Delete'}</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          {activeNote.id === 'new' ? (
+            <Button
+              variant="primary"
+              size="sm"
+              className="gap-1 font-semibold"
+              onClick={handleSave}
+            >
+              <Check className="h-3.5 w-3.5" />
+              <span>{lang === 'id' ? 'Simpan' : 'Save'}</span>
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              size="sm"
+              className="gap-1 font-semibold"
+              onClick={handleSave}
+              disabled={!isDirty}
+            >
+              <Check className="h-3.5 w-3.5" />
+              <span>{lang === 'id' ? 'Perbarui' : 'Update'}</span>
+            </Button>
+          )}
+          <Button
+            variant="custom"
+            size="sm"
+            className="gap-1 text-rose-600 hover:bg-rose-50 border border-rose-200 hover:text-rose-700"
+            onClick={(e) => handleDeleteNote(activeNote.id, e)}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            <span>{activeNote.id === 'new' ? (lang === 'id' ? 'Batal' : 'Cancel') : (lang === 'id' ? 'Hapus' : 'Delete')}</span>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="pt-4 space-y-4">
         {/* Note Title Input */}

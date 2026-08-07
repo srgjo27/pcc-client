@@ -8,30 +8,39 @@ import type { Note, NoteInput } from '@/features/quick-notes/types';
 import { NotesSidebar } from './NotesSidebar';
 import { EmptyNoteState } from './EmptyNoteState';
 import { NoteEditor } from './NoteEditor';
+import { getContextBg } from '../constants/style';
 
 export const QuickNotes: React.FC = () => {
   const { t, lang } = useLanguage();
 
-  // Queries
-  const { data: notes = [], isLoading: isLoadingNotes } = useGetNotes();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  const [allTags, setAllTags] = useState<string[]>([]);
+
+  const { data: notes = [], isLoading: isLoadingNotes } = useGetNotes({
+    q: searchQuery || undefined,
+    tag: selectedTag || undefined,
+  });
   const { data: tasks = [] } = useGetTasks();
 
-  // Mutations
   const createNoteMutation = useCreateNote();
   const updateNoteMutation = useUpdateNote();
   const deleteNoteMutation = useDeleteNote();
 
-  // Component states
+  useEffect(() => {
+    if (notes.length > 0 && !searchQuery && !selectedTag) {
+      const tags = Array.from(new Set(notes.flatMap((n) => n.tags)));
+      setAllTags(tags);
+    }
+  }, [notes, searchQuery, selectedTag]);
+
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
   const [newTagInput, setNewTagInput] = useState('');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  const activeNote = notes.find((n) => n.id === activeNoteId) || null;
 
   const handleSelectNote = (id: string | null) => {
     setActiveNoteId(id);
@@ -55,14 +64,30 @@ export const QuickNotes: React.FC = () => {
   const watchedTags = useWatch({ control, name: 'tags' });
   const tagsValue = useMemo(() => watchedTags || [], [watchedTags]);
 
+  const dbNote = notes.find((n) => n.id === activeNoteId) || null;
+
+  const activeNote = activeNoteId === 'new' ? {
+    id: 'new',
+    title: titleValue || '',
+    content: contentValue || '',
+    tags: tagsValue || [],
+    isPinned: false,
+    taskId: taskIdValue || '',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  } : dbNote;
+
   useEffect(() => {
-    if (activeNote) {
+    if (activeNoteId === 'new') {
+      return;
+    }
+    if (dbNote) {
       reset({
-        title: activeNote.title,
-        content: activeNote.content,
-        tags: activeNote.tags,
-        isPinned: activeNote.isPinned,
-        taskId: activeNote.taskId || '',
+        title: dbNote.title,
+        content: dbNote.content,
+        tags: dbNote.tags,
+        isPinned: dbNote.isPinned,
+        taskId: dbNote.taskId || '',
       });
     } else {
       reset({
@@ -73,13 +98,50 @@ export const QuickNotes: React.FC = () => {
         taskId: '',
       });
     }
-  }, [activeNote, reset]);
+  }, [activeNoteId, dbNote, reset]);
 
-  useEffect(() => {
-    if (!activeNoteId || !isDirty) return;
+  const handleSave = () => {
+    if (!activeNoteId) return;
+    setSaveStatus('saving');
 
-    const timer = setTimeout(() => {
-      setSaveStatus('saving');
+    let finalTags = tagsValue;
+    const cleanTag = newTagInput.trim();
+    if (cleanTag && !tagsValue.includes(cleanTag)) {
+      finalTags = [...tagsValue, cleanTag];
+      setValue('tags', finalTags, { shouldDirty: true });
+      setNewTagInput('');
+    }
+
+    if (activeNoteId === 'new') {
+      createNoteMutation.mutate(
+        {
+          title: titleValue || t.notes.untitledNote,
+          content: contentValue,
+          taskId: taskIdValue,
+          tags: finalTags,
+          isPinned: false,
+        },
+        {
+          onSuccess: (newNote) => {
+            setSaveStatus('saved');
+            setActiveNoteId(newNote.id);
+            reset(
+              {
+                title: newNote.title,
+                content: newNote.content,
+                taskId: newNote.taskId || '',
+                tags: newNote.tags,
+                isPinned: newNote.isPinned,
+              },
+              { keepValues: true }
+            );
+          },
+          onError: () => {
+            setSaveStatus('error');
+          },
+        }
+      );
+    } else {
       updateNoteMutation.mutate(
         {
           id: activeNoteId,
@@ -87,7 +149,7 @@ export const QuickNotes: React.FC = () => {
             title: titleValue,
             content: contentValue,
             taskId: taskIdValue || undefined,
-            tags: tagsValue,
+            tags: finalTags,
           },
         },
         {
@@ -98,7 +160,7 @@ export const QuickNotes: React.FC = () => {
                 title: titleValue,
                 content: contentValue,
                 taskId: taskIdValue,
-                tags: tagsValue,
+                tags: finalTags,
               },
               { keepValues: true }
             );
@@ -108,10 +170,8 @@ export const QuickNotes: React.FC = () => {
           },
         }
       );
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [titleValue, contentValue, taskIdValue, tagsValue, activeNoteId, isDirty, reset, updateNoteMutation]);
+    }
+  };
 
   const insertFormat = (formatType: string) => {
     const textarea = textareaRef.current;
@@ -171,6 +231,10 @@ export const QuickNotes: React.FC = () => {
 
   const handleTogglePin = (note: Note, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (note.id === 'new') {
+      setValue('isPinned', !note.isPinned, { shouldDirty: true });
+      return;
+    }
     updateNoteMutation.mutate({
       id: note.id,
       input: { isPinned: !note.isPinned },
@@ -178,25 +242,23 @@ export const QuickNotes: React.FC = () => {
   };
 
   const handleCreateNote = () => {
-    createNoteMutation.mutate(
-      {
-        title: t.notes.untitledNote,
-        content: '',
-        tags: selectedTag ? [selectedTag] : [],
-        isPinned: false,
-        taskId: '',
-      },
-      {
-        onSuccess: (newNote) => {
-          handleSelectNote(newNote.id);
-          setEditorMode('edit');
-        },
-      }
-    );
+    setActiveNoteId('new');
+    setEditorMode('edit');
+    reset({
+      title: t.notes.untitledNote,
+      content: '',
+      tags: selectedTag ? [selectedTag] : [],
+      isPinned: false,
+      taskId: '',
+    });
   };
 
   const handleDeleteNote = (noteId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (noteId === 'new') {
+      handleSelectNote(null);
+      return;
+    }
     if (window.confirm(t.notes.confirmDelete)) {
       deleteNoteMutation.mutate(noteId, {
         onSuccess: () => {
@@ -208,36 +270,12 @@ export const QuickNotes: React.FC = () => {
     }
   };
 
-  const filteredNotes = notes.filter((note) => {
-    const matchesSearch =
-      note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      note.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      note.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-
-    const matchesTag = !selectedTag || note.tags.includes(selectedTag);
-
-    return matchesSearch && matchesTag;
-  });
+  const filteredNotes = notes;
 
   const pinnedNotes = filteredNotes.filter((n) => n.isPinned);
   const otherNotes = filteredNotes.filter((n) => !n.isPinned);
 
-  const allTags = Array.from(new Set(notes.flatMap((n) => n.tags)));
 
-  const getContextBg = (context?: string) => {
-    switch (context) {
-      case 'college':
-        return 'bg-indigo-50 text-indigo-700 border-indigo-100';
-      case 'work':
-        return 'bg-teal-50 text-teal-700 border-teal-100';
-      case 'business':
-        return 'bg-amber-50 text-amber-700 border-amber-100';
-      case 'personal':
-        return 'bg-rose-50 text-rose-700 border-rose-100';
-      default:
-        return 'bg-slate-50 text-slate-700 border-slate-100';
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -248,7 +286,7 @@ export const QuickNotes: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left pane: Notes list (4 cols) */}
+        {/* Left pane: Notes list */}
         <aside className="lg:col-span-4 space-y-4" aria-label="Daftar Catatan">
           <NotesSidebar
             t={t}
@@ -272,7 +310,7 @@ export const QuickNotes: React.FC = () => {
           />
         </aside>
 
-        {/* Right pane: Active Note Editor (8 cols) */}
+        {/* Right pane: Active Note Editor */}
         <main className="lg:col-span-8" aria-label="Editor Catatan">
           {activeNote ? (
             <NoteEditor
@@ -296,6 +334,8 @@ export const QuickNotes: React.FC = () => {
               handleRemoveTag={handleRemoveTag}
               tagsValue={tagsValue}
               contentValue={contentValue}
+              handleSave={handleSave}
+              isDirty={isDirty}
             />
           ) : (
             <EmptyNoteState lang={lang} onCreateNote={handleCreateNote} />

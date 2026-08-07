@@ -28,4 +28,11 @@ export const ENDPOINTS = {
 
     DASHBOARD: '/finance/dashboard',
   },
+  NOTE: {
+    NOTES: '/notes/notes',
+    CREATE: '/notes/notes',
+    VIEW: '/notes/notes/{id}',
+    UPDATE: '/notes/notes/{id}',
+    REMOVE: '/notes/notes/{id}',
+  },
 } as const;
