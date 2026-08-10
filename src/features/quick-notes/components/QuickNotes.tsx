@@ -271,11 +271,9 @@ export const QuickNotes: React.FC = () => {
   };
 
   const filteredNotes = notes;
-
+  
   const pinnedNotes = filteredNotes.filter((n) => n.isPinned);
   const otherNotes = filteredNotes.filter((n) => !n.isPinned);
-
-
 
   return (
     <div className="space-y-6">
@@ -345,4 +343,3 @@ export const QuickNotes: React.FC = () => {
     </div>
   );
 };
-
