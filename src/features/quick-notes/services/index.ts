@@ -1,106 +1,78 @@
+import { ENDPOINTS } from '@/constants/endpoints';
+import { axiosClient } from '@/services/axiosClient';
+import type { ApiResponse } from '@/shared/types/api';
+import { fetchTasks } from '@/features/to-do/services';
 import type { Note, NoteInput, Task } from '../types';
 
-// Mock list of Tasks to attach to notes
-const MOCK_TASKS: Task[] = [
-  { id: 'task-1', title: 'Belajar Aljabar Linear', priority: 'high', context: 'college' },
-  { id: 'task-2', title: 'Review Pull Request', priority: 'medium', context: 'work' },
-  { id: 'task-3', title: 'Persiapan Launching Produk', priority: 'high', context: 'business' },
-  { id: 'task-4', title: 'Olahraga Pagi', priority: 'low', context: 'personal' }
-];
-
-// Initial mock notes for a nice user experience on first load
-const INITIAL_NOTES: Note[] = [
-  {
-    id: 'note-1',
-    title: 'Catatan Rapat Mingguan',
-    content: '# Rapat Desain Sistem\n\n- Gunakan **TailwindCSS** untuk layouting\n- Perhatikan kontras warna dan aksesibilitas `a11y`\n- Gunakan *Vite* untuk bundling yang cepat\n\n```typescript\nconst config = { theme: "dark" };\n```',
-    tags: ['Rapat', 'PCC'],
-    isPinned: true,
-    taskId: 'task-2',
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-  },
-  {
-    id: 'note-2',
-    title: 'Materi Ujian Aljabar Linear',
-    content: '## Bab 3: Matriks & Vektor\n\n- Pelajari invers matriks\n- Latihan soal perkalian matriks *3x3*\n- Tanyakan ke dosen mengenai determinan\n\n*Penting untuk kelulusan!*',
-    tags: ['Kuliah', 'Belajar'],
-    isPinned: false,
-    taskId: 'task-1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  }
-];
-
-const LOCAL_STORAGE_KEY = 'pcc_quick_notes';
-
-const getStoredNotes = (): Note[] => {
-  const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (!data) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_NOTES));
-    return INITIAL_NOTES;
-  }
-  try {
-    return JSON.parse(data);
-  } catch {
-    return INITIAL_NOTES;
-  }
-};
-
-const saveStoredNotes = (notes: Note[]) => {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(notes));
-};
-
-// Simulate async network request delay
-const delay = (ms = 200) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export const quickNotesService = {
-  getNotes: async (): Promise<Note[]> => {
-    await delay();
-    return getStoredNotes();
+  getNotes: async (params?: { q?: string; tag?: string }): Promise<Note[]> => {
+    const response = await axiosClient.get<ApiResponse<any[]>>(
+      ENDPOINTS.NOTE.NOTES,
+      { params }
+    );
+    return (response.data.data || []).map((note) => ({
+      ...note,
+      taskId: note.tasks?.[0]?.id || '',
+    }));
   },
 
   getTasks: async (): Promise<Task[]> => {
-    await delay(100);
-    return MOCK_TASKS;
+    const tasks = await fetchTasks();
+    return tasks.map((t) => {
+      let contextMapped: 'college' | 'work' | 'business' | 'personal' = 'personal';
+      const ctx = t.context.toUpperCase();
+      if (ctx === 'LECTURE') contextMapped = 'college';
+      else if (ctx === 'WORK') contextMapped = 'work';
+      else if (ctx === 'BUSINESS') contextMapped = 'business';
+      else if (ctx === 'PERSONAL') contextMapped = 'personal';
+
+      let priorityMapped: 'high' | 'medium' | 'low' = 'medium';
+      const prio = t.priority.toUpperCase();
+      if (prio === 'HIGH' || prio === 'URGENT') priorityMapped = 'high';
+      else if (prio === 'MEDIUM') priorityMapped = 'medium';
+      else if (prio === 'LOW') priorityMapped = 'low';
+
+      return {
+        id: t.id,
+        title: t.title,
+        priority: priorityMapped,
+        context: contextMapped,
+      };
+    });
   },
 
   createNote: async (input: NoteInput): Promise<Note> => {
-    await delay();
-    const notes = getStoredNotes();
-    const newNote: Note = {
-      ...input,
-      id: `note-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    const { taskId, ...rest } = input;
+    const taskIds = taskId ? [taskId] : [];
+    const response = await axiosClient.post<ApiResponse<any>>(
+      ENDPOINTS.NOTE.CREATE,
+      { ...rest, taskIds }
+    );
+    const note = response.data.data;
+    return {
+      ...note,
+      taskId: note.tasks?.[0]?.id || '',
     };
-    notes.unshift(newNote);
-    saveStoredNotes(notes);
-    return newNote;
   },
 
   updateNote: async ({ id, input }: { id: string; input: Partial<NoteInput> }): Promise<Note> => {
-    await delay();
-    const notes = getStoredNotes();
-    const index = notes.findIndex((n) => n.id === id);
-    if (index === -1) {
-      throw new Error('Note not found');
-    }
-    const updatedNote: Note = {
-      ...notes[index],
-      ...input,
-      updatedAt: new Date().toISOString(),
+    const { taskId, ...rest } = input;
+    const taskIds = taskId !== undefined ? (taskId ? [taskId] : []) : undefined;
+    const response = await axiosClient.patch<ApiResponse<any>>(
+      ENDPOINTS.NOTE.UPDATE.replace('{id}', id),
+      { ...rest, ...(taskIds !== undefined && { taskIds }) }
+    );
+    const note = response.data.data;
+    return {
+      ...note,
+      taskId: taskId ?? note.tasks?.[0]?.id ?? '',
     };
-    notes[index] = updatedNote;
-    saveStoredNotes(notes);
-    return updatedNote;
   },
 
   deleteNote: async (id: string): Promise<boolean> => {
-    await delay();
-    const notes = getStoredNotes();
-    const filtered = notes.filter((n) => n.id !== id);
-    saveStoredNotes(filtered);
+    await axiosClient.delete<ApiResponse<null>>(
+      ENDPOINTS.NOTE.REMOVE.replace('{id}', id)
+    );
     return true;
   }
 };

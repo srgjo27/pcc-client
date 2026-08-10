@@ -5,14 +5,14 @@ import type { NoteInput } from '../types';
 // Query Key Factory
 export const quickNotesKeys = {
   all: ['quick-notes'] as const,
-  notes: () => [...quickNotesKeys.all, 'notes'] as const,
+  notes: (params?: { q?: string; tag?: string }) => [...quickNotesKeys.all, 'notes', params] as const,
   tasks: () => [...quickNotesKeys.all, 'tasks'] as const,
 };
 
-export const useGetNotes = () => {
+export const useGetNotes = (params?: { q?: string; tag?: string }) => {
   return useQuery({
-    queryKey: quickNotesKeys.notes(),
-    queryFn: quickNotesService.getNotes,
+    queryKey: quickNotesKeys.notes(params),
+    queryFn: () => quickNotesService.getNotes(params),
   });
 };
 
