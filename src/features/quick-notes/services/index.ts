@@ -4,9 +4,20 @@ import type { ApiResponse } from '@/shared/types/api';
 import { fetchTasks } from '@/features/to-do/services';
 import type { Note, NoteInput, Task } from '../types';
 
+interface BackendNote {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  isPinned: boolean;
+  tasks?: Array<{ id: string }>;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export const quickNotesService = {
   getNotes: async (params?: { q?: string; tag?: string }): Promise<Note[]> => {
-    const response = await axiosClient.get<ApiResponse<any[]>>(
+    const response = await axiosClient.get<ApiResponse<BackendNote[]>>(
       ENDPOINTS.NOTE.NOTES,
       { params }
     );
@@ -44,7 +55,7 @@ export const quickNotesService = {
   createNote: async (input: NoteInput): Promise<Note> => {
     const { taskId, ...rest } = input;
     const taskIds = taskId ? [taskId] : [];
-    const response = await axiosClient.post<ApiResponse<any>>(
+    const response = await axiosClient.post<ApiResponse<BackendNote>>(
       ENDPOINTS.NOTE.CREATE,
       { ...rest, taskIds }
     );
@@ -58,7 +69,7 @@ export const quickNotesService = {
   updateNote: async ({ id, input }: { id: string; input: Partial<NoteInput> }): Promise<Note> => {
     const { taskId, ...rest } = input;
     const taskIds = taskId !== undefined ? (taskId ? [taskId] : []) : undefined;
-    const response = await axiosClient.patch<ApiResponse<any>>(
+    const response = await axiosClient.patch<ApiResponse<BackendNote>>(
       ENDPOINTS.NOTE.UPDATE.replace('{id}', id),
       { ...rest, ...(taskIds !== undefined && { taskIds }) }
     );

@@ -5,11 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
 import { NotesList } from './NotesList';
-import type { TranslationType } from '@/shared/types/translation';
+import { useLanguage } from '@/shared/hooks/useLanguage';
 
 export interface NotesSidebarProps {
-  t: TranslationType;
-  lang: string;
   handleCreateNote: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -29,8 +27,6 @@ export interface NotesSidebarProps {
 }
 
 export const NotesSidebar: React.FC<NotesSidebarProps> = ({
-  t,
-  lang,
   handleCreateNote,
   searchQuery,
   setSearchQuery,
@@ -48,6 +44,7 @@ export const NotesSidebar: React.FC<NotesSidebarProps> = ({
   tasks,
   getContextBg,
 }) => {
+  const { t, lang } = useLanguage();
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">

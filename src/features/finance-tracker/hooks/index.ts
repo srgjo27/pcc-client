@@ -12,9 +12,9 @@ import type { TransactionFormPayload, BudgetFormPayload } from '../types';
 
 export const FINANCE_KEYS = {
   all: ['finance'] as const,
-  transactions: (params?: any) => ['finance', 'transactions', params] as const,
-  budgets: (params?: any) => ['finance', 'budgets', params] as const,
-  dashboard: (params?: any) => ['finance', 'dashboard', params] as const,
+  transactions: (params?: unknown) => ['finance', 'transactions', params] as const,
+  budgets: (params?: unknown) => ['finance', 'budgets', params] as const,
+  dashboard: (params?: unknown) => ['finance', 'dashboard', params] as const,
 };
 
 export const useGetTransactions = (params?: { type?: 'INCOME' | 'EXPENSE'; category?: string; page?: number; limit?: number }) => {

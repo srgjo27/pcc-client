@@ -16,24 +16,25 @@ export const QuickNotes: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const [allTags, setAllTags] = useState<string[]>([]);
+  const { data: allNotes = [] } = useGetNotes();
 
-  const { data: notes = [], isLoading: isLoadingNotes } = useGetNotes({
+  const queryParams = useMemo(() => ({
     q: searchQuery || undefined,
     tag: selectedTag || undefined,
-  });
+  }), [searchQuery, selectedTag]);
+
+  const { data: notes = [], isLoading: isLoadingNotes } = useGetNotes(
+    searchQuery || selectedTag ? queryParams : undefined
+  );
   const { data: tasks = [] } = useGetTasks();
 
   const createNoteMutation = useCreateNote();
   const updateNoteMutation = useUpdateNote();
   const deleteNoteMutation = useDeleteNote();
 
-  useEffect(() => {
-    if (notes.length > 0 && !searchQuery && !selectedTag) {
-      const tags = Array.from(new Set(notes.flatMap((n) => n.tags)));
-      setAllTags(tags);
-    }
-  }, [notes, searchQuery, selectedTag]);
+  const allTags = useMemo(() => {
+    return Array.from(new Set(allNotes.flatMap((n) => n.tags)));
+  }, [allNotes]);
 
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
@@ -287,8 +288,6 @@ export const QuickNotes: React.FC = () => {
         {/* Left pane: Notes list */}
         <aside className="lg:col-span-4 space-y-4" aria-label="Daftar Catatan">
           <NotesSidebar
-            t={t}
-            lang={lang}
             handleCreateNote={handleCreateNote}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -313,8 +312,6 @@ export const QuickNotes: React.FC = () => {
           {activeNote ? (
             <NoteEditor
               activeNote={activeNote}
-              lang={lang}
-              t={t}
               saveStatus={saveStatus}
               editorMode={editorMode}
               setEditorMode={setEditorMode}
