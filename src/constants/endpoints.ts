@@ -35,4 +35,14 @@ export const ENDPOINTS = {
     UPDATE: '/notes/notes/{id}',
     REMOVE: '/notes/notes/{id}',
   },
+  HABIT: {
+    HABITS: '/habits/habits',
+    CREATE: '/habits/habits',
+    UPDATE: '/habits/habits/{id}',
+    REMOVE: '/habits/habits/{id}',
+    LOGS: '/habits/habits/{id}/logs',
+    CHECK_IN: '/habits/habits/{id}/logs',
+    CANCEL_CHECK_IN: '/habits/habits/{id}/logs/{date}',
+    STREAKS: '/habits/habits/streaks',
+  },
 } as const;
