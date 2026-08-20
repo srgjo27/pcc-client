@@ -34,7 +34,7 @@ export const LoginForm: React.FC = () => {
     try {
       await login(data);
       navigate("/dashboard");
-    } catch (e) {
+    } catch {
       // TODO:
     }
   };

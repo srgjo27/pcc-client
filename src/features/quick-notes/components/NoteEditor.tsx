@@ -24,12 +24,10 @@ import { Select } from '@/shared/components/ui/Select';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import { parseMarkdownToHtml } from '@/shared/utils/markdown';
 import type { UseFormRegister } from 'react-hook-form';
-import type { TranslationType } from '@/shared/types/translation';
+import { useLanguage } from '@/shared/hooks/useLanguage';
 
 export interface NoteEditorProps {
   activeNote: Note;
-  lang: string;
-  t: TranslationType;
   saveStatus: 'idle' | 'saving' | 'saved' | 'error';
   editorMode: 'edit' | 'preview';
   setEditorMode: (mode: 'edit' | 'preview') => void;
@@ -51,8 +49,6 @@ export interface NoteEditorProps {
 
 export const NoteEditor: React.FC<NoteEditorProps> = ({
   activeNote,
-  lang,
-  t,
   saveStatus,
   editorMode,
   setEditorMode,
@@ -71,6 +67,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
   handleSave,
   isDirty,
 }) => {
+  const { t, lang } = useLanguage();
   return (
     <Card>
       <CardHeader className="border-b border-slate-100 flex-row items-center justify-between">

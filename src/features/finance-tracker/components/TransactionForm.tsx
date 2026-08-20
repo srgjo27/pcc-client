@@ -133,7 +133,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     } else {
       setValue('context', 'PERSONAL');
     }
-  }, [transactionType, category, setValue, defaultValues, isOpen, control]);
+  }, [transactionType, category, setValue, getValues, defaultValues, isOpen, control]);
 
   const incomeCategories = [
     { value: 'salary', label: t.finance.categories.salary },
