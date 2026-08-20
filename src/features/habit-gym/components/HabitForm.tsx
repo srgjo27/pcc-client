@@ -18,14 +18,12 @@ interface HabitFormProps {
 }
 
 const AVAILABLE_ICONS = [
-  { value: 'Dumbbell', label: 'Gym / Sports' },
-  { value: 'BookOpen', label: 'Reading / Learning' },
-  { value: 'Moon', label: 'Sleep / Rest' },
-  { value: 'Droplet', label: 'Water / Diet' },
-  { value: 'Heart', label: 'Health / Meds' },
-  { value: 'Flame', label: 'Workout / Cardio' },
-  { value: 'CalendarRange', label: 'Planning / Schedule' },
-  { value: 'Smile', label: 'Mindfulness / Self-care' },
+  { value: 'Dumbbell', label: 'Sports' },
+  { value: 'Braces', label: 'Coding' },
+  { value: 'Bed', label: 'Sleep' },
+  { value: 'GlassWater', label: 'Water' },
+  { value: 'Book', label: 'Reading' },
+  { value: 'Trophy', label: 'Other' },
 ];
 
 export const HabitForm: React.FC<HabitFormProps> = ({

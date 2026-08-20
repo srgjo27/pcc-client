@@ -3,12 +3,20 @@ import { useLanguage } from '@/shared/hooks/useLanguage';
 import type { Habit } from '../types';
 import { Card } from '@/shared/components/ui/Card';
 import { Button } from '@/shared/components/ui/Button';
-import { getLocalDateString } from '../services';
+import { formatToDateLocal, WEEKDAYS_SHORT, WEEKDAYS_SHORT_ID } from '@/shared/utils/date';
 import { cn } from '@/shared/utils/cn';
-import { Check, Trash2, Trophy, Zap } from 'lucide-react';
+import { Check, Trash2, Trophy, Zap, Dumbbell, Braces, Bed, GlassWater, Book } from 'lucide-react';
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Dumbbell,
+  Braces,
+  Bed,
+  GlassWater,
+  Book,
+};
 
 interface HabitListItemProps {
-  habit: Habit;
+  habit: Habit & { streak: number; checkInHistory: Record<string, boolean> };
   onToggleCheckIn: (id: string, dateStr: string) => void;
   onDelete: (id: string) => void;
   isCheckingIn?: boolean;
@@ -21,8 +29,9 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
   isCheckingIn = false,
 }) => {
   const { t, lang } = useLanguage();
-  const todayStr = getLocalDateString();
+  const todayStr = formatToDateLocal(new Date());
   const isCheckedToday = !!habit.checkInHistory[todayStr];
+  const IconComponent = (habit.icon ? iconMap[habit.icon] : null) || Trophy;
 
   const handleDeleteClick = () => {
     if (window.confirm(t.habits.confirmDelete)) {
@@ -31,15 +40,13 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
   };
 
   const getFrequencyLabel = () => {
-    if (habit.frequency === 'daily') {
+    if (habit.frequency === 'DAILY') {
       return t.habits.frequencyDaily;
     }
 
-    const daysShort = lang === 'id'
-      ? ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
-      : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const daysShort = lang === 'id' ? WEEKDAYS_SHORT_ID : WEEKDAYS_SHORT;
 
-    const activeDays = habit.frequencyDays.map(d => daysShort[d]);
+    const activeDays = habit.targetDays.map((d) => daysShort[d]);
     return activeDays.join(', ');
   };
 
@@ -52,7 +59,7 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
             ? 'bg-[#F0F9FF] text-[#26A69A] border-[#B2DFDB]'
             : 'bg-slate-50 text-slate-500 border-neutral-200'
         )}>
-          <Trophy className="h-5 w-5" />
+          <IconComponent className="h-5 w-5" />
         </div>
         <div>
           <h4 className="text-xs sm:text-sm">
@@ -65,6 +72,7 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
       </div>
 
       <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 border-neutral-100 pt-3 sm:pt-0">
+
         {/* Streak & Stats */}
         <div className="flex gap-4">
           <div className="flex flex-col">
@@ -87,12 +95,12 @@ export const HabitListItem: React.FC<HabitListItemProps> = ({
             isLoading={isCheckingIn}
           >
             {isCheckedToday ? (
-              <span className="flex items-center gap-1">
+              <>
                 <Check className="h-3.5 w-3.5" />
                 {lang == 'id' ? 'Selesai' : 'Done'}
-              </span>
+              </>
             ) : (
-              'Check In'
+              lang == 'id' ? 'Cek In' : 'Check In'
             )}
           </Button>
 
