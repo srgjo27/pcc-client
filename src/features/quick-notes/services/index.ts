@@ -2,7 +2,7 @@ import { ENDPOINTS } from '@/constants/endpoints';
 import { axiosClient } from '@/services/axiosClient';
 import type { ApiResponse } from '@/shared/types/api';
 import { fetchTasks } from '@/features/to-do/services';
-import type { Note, NoteInput, Task } from '../types';
+import type { Note, NoteInput, NoteTask } from '../types';
 
 interface BackendNote {
   id: string;
@@ -27,7 +27,7 @@ export const quickNotesService = {
     }));
   },
 
-  getTasks: async (): Promise<Task[]> => {
+  getTasks: async (): Promise<NoteTask[]> => {
     const tasks = await fetchTasks();
     return tasks.map((t) => {
       let contextMapped: 'college' | 'work' | 'business' | 'personal' = 'personal';

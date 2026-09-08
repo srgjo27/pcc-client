@@ -252,13 +252,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       minutesVal: '{minutes} menit',
       saveSettings: 'Simpan Pengaturan',
       cancelBtn: 'Batal',
-      taskTitle: 'Tugas',
       modeFocus: 'Fokus',
       modeBreak: 'Istirahat',
       alertSessionCompleted: 'Sesi fokus selesai! Waktunya istirahat.',
       alertBreakCompleted: 'Sesi istirahat selesai! Waktunya kembali fokus.',
-      addTaskPlaceholder: 'Tambah tugas baru',
-      addNewTaskBtn: 'Tambah',
     }
   },
   en: {
@@ -512,13 +509,10 @@ export const strings: Record<'id' | 'en', TranslationType> = {
       minutesVal: '{minutes} mins',
       saveSettings: 'Save Settings',
       cancelBtn: 'Cancel',
-      taskTitle: 'Task',
       modeFocus: 'Focus',
       modeBreak: 'Break',
       alertSessionCompleted: 'Focus session completed! Time for a break.',
       alertBreakCompleted: 'Break session completed! Time to get back to focus.',
-      addTaskPlaceholder: 'Add a new task',
-      addNewTaskBtn: 'Add',
     }
   }
 };

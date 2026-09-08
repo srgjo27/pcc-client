@@ -33,16 +33,6 @@ export const useGetFocusTasks = () => {
   });
 };
 
-export const useCreateFocusTask = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (title: string) => focusService.createTask(title),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: FOCUS_KEYS.tasks });
-    },
-  });
-};
-
 export const useGetFocusSessions = () => {
   return useQuery({
     queryKey: FOCUS_KEYS.sessions,

@@ -19,7 +19,32 @@ export interface FocusSession {
   mode: 'focus' | 'break';
 }
 
+export interface Session {
+  id: string;
+  userId: string;
+  taskId: string | null;
+  durationMins: number;
+  plannedMins: number;
+  completedAt: string;
+  note: string;
+  createdAt: string;
+}
+
 export interface DailyFocusStats {
   sessionsCompletedToday: number;
   totalFocusMinutesToday: number;
+}
+
+export interface Stats {
+  totalHours: number;
+  totalMinutes: number;
+  totalSessions: number;
+  dailyAverageMins: number;
+  dailyStats: DailyStats[];
+}
+
+export interface DailyStats {
+  date: string;
+  sessionsCount: number;
+  totalDurationMins: number;
 }

@@ -45,4 +45,8 @@ export const ENDPOINTS = {
     CANCEL_CHECK_IN: '/habits/habits/{id}/logs/{date}',
     STREAKS: '/habits/habits/streaks',
   },
+  FOCUS: {
+    SESSIONS: '/focus/sessions',
+    STATS: '/focus/stats',
+  },
 } as const;

@@ -1,83 +1,22 @@
-import type { FocusTask, FocusTimerSettings, FocusSession, DailyFocusStats } from '../types';
+import { axiosClient } from '@/services/axiosClient';
+import { ENDPOINTS } from '@/constants/endpoints';
+import type { ApiResponse } from '@/shared/types/api';
+import type {
+  FocusTask,
+  FocusTimerSettings,
+  FocusSession,
+  Session,
+  DailyFocusStats,
+  Stats,
+} from '../types';
+import type { Task } from '@/features/to-do';
 
 const SETTINGS_KEY = 'pcc_focus_settings';
-const TASKS_KEY = 'pcc_focus_tasks';
-const SESSIONS_KEY = 'pcc_focus_sessions';
 
 const DEFAULT_SETTINGS: FocusTimerSettings = {
   focusDuration: 25,
   breakDuration: 5,
 };
-
-const DEFAULT_TASKS: FocusTask[] = [
-  {
-    id: 't1',
-    title: 'Mengerjakan Tugas Aljabar',
-    completed: false,
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 't2',
-    title: 'Revisi Kodingan PCC Client',
-    completed: false,
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 't3',
-    title: 'Membaca Buku Pemrograman',
-    completed: true,
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 't4',
-    title: 'Desain UI Modul Focus',
-    completed: true,
-    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
-
-const DEFAULT_SESSIONS: FocusSession[] = [
-  {
-    id: 's1',
-    taskId: 't3',
-    taskTitle: 'Membaca Buku Pemrograman',
-    duration: 25,
-    completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 - 3 * 60 * 60 * 1000).toISOString(),
-    mode: 'focus',
-  },
-  {
-    id: 's2',
-    taskId: 't4',
-    taskTitle: 'Desain UI Modul Focus',
-    duration: 25,
-    completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000 - 4 * 60 * 60 * 1000).toISOString(),
-    mode: 'focus',
-  },
-  {
-    id: 's3',
-    taskId: 't4',
-    taskTitle: 'Desain UI Modul Focus',
-    duration: 25,
-    completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000 - 2 * 60 * 60 * 1000).toISOString(),
-    mode: 'focus',
-  },
-  {
-    id: 's4',
-    taskId: 't2',
-    taskTitle: 'Revisi Kodingan PCC Client',
-    duration: 25,
-    completedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    mode: 'focus',
-  },
-  {
-    id: 's5',
-    taskId: 't1',
-    taskTitle: 'Mengerjakan Tugas Aljabar',
-    duration: 25,
-    completedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    mode: 'focus',
-  },
-];
 
 const getStoredSettings = (): FocusTimerSettings => {
   const data = localStorage.getItem(SETTINGS_KEY);
@@ -92,114 +31,110 @@ const getStoredSettings = (): FocusTimerSettings => {
   }
 };
 
-const getStoredTasks = (): FocusTask[] => {
-  const data = localStorage.getItem(TASKS_KEY);
-  if (!data) {
-    localStorage.setItem(TASKS_KEY, JSON.stringify(DEFAULT_TASKS));
-    return DEFAULT_TASKS;
-  }
-  try {
-    return JSON.parse(data);
-  } catch {
-    return DEFAULT_TASKS;
-  }
-};
-
-const getStoredSessions = (): FocusSession[] => {
-  const data = localStorage.getItem(SESSIONS_KEY);
-  if (!data) {
-    localStorage.setItem(SESSIONS_KEY, JSON.stringify(DEFAULT_SESSIONS));
-    return DEFAULT_SESSIONS;
-  }
-  try {
-    return JSON.parse(data);
-  } catch {
-    return DEFAULT_SESSIONS;
-  }
-};
-
-const delay = (ms = 200) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export const focusService = {
   getSettings: async (): Promise<FocusTimerSettings> => {
-    await delay();
     return getStoredSettings();
   },
 
   saveSettings: async (settings: FocusTimerSettings): Promise<FocusTimerSettings> => {
-    await delay();
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     return settings;
   },
 
   getTasks: async (): Promise<FocusTask[]> => {
-    await delay();
-    return getStoredTasks();
-  },
-
-  createTask: async (title: string): Promise<FocusTask> => {
-    await delay();
-    const tasks = getStoredTasks();
-    const newTask: FocusTask = {
-      id: `t_${Date.now()}`,
-      title,
-      completed: false,
-      createdAt: new Date().toISOString(),
-    };
-    tasks.unshift(newTask);
-    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
-    return newTask;
+    const response = await axiosClient.get<ApiResponse<Task[]>>(ENDPOINTS.TASK.TASKS);
+    const backendTasks = response.data.data || [];
+    return backendTasks.map((t) => ({
+      id: t.id,
+      title: t.title,
+      completed: t.status === 'DONE',
+      createdAt: t.createdAt,
+    }));
   },
 
   getFocusSessions: async (): Promise<FocusSession[]> => {
-    await delay();
-    const sessions = getStoredSessions();
-    return [...sessions].sort(
-      (a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
+    const sessionsResponse = await axiosClient.get<ApiResponse<Session[]>>(
+      ENDPOINTS.FOCUS.SESSIONS
     );
+    const backendSessions = sessionsResponse.data.data || [];
+
+    let tasks: Task[] = [];
+    try {
+      const tasksResponse = await axiosClient.get<ApiResponse<Task[]>>(ENDPOINTS.TASK.TASKS);
+      tasks = tasksResponse.data.data || [];
+    } catch (e) {
+      console.error('Failed to fetch tasks for mapping titles', e);
+    }
+
+    const taskMap = new Map(tasks.map((t) => [t.id, t.title]));
+
+    return backendSessions.map((s): FocusSession => ({
+      id: s.id,
+      taskId: s.taskId,
+      taskTitle: s.taskId ? (taskMap.get(s.taskId) || 'Unknown Task') : 'Tanpa Task',
+      duration: s.durationMins,
+      completedAt: s.completedAt,
+      mode: 'focus',
+    }));
   },
 
   createFocusSession: async (
     sessionInput: Omit<FocusSession, 'id' | 'completedAt'>
   ): Promise<FocusSession> => {
-    await delay();
-    const sessions = getStoredSessions();
-    const newSession: FocusSession = {
-      ...sessionInput,
-      id: `s_${Date.now()}`,
+    const settings = getStoredSettings();
+    const plannedMins = settings.focusDuration;
+    const payload = {
+      taskId: sessionInput.taskId || null,
+      durationMins: sessionInput.duration,
+      plannedMins,
       completedAt: new Date().toISOString(),
+      note: '',
     };
-    sessions.push(newSession);
-    localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
 
-    if (sessionInput.taskId && sessionInput.mode === 'focus') {
-      const tasks = getStoredTasks();
-      const taskIndex = tasks.findIndex((t) => t.id === sessionInput.taskId);
-      if (taskIndex !== -1) {
-        tasks[taskIndex].completed = true;
-        localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+    const response = await axiosClient.post<ApiResponse<Session>>(
+      ENDPOINTS.FOCUS.SESSIONS,
+      payload
+    );
+    const createdSession = response.data.data;
+
+    if (!createdSession) {
+      throw new Error('Failed to create focus session: No data returned');
+    }
+
+    let taskTitle = sessionInput.taskTitle;
+    if (createdSession.taskId && !taskTitle) {
+      try {
+        const tasksResponse = await axiosClient.get<ApiResponse<Task[]>>(ENDPOINTS.TASK.TASKS);
+        const tasks = tasksResponse.data.data || [];
+        const task = tasks.find((t) => t.id === createdSession.taskId);
+        if (task) {
+          taskTitle = task.title;
+        }
+      } catch (e) {
+        console.error('Failed to fetch tasks for mapping title', e);
       }
     }
 
-    return newSession;
+    return {
+      id: createdSession.id,
+      taskId: createdSession.taskId,
+      taskTitle: taskTitle || 'Tanpa Task',
+      duration: createdSession.durationMins,
+      completedAt: createdSession.completedAt,
+      mode: 'focus',
+    };
   },
 
   getDailyStats: async (): Promise<DailyFocusStats> => {
-    await delay();
-    const sessions = getStoredSessions();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const response = await axiosClient.get<ApiResponse<Stats>>(ENDPOINTS.FOCUS.STATS);
+    const data = response.data.data;
 
-    const todaySessions = sessions.filter((s) => {
-      const compDate = new Date(s.completedAt);
-      return compDate.getTime() >= today.getTime() && s.mode === 'focus';
-    });
-
-    const totalMinutes = todaySessions.reduce((acc, curr) => acc + curr.duration, 0);
+    const todayStr = new Date().toLocaleDateString('en-CA');
+    const todayStat = data?.dailyStats?.find((s) => s.date === todayStr);
 
     return {
-      sessionsCompletedToday: todaySessions.length,
-      totalFocusMinutesToday: totalMinutes,
+      sessionsCompletedToday: todayStat?.sessionsCount ?? 0,
+      totalFocusMinutesToday: todayStat?.totalDurationMins ?? 0,
     };
   },
 };
