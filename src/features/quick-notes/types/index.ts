@@ -1,13 +1,6 @@
 import { z } from 'zod';
 import { noteSchema } from '../schemas';
 
-export interface Task {
-  id: string;
-  title: string;
-  priority: 'high' | 'medium' | 'low';
-  context: 'college' | 'work' | 'business' | 'personal';
-}
-
 export interface Note {
   id: string;
   title: string;
@@ -20,3 +13,10 @@ export interface Note {
 }
 
 export type NoteInput = z.infer<typeof noteSchema>;
+
+export interface NoteTask {
+  id: string;
+  title: string;
+  priority: 'high' | 'medium' | 'low';
+  context: 'college' | 'work' | 'business' | 'personal';
+}

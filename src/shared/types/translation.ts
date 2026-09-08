@@ -249,12 +249,9 @@ export interface TranslationType {
         minutesVal: string;
         saveSettings: string;
         cancelBtn: string;
-        taskTitle: string;
         modeFocus: string;
         modeBreak: string;
         alertSessionCompleted: string;
         alertBreakCompleted: string;
-        addTaskPlaceholder: string;
-        addNewTaskBtn: string;
     };
 }

@@ -1,17 +1,11 @@
 import React from 'react';
-import { Play, Pause, RotateCcw, SkipForward, Brain, Coffee, Plus } from 'lucide-react';
+import { Play, Pause, RotateCcw, SkipForward, Brain, Coffee } from 'lucide-react';
 import { Card } from '@/shared/components/ui/Card';
 import { Button } from '@/shared/components/ui/Button';
 import { Select } from '@/shared/components/ui/Select';
-import { Input } from '@/shared/components/ui/Input';
 import { useLanguage } from '@/shared/hooks/useLanguage';
-import type { UseFormRegister, UseFormHandleSubmit, FieldErrors } from 'react-hook-form';
-import type { z } from 'zod';
-import { focusTaskSchema } from '../schemas';
 import type { FocusTask, FocusTimerSettings } from '../types';
 import { formatDurationSeconds } from '@/shared/utils/date';
-
-type TaskFormValues = z.infer<typeof focusTaskSchema>;
 
 interface FocusTimerProps {
   mode: 'focus' | 'break';
@@ -24,14 +18,9 @@ interface FocusTimerProps {
   timerError: string | null;
   setTimerError: (error: string | null) => void;
   activeTasks: FocusTask[];
-  isCreatingTask: boolean;
-  onAddTask: (data: TaskFormValues) => Promise<void>;
   handleReset: () => void;
   handleToggleStart: () => void;
   handleSkip: () => void;
-  registerTask: UseFormRegister<TaskFormValues>;
-  handleSubmitTask: UseFormHandleSubmit<TaskFormValues>;
-  taskErrors: FieldErrors<TaskFormValues>;
 }
 
 
@@ -46,14 +35,9 @@ export const FocusTimer: React.FC<FocusTimerProps> = ({
   timerError,
   setTimerError,
   activeTasks,
-  isCreatingTask,
-  onAddTask,
   handleReset,
   handleToggleStart,
   handleSkip,
-  registerTask,
-  handleSubmitTask,
-  taskErrors,
 }) => {
   const { t } = useLanguage();
 
@@ -178,27 +162,6 @@ export const FocusTimer: React.FC<FocusTimerProps> = ({
               ]}
               className="font-medium"
             />
-
-            {/* Quick Add Task */}
-            {!isRunning && (
-              <form onSubmit={handleSubmitTask(onAddTask)} className="flex gap-2 space-y-4">
-                <Input
-                  placeholder={t.focus.addTaskPlaceholder}
-                  error={taskErrors.title?.message}
-                  {...registerTask('title')}
-                />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  size="sm"
-                  isLoading={isCreatingTask}
-                  className="h-10"
-                >
-                  <Plus className="h-3.5 w-3.5 mr-1" />
-                  <span>{t.focus.addNewTaskBtn}</span>
-                </Button>
-              </form>
-            )}
           </div>
         )}
       </Card>
