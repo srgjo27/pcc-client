@@ -42,6 +42,38 @@ export interface TranslationType {
     dashboard: {
         title: string;
         subtitle: string;
+        greetingMorning: string;
+        greetingAfternoon: string;
+        greetingEvening: string;
+        greetingNight: string;
+        greetingSub: string;
+        briefingTitle: string;
+        urgentTasks: string;
+        todayEvents: string;
+        monthlyBalance: string;
+        uncompletedHabits: string;
+        noUrgentTasks: string;
+        noTodayEvents: string;
+        allHabitsCompleted: string;
+        quickAddTitle: string;
+        quickAddTaskTab: string;
+        quickAddNoteTab: string;
+        quickAddTaskPlaceholder: string;
+        quickAddNotePlaceholder: string;
+        quickAddNoteContentPlaceholder: string;
+        quickAddSubmit: string;
+        quickAddSuccess: string;
+        weeklyCalendarTitle: string;
+        streakSnapshotTitle: string;
+        bestStreakLabel: string;
+        activeHabitsLabel: string;
+        todayCompletedLabel: string;
+        checkInAction: string;
+        completedAction: string;
+        viewAll: string;
+        incomeLabel: string;
+        expenseLabel: string;
+        netBalanceLabel: string;
     };
     todo: {
         title: string;
